@@ -1,0 +1,15 @@
+var app_environment = 'production';
+var app_user_env = 'DEV';
+var app_version = '1.8.0';
+var company_id = 58451; //4
+var home_id = 1455447;  //27
+var home_template = 'home-6'; //home-1
+var username = 'guest58451@yahoo.com'; //guest4@compro.id
+var password = 'guest';
+var package_name = 'giftboxpromosindo';
+var sqlitedb = 'compro.' + package_name + '.db';
+var menu_type = 'sidebar'; //'sidebar'; 'tabs';
+var menu_template = 'menu.html'; //'menu.html'; 'tabs.html';
+var tab_type = 'tabs-bottom'; //'tabs-top'; 'tabs-bottom';
+var data_limit = '5';
+var login_required = false;

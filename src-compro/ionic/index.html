@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="viewport-fit=cover, initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+    <meta http-equiv="Content-Security-Policy" content="default-src * 'self' data: https://*.compro.id http://*.squareone.id http://api.rajaongkir.com https://*.hotline.io http://*.openstreetmap.org https://*.googleapis.com;
+              font-src * 'self' data: https://*.compro.id http://*.squareone.id http://api.rajaongkir.com;
+              img-src * 'self' data: https://*.compro.id http://*.squareone.id http://api.rajaongkir.com http://*.openstreetmap.org https://*.googleapis.com https://*.google.com;
+              style-src 'self' 'unsafe-inline' https://*.googleapis.com https://*.compro.id https://maxcdn.bootstrapcdn.com https://*.google.com;
+              script-src 'self' 'unsafe-inline' 'unsafe-eval' https://*.googleapis.com https://*.compro.id https://*.hotline.io https://*.midtrans.com https://*.sandbox.midtrans.com http://*.openstreetmap.org https://*.gstatic.com https://*.google.com;
+              media-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.youtube.com https://vimeo.com https://instagram.com https://dailymotion.com https://*.compro.id http://*.squareone.id http://api.rajaongkir.com https://*.hotline.io http://*.openstreetmap.org;"/>
+
+
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <title>Compro App</title>
+    <link rel="shortcut icon" type="image/png" href="favicon.png">
+
+    <link href="lib/ionic/css/ionic.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="lib/ionic-calendar/dist/css/calendar.min.css"/>
+    <link href="css/style.css" rel="stylesheet">
+    <link href="css/fonts.css" rel="stylesheet">
+    <link href="css/fonts/customFontContentHeadingTTF.css" rel="stylesheet">
+    <link href="css/fonts/customFontContentTTF.css" rel="stylesheet">
+    <link href="css/fonts/customFontUIHeadingTTF.css" rel="stylesheet">
+    <link href="css/fonts/customFontUITextTTF.css" rel="stylesheet">
+    <link href="lib/ionic-wheel/ionic.wheel.css" rel="stylesheet">
+    <link href="lib/ionic-rating/ionic-rating.css" rel="stylesheet">
+    <link href="lib/leaflet/dist/leaflet.css" rel="stylesheet">
+
+    <link href="css/themes.css" rel="stylesheet">
+    <link href="css/custom/custom.css" rel="stylesheet">
+
+    <!-- IF using Sass (run gulp sass first), then uncomment below and remove the CSS includes above
+    <link href="css/ionic.app.css" rel="stylesheet">
+    -->
+   
+    <!-- google places api -->
+    <script id="initGoogleMaps"></script>
+    <!-- google places api ends -->
+
+    <!-- ionic/angularjs js -->
+    <script src="lib/ionic/js/ionic.bundle.js"></script>
+    <script src="lib/ionic-audio/dist/ion-audio.min.js"></script>
+    <script src="lib/angular-route/angular-route.min.js"></script>
+
+
+    <!-- Cordova Scripts (this will be a 404 during development) -->
+    <script src="js/ng-cordova.min.js"></script>
+    <script src="cordova.js"></script>
+
+    <script type="text/javascript" id="initMidtransSNAP"></script>
+    <!--<script type="text/javascript" src="https://app.midtrans.com/snap/snap.js" data-client-key="<CLIENT-KEY>"></script>-->
+    <!--<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="VT-client-EPn790z-SCokdBum"></script>-->
+    <!--<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<asdfasdffsd>"></script>-->
+
+
+  <!-- Plugins -->
+    <script type="text/javascript" src="lib/SQLitePlugin.js"></script>
+    <script type="text/javascript" src="lib/SocialSharing.js"></script>
+    <script type="text/javascript" src="lib/push.js"></script>
+    <!-- COMPRO TODO: Comment This on iOS -->
+    <script type="text/javascript" src="lib/ionic-native-transitions/dist/ionic-native-transitions.min.js"></script>
+    <script type="text/javascript" src="lib/ionic-wheel/ionic.wheel.js"></script>
+    <script src="lib/ionic-calendar/dist/js/calendar-tpls.min.js"></script>
+    <script src="lib/ionic-rating/ionic-rating.min.js"></script>
+    <!-- App Scripts -->
+    <script src="js/app.js"></script>
+    <script src="js/app-parameters.js"></script>
+    <script src="js/app-vars.js"></script>
+    <script src="js/app-functions.js"></script>
+    <script src="js/directives.js"></script>
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBGPiP-vRdl8mFa9E7dkibiwpguipe6HnU"></script> -->
+    <!-- <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script> -->
+    <script src="lib/leaflet/dist/leaflet.js"></script>
+    <script src="lib/leaflet/dist/leaflet.label.js"></script>
+    <script src="lib/angular-leaflet-directive/dist/angular-leaflet-directive.js"></script>
+
+    <!-- App Filters -->
+    <script src="js/filter/html-filter.js"></script>
+
+    <!-- App Services -->
+    <script src="js/services/http-service.js"></script>
+    <script src="js/services/local-notif.js"></script>
+    <!--<script src="js/services/admob-service.js"></script>-->
+    
+    <!-- Studio Controllers -->
+    <script src='js/controllers/studio/studio-controller.js'></script>
+    <script src="js/controllers/studio/studio-login-controller.js"></script>
+    <script src="js/controllers/studio/studio-app-list-controller.js"></script>
+    <script src="js/controllers/studio/studio-app-initialize-controller.js"></script>
+    <script src="js/controllers/studio/studio-about-controller.js"></script>
+    <script src="js/controllers/studio/studio-app-published-controller.js"></script>
+
+    <!-- Membership Controllers -->
+    <script src="js/controllers/membership/membership-products-controller.js"></script>
+    <script src="js/controllers/membership/membership-product-detail-controller.js"></script>
+    <script src="js/controllers/membership/membership-history-controller.js"></script>
+    <script src="js/controllers/membership/membership-history-detail-controller.js"></script>
+    <script src="js/controllers/membership/membership-member-items-controller.js"></script>
+    <script src="js/controllers/membership/membership-member-item-detail-controller.js"></script>
+
+    <!-- Custom Form Reply Controllers -->
+    <script src="js/controllers/custom-form/custom-form-reply-history-controller.js"></script>
+    <script src="js/controllers/custom-form/custom-form-reply-history-detail-controller.js"></script>
+
+    <!-- Settings -->
+    <script src="js/controllers/settings/settings-controller.js"></script>
+    <script src="js/controllers/settings/language-controller.js"></script>
+
+    <!-- App Controllers -->
+    <!-- <script src="js/controllers.js"></script> -->
+    <script src="js/controllers/app-controller.js"></script>
+    <script src="js/controllers/notification-list-controller.js"></script>
+    <script src="js/controllers/contact-list-controller.js"></script>
+    <script src="js/controllers/contact-controller.js"></script>
+    <script src="js/controllers/gallery-controller.js"></script>
+    <script src="js/controllers/gallery-detail-controller.js"></script>
+    <script src="js/controllers/checkaudiofile-controller.js"></script>
+    <script src="js/controllers/audio-controller.js"></script>
+    <script src="js/controllers/audio-detail-controller.js"></script>
+    <script src="js/controllers/home-controller.js"></script>
+    <script src="js/controllers/home-controller-12.js"></script>
+    <!-- COMPRO TODO: Take care of which controller to use (Token or No Token) -->
+    <!--<script src="js/controllers/home-custom-controller.js"></script>-->
+    <script src="js/controllers/home-custom-controller-notoken.js"></script>
+    <script src="js/controllers/home-carousel-controller.js"></script>
+    <script src="js/controllers/event-controller.js"></script>
+    <script src="js/controllers/event-detail-controller.js"></script>
+    <script src="js/controllers/booking-controller.js"></script>
+    <script src="js/controllers/booking-detail-controller.js"></script>
+    <script src="js/controllers/career-controller.js"></script>
+    <script src="js/controllers/career-detail-controller.js"></script>
+    <script src="js/controllers/book-controller.js"></script>
+    <script src="js/controllers/book-detail-controller.js"></script>
+    <script src="js/controllers/article-controller.js"></script>
+    <script src="js/controllers/article-detail-controller.js"></script>
+    <script src="js/controllers/article-detail-4-controller.js"></script>
+    <script src="js/controllers/profile-list-controller.js"></script>
+    <script src="js/controllers/profile-controller.js"></script>
+    <script src="js/controllers/vision-mission-controller.js"></script>
+    <script src="js/controllers/login-controller.js"></script>
+    <script src="js/controllers/search-controller.js"></script>
+    <script src="js/controllers/list-title-post-controller.js"></script>
+    <script src="js/controllers/image-only-controller.js"></script>
+    <script src="js/controllers/content-only-controller.js"></script>
+    <script src="js/controllers/default-controller.js"></script>
+    <script src="js/controllers/no-click-controller.js"></script>
+    <script src="js/controllers/video-controller.js"></script>
+    <script src="js/controllers/video-detail-controller.js"></script>
+    <script src="js/controllers/product-controller.js"></script>
+    <script src="js/controllers/product-controller-2.js"></script>
+    <script src="js/controllers/product-controller-4.js"></script>
+    <script src="js/controllers/product-detail-controller.js"></script>
+    <script src="js/controllers/shoppingcart-controller.js"></script>
+    <script src="js/controllers/landing-controller.js"></script>
+    <script src="js/controllers/file-controller.js"></script>
+    <script src="js/controllers/file-detail-controller.js"></script>
+    <script src="js/controllers/webview-controller.js"></script>
+    <script src="js/controllers/webview-detail-controller.js"></script>
+    <script src="js/controllers/register-controller.js"></script>
+    <script src="js/controllers/custom-form-list-controller.js"></script>
+    <script src="js/controllers/custom-form-controller.js"></script>
+    <script src="js/controllers/custom-register-controller.js"></script>
+    <script src="js/controllers/custom-edit-profile-controller.js"></script>
+    <script src="js/controllers/contact-form-controller.js"></script>
+    <script src="js/controllers/edit-profile-controller.js"></script>
+    <script src="js/controllers/change-password-controller.js"></script>
+    <script src="js/controllers/reset-password-controller.js"></script>
+    <script src="js/controllers/reset-password-required-controller.js"></script>
+    <script src="js/controllers/rss-reader-controller.js"></script>
+    <script src="js/controllers/inapppurchase-controller.js"></script>
+    <script src="js/controllers/top-up-required-controller.js"></script>
+    <script src="js/controllers/top-up-controller.js"></script>
+    <script src="js/controllers/login-required/login-required-controller.js"></script>
+    <script src="js/controllers/login-required/register-required-controller.js"></script>
+    <script src="js/controllers/transaction-controller.js"></script>
+    <script src="js/controllers/transaction-detail-controller.js"></script>
+    <script src="js/controllers/booking-history-controller.js"></script>
+    <script src="js/controllers/manual-payment-controller.js"></script>
+    <script src="js/controllers/how-to-contribute-controller.js"></script>
+    <script src="js/controllers/comment-list-controller.js"></script>
+    <script src="js/controllers/calendar-controller.js"></script>
+    <script src="js/controllers/shopping-tnc-controller.js"></script>
+    <script src="js/controllers/maintenance-controller.js"></script>
+    <!--<script src="js/controllers/wp-posts-controller.js"></script>-->
+    <!--<script src="js/controllers/fbrss-controller.js"></script>-->
+    <!--<script src="js/controllers/_games001-settings-controller.js"></script>-->
+    <!--<script src="js/controllers/_games001-controller.js"></script>-->
+    <script src="js/controllers/airline-booking-controller.js"></script>
+    <script src="js/controllers/airline-booking-origin-destination-controller.js"></script>
+    <script src="js/controllers/airline-booking-search-controller.js"></script>
+    <script src="js/controllers/airline-booking-search-return-controller.js"></script>
+    <script src="js/controllers/airline-booking-summary-controller.js"></script>
+    <script src="js/controllers/airline-booking-detail-controller.js"></script>
+    <script src="js/controllers/airline-transaction-detail-controller.js"></script>
+    <script src="js/controllers/opsigo-transaction-controller.js"></script>
+    <script src="js/controllers/opsigo-transaction-detail-controller.js"></script>
+    <script src="js/controllers/testimonial-controller.js"></script>
+    <script src="js/controllers/wishlist-controller.js"></script>
+    <script src="js/controllers/wishlist-detail-controller.js"></script>
+    <script src="js/controllers/qrcode-scanner-controller.js"></script>
+    <script src="js/controllers/online-reservation-controller.js"></script>
+    <script src="js/controllers/online-reservation-data-controller.js"></script>
+    <script src="js/controllers/reservation-controller.js"></script>
+    <script src="js/controllers/reservation-detail-controller.js"></script>
+    <script src="js/controllers/reservation-admin-controller.js"></script>
+    <script src="js/controllers/reservation-admin-detail-controller.js"></script>
+    <script src="js/controllers/online-reservation-list-controller.js"></script>
+    <script src="js/controllers/wishlist-transaction-controller.js"></script>
+    <script src="js/controllers/wishlist-transaction-detail-controller.js"></script>
+    <!-- App Messages -->
+    <script src="js/error-message.js"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/5.4.1/firebase.js"></script>
+
+    
+    <!-- Google Maps -->
+    <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlMXOoIlbEu6yfxF7eJ7o17UsRZb8s6FY&sensor=true" async defer></script> -->
+</head>
+
+<body ng-app="starter" class="platform-android platform-cordova platform-webview">
+<div id="style" class="myStyle">
+    <style>
+        ::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
+</div>
+<ion-nav-view></ion-nav-view>
+ 
+<!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBlMXOoIlbEu6yfxF7eJ7o17UsRZb8s6FY&sensor=true" async defer></script> -->
+</body>
+</html>

@@ -1,0 +1,12 @@
+
+			@font-face {
+				font-family: 'customFontContentHeadingTTF';
+				src: url('fonts/customFontContentHeadingTTF.eot');
+				src: url('fonts/customFontContentHeadingTTF.eot') format('embedded-opentype'),
+					 url('fonts/customFontContentHeadingTTF.woff2') format('woff2'),
+					 url('fonts/customFontContentHeadingTTF.woff') format('woff'),
+					 url('fonts/customFontContentHeadingTTF.ttf') format('truetype'),
+					 url('fonts/customFontContentHeadingTTF.svg#customFontContentHeadingTTF') format('svg');
+			}
+
+		

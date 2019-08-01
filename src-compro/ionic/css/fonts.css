@@ -1,0 +1,75 @@
+@font-face {
+    font-family: ralewayBold;
+    src: url(fonts/Raleway-Bold.ttf);
+}
+
+@font-face {
+    font-family: openSansBold;
+    src: url(fonts/OpenSans/OpenSans-Bold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansBoldItalic;
+    src: url(fonts/OpenSans/OpenSans-BoldItalic.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansExtraBold;
+    src: url(fonts/OpenSans/OpenSans-ExtraBold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansExtraBoldItalic;
+    src: url(fonts/OpenSans/OpenSans-ExtraBoldItalic.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansItalic;
+    src: url(fonts/OpenSans/OpenSans-Italic.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansLight;
+    src: url(fonts/OpenSans/OpenSans-Light.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansLightItalic;
+    src: url(fonts/OpenSans/OpenSans-LightItalic.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansRegular;
+    src: url(fonts/OpenSans/OpenSans-Regular.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansSemibold;
+    src: url(fonts/OpenSans/OpenSans-Semibold.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: openSansSemiboldItalic;
+    src: url(fonts/OpenSans/OpenSans-SemiboldItalic.ttf) format('truetype');
+}
+
+
+@font-face {
+    font-family: customFontUIHeadingTTF;
+    src: url(fonts/custom/customFontUIHeadingTTF.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: customFontUITextTTF;
+    src: url(fonts/custom/customFontUITextTTF.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: customFontContentHeadingTTF;
+    src: url(fonts/custom/customFontContentHeadingTTF.ttf) format('truetype');
+}
+
+@font-face {
+    font-family: customFontContentTTF;
+    src: url(fonts/custom/customFontContentTTF.ttf) format('truetype');
+}
