@@ -1,0 +1,27 @@
+<ion-view cache-view="false"  class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry='retryLoadContent()'></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content'>
+            <div class="row">
+                <div class="col">
+                    <h2 class="post_title normal_white_space cp-post-title"><b>{{content_data.title}}</b></h2>
+                    <h3 class="post_subtitle normal_white_space cp-post-subtitle">{{content_data.created_date}}</h3>
+                    <div class="item item-text-wrap" style="height:30vh; background:url({{content_data.cover}}) no-repeat center !important; background-size: cover !important;" ng-if="isAndroid() || !isPhoneGap()">
+                        <div style="display:flex;justify-content:center;align-items:center;width:100%;height:25vh;">
+                            <button class="button cp-button" ng-click='nativePlayVideo("{{content_data.video_link}}")'>
+                                <i class="ion-play"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <section ng-if="isIOS()">
+                        <iframe ng-src="{{content_data.video_link}}" class="half-page-image" id="videoIFrame" sourceonload="" frameborder="0" allowfullscreen="true" webkitallowfullscreen="true" mozallowfullscreen="true" ></iframe>
+                    </section>
+                    <p class="normal_white_space justify_text_align cp-post-content" ng-bind-html='content_data.content | unsafe'></p>
+                </div>
+            </div>
+            <comment-pane></comment-pane>
+        </ion-content>
+    </ion-pane>
+</ion-view>
+

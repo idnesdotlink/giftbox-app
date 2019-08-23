@@ -1,0 +1,40 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.history.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.history.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list" >
+                <div ng-repeat='history in content_data.history track by $index'>
+                    <!-- <div class="item item-divider cp-term-divider">
+                        {{history.date_created}}
+                    </div> -->
+                    <a class="item" href="#/app/custom-form-reply-history-detail/{{history.id}}">
+                        <div class="row">
+                            <div class="col col-50">
+                                <h3 class="cp-post-subtitle normal_white_space"><strong>{{ history.category }}</strong></h3>
+                                <h3 class="cp-post-subtitle normal_white_space"><strong>ID: {{ history.user_post_unique_id }}</strong></h3>
+                                <h3 class="cp-post-subtitle normal_white_space">{{history.date_created}}</h3>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h4 ng-if="history.status == 'REQUESTED'" class="badge badge-energized" style="right:25px; top:25px">{{ history.status }}</h4>
+                                <h4 ng-if="history.status == 'PENDING'" class="badge badge-energized" style="right:25px; top:25px">{{ history.status }}</h4>
+                                <h4 ng-if="history.status == 'REPLIED'" class="badge badge-balanced" style="right:25px; top:25px">{{ history.status }}</h4>
+                                <h4 ng-if="history.status == 'APPROVED'" class="badge badge-balanced" style="right:25px; top:25px">{{ history.status }}</h4>
+                                <h4 ng-if="history.status == 'EXPIRED'" class="badge badge-assertive" style="right:25px; top:25px">{{ history.status }}</h4>
+                                <h4 ng-if="history.status == 'REJECTED'" class="badge badge-assertive" style="right:25px; top:25px">{{ history.status }}</h4>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+<!--    <div class="bar bar-footer" ng-show="vt_payment_service!='YES'">
+        <a class="button cp-button" style="width:100%;"  ng-href="#/app/manual-payment"><i class="ion-help-circled"></i> {{button_text_how_to_pay}}</a>
+    </div>-->
+</ion-view>

@@ -1,0 +1,65 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.bookings.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.bookings.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
+            <div class="list card cp-list" ng-repeat='booking in content_data.bookings'>
+                <div class="item">
+                    <a href="#/app/{{booking.post.post_template.name}}/{{booking.post.id}}" style="text-decoration:none;">
+                        <div class="row" style="margin-bottom:20px" ng-if="getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='confirmed' || getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='placed'">
+                            <div class="col col-100">
+                                <h2 class="cp-post-title normal_white_space"><strong>{{getPostMetaValueById(booking.user_post_meta, "booking_number").value}}</strong></h2>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">{{ui_text_booking_post}} </div>
+                                    <div class="col-50">: {{booking.post.title}}</div>
+                                </div>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">{{input_text_booking_date}} </div>
+                                    <div class="col-50">: {{getPostMetaValueById(booking.user_post_meta, "booking_date").value}} {{getPostMetaValueById(booking.user_post_meta, "booking_time").value}}</div>
+                                </div>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">{{input_text_message}} </div>
+                                    <div class="col-50">: {{getPostMetaValueById(booking.user_post_meta, "message").value}}</div>
+                                </div>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">Status </div>
+                                    <div class="col-50">: {{getPostMetaValueById(booking.user_post_meta, "booking_status").value}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row" style="margin-bottom:20px;opacity:0.4;" ng-if="getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='canceled' || getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='rejected' ">
+                            <div class="col col-100">
+                                <h2 class="cp-post-title normal_white_space"><strong>{{getPostMetaValueById(booking.user_post_meta, "booking_number").value}}</strong></h2>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">{{ui_text_booking_post}} </div>
+                                    <div class="col-50">: {{booking.post.title}}</div>
+                                </div>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">{{input_text_booking_date}} </div>
+                                    <div class="col-50">: {{getPostMetaValueById(booking.user_post_meta, "booking_date").value}} {{getPostMetaValueById(booking.user_post_meta, "booking_time").value}}</div>
+                                </div>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">{{input_text_message}} </div>
+                                    <div class="col-50">: {{getPostMetaValueById(booking.user_post_meta, "message").value}}</div>
+                                </div>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">Status </div>
+                                    <div class="col-50">: {{getPostMetaValueById(booking.user_post_meta, "booking_status").value}}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <div ng-show="getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='placed'" class="button cp-devider" style="width:100%;"  ng-click="cancelBooking({{booking.id}})">{{button_text_cancel_booking}} {{getPostMetaValueById(booking.user_post_meta, "booking_number").value}}</div>
+                    <span ng-show="getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='canceled'" class="button cp-devider" style="width:100%;" disabled>{{getPostMetaValueById(booking.user_post_meta, "booking_number").value}} {{button_text_canceled}}</span>
+                    <span ng-show="getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='rejected'" class="button cp-devider" style="width:100%;" disabled>{{getPostMetaValueById(booking.user_post_meta, "booking_number").value}} {{button_text_rejected}}</span>
+                    <span ng-show="getPostMetaValueById(booking.user_post_meta, 'booking_status').value=='confirmed'" class="button cp-devider" style="width:100%;" disabled>{{getPostMetaValueById(booking.user_post_meta, "booking_number").value}} {{button_text_confirmed}}</span>
+                </div>
+            </div>
+            <ion-infinite-scroll distance="2"
+                                 on-infinite="loadMoreData()"
+                                 ng-if="!moredata">
+            </ion-infinite-scroll>
+        </ion-content>
+    </ion-pane>
+</ion-view>

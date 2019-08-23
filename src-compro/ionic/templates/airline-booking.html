@@ -1,0 +1,106 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> Airline Booking </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content has-header'>
+        	<section>
+	        	<div class="row">
+		            <div class = "col text-left">
+		            	<div class="input-label">Origin</div>
+		               <a class="item item-icon-left" href="#/app/airline-booking-origin-destination/origin"><i class="icon ion-android-plane"></i>{{airline.search_origin}}</a>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class = "col">
+		               <div class="input-label">Destination</div>
+		               <a class="item item-icon-left" href="#/app/airline-booking-origin-destination/destination"><i class="icon ion-android-plane"></i>{{airline.search_destination}}</a>
+		            </div>
+		        </div>
+		        <div class="row">
+	            	<div class = "col text-right">
+		            </div>
+		            <div class = "col text-right">
+	            		<li class="item item-toggle">
+						     Round-trip?
+						     <label class="toggle toggle-assertive">
+						       <input type="checkbox" ng-model="airline.round_trip" ng-init="airline.round_trip">
+						       <div class="track">
+						         <div class="handle"></div>
+						       </div>
+						     </label>
+						 </li>
+		            </div>
+		        </div>
+		        <div class="row">
+		            <div class = "col">
+		               	<div class="input-label">Departure Date</div>
+		               	<span class="item item-icon-left"><i class="icon ion-android-calendar"></i>
+			               	<label class="item item-input item-stacked-label cp-item-input">
+			               		<input type="date" name="departure_date" ng-model="airline.departure_date" validatedateformat data-date-format="dd/mm/yyyy" ng-init="date_rdv">
+			               </label>
+		           		</span>
+		            </div>
+		        </div>
+		        <div class="row" ng-if="airline.round_trip">
+		            <div class = "col">
+		               	<div class="input-label">Return Date</div>
+		               	<span class="item item-icon-left"><i class="icon ion-android-calendar"></i>
+		               		<label class="item item-input item-stacked-label cp-item-input">
+		               			<input type="date" name="return_date" ng-model="airline.return_date" validatedateformat data-date-format="dd/mm/yyyy" ng-init="date_rdv">
+		               		</label>
+		               	</span>
+		            </div>
+		        </div>
+		        <div class="row">
+		        	<div class="col">
+		        		<div class="input-label">
+					      Adult
+					    </div>
+		        		<select ng-model="airline.adult">
+					      <option ng-selected='true'>1</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					      <option>6</option>
+					    </select>
+		        	</div>
+		        	<div class="col">
+		        		<div class="input-label">
+					      Child
+					    </div>
+		        		<select ng-model="airline.child">
+					      <option ng-selected='true'>0</option>
+					      <option>1</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					      <option>6</option>
+					    </select>
+		        	</div>
+		        	<div class="col">
+		        		<div class="input-label">
+					      Infant
+					    </div>
+		        		<select ng-model="airline.infant">
+					      <option ng-selected='true'>0</option>
+					      <option>1</option>
+					      <option>2</option>
+					      <option>3</option>
+					      <option>4</option>
+					      <option>5</option>
+					      <option>6</option>
+					    </select>
+		        	</div>
+		        </div>
+		        <div class="row">
+		        	<div class="col"><!-- 
+		        		<a class="button button-block cp-button" href="#/app/airline-booking-search?round_trip={{airline.round_trip}}&origin={{airline.search_origin}}&destination={{airline.search_destination}}&origin_code={{airline.search_origin_code}}&destination_code={{airline.search_destination_code}}&departure_date={{airline.departure_date}}&return_date={{airline.return_date}}&adult={{airline.adult}}&child={{airline.child}}&infant={{airline.infant}}" ng-click="validateSubmit()">Find Flights</a> -->
+		        		<a class="button button-block cp-button" href="" ng-click="validateSubmit()">Find Flights</a>
+		        	</div>
+		        </div>
+	    	</section>
+        </ion-content>
+    </ion-pane>
+</ion-view>

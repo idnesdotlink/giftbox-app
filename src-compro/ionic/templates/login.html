@@ -1,0 +1,184 @@
+<ion-view cache-view="false" class="cp-page">
+    <div class="bar bar-clear" ng-if="menu_type=='sidebar' && member_card_enabled && isLogin">
+        <!--<button class="button button-icon button-clear ion-navicon cp-header-button" menu-toggle="left"></button>-->
+        <div class="cp-page-content" style="width:100%;height:100%; justify-content:center; text-align:center; margin-top:33px;">
+            <div class='header' style="height:50vw; margin-left:-5px;">
+                <div class='image-product-cover blur background cp-header' style="background-image:url({{ user_meta['u_profile_pic'] }});"/></div>
+                <div class="cp-menu-image-overlay image-product-cover background"></div>
+                <div style="float:right;" ng-if="!isConfirmSavePic">
+                    <a class="button button-icon button-large button-clear cp-header-button" ng-click='showLogoutConfirm()' style="font-size:175%; position:absolute; right:5px;"><i class="ion-log-out"></i></a>
+                    <div style='margin-top:40px;'>
+                        <a class="button button-icon button-large button-clear cp-header-button" href="#/app/custom-edit-profile" style="font-size:175%; position:absolute; right:5px; "><i class="icon-width-20 ion-edit"></i></a>
+                        <a class="button button-icon button-large button-clear cp-header-button" href="#/app/change-password" style="font-size:175%; position:absolute; right:11px; margin-top:40px;"><i class="icon-width-20 ion-key"></i></a>
+                        <a class="button button-icon button-large button-clear cp-header-button" href="#/app/top-up/-6" ng-if="is_membership_enabled=='YES'" style="font-size:175%; position:absolute; right:5px; margin-top:80xp;"><i class="icon-width-20 ion-card"></i></a>
+                    </div>
+                </div>
+                <div class="image-product-cover circle profilepic cp-header" style="background-image:url({{user_meta['u_profile_pic']}});" ng-click="changeProfilePicture('u_profile_pic')">
+                    <div class="profilepictext"><i class="icon ion-ios-plus-empty" ng-if="user_meta['u_profile_pic'] == ''"></i></div>
+                </div>
+                <div style="margin-top:-20vw;" ng-if="isConfirmSavePic">
+                    <a class="button button-icon button-large button-clear cp-header-button" ng-click='cancelSavePicture()' style="font-size:12vw;">
+                        <i class="icon-width-20 ion-close-circled"></i>
+                    </a>
+                    <a class="button button-icon button-large button-clear cp-header-button" ng-click='confirmSavePicture()' style="font-size:12vw; margin-left:40vw;">
+                        <i class="icon-width-20 ion-checkmark-circled"></i>
+                    </a>
+                </div>
+                <div class="cp-menu-image-text" style="position:relative;margin:0; margin-top:{{isConfirmSavePic ? 7 : 0}}vw;font-size:7vw;line-height:20vw; text-align:center; text-overflow: ellipsis; white-space:nowrap;">
+                    {{ username_login }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <ion-nav-title class='cp-header'> {{ text_login_menu }} </ion-nav-title>
+
+    <ion-content class='cp-page-content' scroll='true'>
+
+        <div ng-if='!isLogin'>
+            <div class="list cp-list">
+                <div ng-hide="summernote_text_login_instruction === '<p><br></p>' || summernote_text_login_instruction === ''">
+                    <div class="item cp-item">
+                        <p class="cp-post-content normal_white_space"
+                           ng-bind-html='summernote_text_login_instruction | unsafe'></p>
+                    </div>
+                </div>
+                <label class="item item-input cp-item-input" ng-if="login_mode == 'username'">
+                    <span class="input-label">{{ ui_text_username }}</span>
+                    <input type="text" ng-model="input.username" placeholder="{{ ui_text_username }}">
+                </label>
+
+                <label class="item item-input cp-item-input" ng-if="login_mode == 'email'">
+                    <span class="input-label">{{ ui_text_email }}</span>
+                    <input type="email" ng-model="input.email" placeholder="you@email.com">
+                </label>
+
+                <label class="item item-input cp-item-input">
+                    <span class="input-label">{{ ui_text_password }}</span>
+                    <input type="password" ng-model="input.password" placeholder="{{ ui_text_password }}">
+                </label>
+
+                <div class="item" style="border-bottom: none; ">
+                    <button type="button" class="button button-block button-positive cp-button" ng-click="login()">{{button_text_login}}</button>
+                    <div class="cp-post-content" style="text-align: center" ng-if="register_enabled">{{ui_text_or}}</div>
+                    <!--<a class="button button-block button-positive cp-button" href="#/app/register">Register</a>-->
+                    <a class="button button-block button-positive cp-button" ng-click="save_login_redirect()" ng-href="#/app/custom-register" ng-if="register_enabled">{{button_text_register}}</a>
+                    <div class="col text-center cp-post-content">
+                        {{ui_text_forgot_password}} <strong><a class="center" ng-click="save_login_redirect()" ng-href="#/app/reset-password">{{ui_text_click_here}}</a></strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align:center;vertical-align:middle;justify-content:center;align-items:center;height:100%;width:100%" ng-if='isLogin && !member_card_enabled'>
+            <div style='padding-top:50%'>You are logged as {{username_login}}</div>
+            <div ng-if="membership_features_enabled == 'YES'">{{ user_meta['approved_points'] | number:0 }} {{ text_membership_menu_text_points }}</div>
+            <!--<a class="button button-block button-positive cp-button" href="#/app/edit-profile">Edit Profile</a>-->
+            <a class="button button-block button-positive cp-button" href="#/app/custom-edit-profile" style="margin-left:20px; margin-right:20px;">{{button_text_edit_profile}}</a>
+            <a class="button button-block button-positive cp-button" href="#/app/change-password" style="margin-left:20px; margin-right:20px;">{{button_text_change_password}}</a>
+            <a class="button button-block button-positive cp-button" href="#/app/top-up/-6" ng-if="is_membership_enabled=='YES'" style="margin-left:20px; margin-right:20px;">{{button_text_top_up}}</a>
+            <!-- <a class="button button-block button-positive cp-button" href="#/app/transaction-list" ng-show="shopping_enabled=='YES'">Transaction History</a> -->
+            <a class="button button-block button-positive cp-button" ng-click='showLogoutConfirm()' style="margin-left:20px; margin-right:20px;">{{button_text_logout}}</a>
+        </div>
+
+        <!-- Membership Card Enabled -->
+        <div class="cp-page-content" style="width:100%;height:100%; justify-content:center; text-align:center; padding-top:65vw;" ng-if="isLogin && member_card_enabled">
+
+            <div class='content'>
+                <div ng-if="user_meta['membership_member_code'] != undefined && user_meta['membership_member_code'] != null">
+                    <h2 class="cp-post-title" style="font-size:x-large !important; font-weight:bold !important;">{{ splitString(user_meta['membership_member_code'],4) }}</h2>
+                </div>
+
+                <div ng-if="membership_features_enabled == 'YES' && loyalty_integration_active == 'NO'">
+                    <div class="col">
+                        <h3 class="cp-post-title">{{ text_membership_menu_text_points }} <br>
+                                <small class="cp-post-content">{{ user_meta['approved_points'] | number:0 }}</small>
+                        </h3>
+                    </div>
+                </div>
+
+                <div ng-if="loyalty_integration_active == 'YES'">
+                    <div ng-if="user_meta['loyalty_connect'] == 'YES'">
+                        <div class="col">
+                            <h3 class="cp-post-title">{{ text_membership_menu_text_loyalty }} Balance<br>
+                                    <small class="cp-post-content">{{ user_meta['loyalty_balance'] | currency:currency }}</small>
+                            </h3>
+                        </div>
+                        <div class="col">
+                            <h3 class="cp-post-title">{{ text_membership_menu_text_loyalty }} Reward<br>
+                                    <small class="cp-post-content">{{ user_meta['loyalty_reward'] | currency:currency }}</small>
+                            </h3>
+                        </div>
+                        <div class="col">
+                            <h3 class="cp-post-title">{{ text_membership_menu_text_loyalty }} Email<br>
+                                    <small class="cp-post-content">{{ user_meta['loyalty_email'] }}</small>
+                            </h3>
+                        </div>
+                        <div class="col">
+                            <h3 class="cp-post-title">{{ text_membership_menu_text_loyalty }} Full Name<br>
+                                    <small class="cp-post-content">{{ user_meta['loyalty_name'] }}</small>
+                            </h3>
+                        </div>
+                        <div class="col">
+                            <h3 class="cp-post-title">{{ text_membership_menu_text_loyalty }} Phone<br>
+                                    <small class="cp-post-content">{{ user_meta['loyalty_phone'] }}</small>
+                            </h3>
+                        </div>
+                        <div class="col">
+                            <h3 class="cp-post-title">{{ text_membership_menu_text_loyalty }} Member Code<br>
+                                    <small class="cp-post-content">{{ user_meta['loyalty_member_code'] }}</small>
+                            </h3>
+                        </div>
+                    </div>
+                        <!-- <a class="button button-block button-positive cp-button" href="#/app/login-loyalty" style="margin-left:20px; margin-right:20px;">{{text_membership_menu_text_connect_loyalty}}</a> -->
+                    <a class="button button-block button-positive cp-button" ng-click='showLoginLoyalty()' style="margin-left:20px; margin-right:20px;" ng-if="user_meta['loyalty_connect'] == 'NO'">{{text_membership_menu_text_connect_loyalty}}</a>
+                    <a class="button button-block button-positive cp-button" ng-click='disconnectLoyalty()' style="margin-left:20px; margin-right:20px;" ng-if="user_meta['loyalty_connect'] == 'YES'">{{text_membership_menu_text_disconnect_loyalty}}</a>
+                </div>
+
+
+                <div ng-if="member_card_fields.email != undefined && member_card_fields.email != null && member_card_fields.email.is_visible == 'YES'">
+                    <div class="col" ng-if="default_register_fields.email !== false && default_register_fields.email !== null && default_register_fields.email !== ''">
+                        <h3 class="cp-post-title">{{default_register_fields.email.field_name }} <br>
+                                <small class="cp-post-content">{{ email }}</small>
+                        </h3>
+                    </div>
+                </div>
+
+                <!--<div class="{{ custom_register_fields.length > 4 ? 'row' : '' }}" ng-repeat ="field in custom_register_fields track by $index" ng-if="custom_register_fields.length > 4 ? $index % 2 === 0 : 'true'">-->
+                <div ng-repeat ="field in custom_register_fields track by $index">
+                    <!--<div class="{{ custom_register_fields.length > 4 ? 'col col-50' : ''}}">-->
+                    <div ng-if="member_card_fields[field.field_key] != undefined && member_card_fields[field.field_key] != null && member_card_fields[field.field_key].is_visible == 'YES'">
+                        <div ng-if="custom_register_fields[$index].type === 'text'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}} <br><small class="cp-post-content">{{ user_meta[custom_register_fields[$index].field_key] === '' ? '-' :  user_meta[custom_register_fields[$index].field_key] }}</small></h3>
+                        </div>
+                        <div ng-if="custom_register_fields[$index].type === 'textarea'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}} <br><small class="cp-post-content">{{ user_meta[custom_register_fields[$index].field_key] === '' ? '-' :  user_meta[custom_register_fields[$index].field_key] }}</small></h3>
+                        </div>
+                        <div ng-if="custom_register_fields[$index].type === 'number'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}} <br><small class="cp-post-content">{{ user_meta[custom_register_fields[$index].field_key] === '' ? '-' :  user_meta[custom_register_fields[$index].field_key] }}</small></h3>
+                        </div>
+                        <div ng-if="custom_register_fields[$index].type === 'email'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}} <br><small class="cp-post-content">{{ user_meta[custom_register_fields[$index].field_key] === '' ? '-' :  user_meta[custom_register_fields[$index].field_key] }}</small></h3>
+                        </div>
+                        <div ng-if="custom_register_fields[$index].type === 'date'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}} <br><small class="cp-post-content">{{ (user_meta[custom_register_fields[$index].field_key] === '' ? '-' :  user_meta[custom_register_fields[$index].field_key]) | date:MM/dd/yyyy }}</small></h3>
+                        </div>
+                        <div ng-if="custom_register_fields[$index].type === 'image'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}}</h3> <img ng-src="{{ user_meta[custom_register_fields[$index].field_key] }}" style="width:50%; height:auto;" />
+                        </div>
+                        <div ng-if="custom_register_fields[$index].type === 'generate_id'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}} <br><small class="cp-post-content">{{ user_meta[custom_register_fields[$index].field_key] === '' ? '-' :  user_meta[custom_register_fields[$index].field_key] }}</small></h3>
+                        </div>
+                        <div ng-if="custom_register_fields[$index].type === 'admin_generated'" class="">
+                            <h3 class="cp-post-title">{{custom_register_fields[$index].field_name}} <br><small class="cp-post-content">{{ user_meta[custom_register_fields[$index].field_key] === '' ? '-' :  user_meta[custom_register_fields[$index].field_key] }}</small></h3>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+
+
+
+    </ion-content>
+</ion-view>

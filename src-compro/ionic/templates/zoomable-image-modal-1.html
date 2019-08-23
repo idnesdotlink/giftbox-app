@@ -1,0 +1,17 @@
+<ion-modal-view>
+    <ion-header-bar class="header-no-border cp-gallery-background">
+        <h1 class="title cp-gallery-title">{{content_data.galleries[modal_index].title}}</h1>
+        <div class="buttons">
+            <!--<button class="button button-clear cp-button" ng-show="isPhoneGap()" style="margin-right: 10px">Share</button>-->
+            <button class="button button-clear cp-button" ng-click="closeZoombleImageModal()">Close</button>
+        </div>
+    </ion-header-bar>
+    
+    <ion-content class="cp-gallery-background">
+        <div class="box" style="display:flex;justify-content:center;align-items:center;width:100%;height:inherit;">>
+            <ion-scroll zooming="true" min-zoom="1" direction="xy" locked="false" style="display:flex;justify-content:center;align-items:center;width:100%;height:inherit;" overflow-scroll="false">
+                    <img ng-src="{{zoomable_image}}" class="full_page_image fix-aspect-ratio" style="width:100%"/>
+            </ion-scroll>
+        </div>
+    </ion-content>
+</ion-modal-view>

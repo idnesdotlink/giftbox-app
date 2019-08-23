@@ -1,0 +1,39 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-bar class="has-tab-tops cp-header header-no-border">
+        <ion-nav-back-button class="cp-header-button"></ion-nav-back-button>
+    </ion-nav-bar>
+
+    <ion-nav-title class='cp-header'>Top Up</ion-nav-title>
+    <ion-content class='cp-page-content'>
+        <div style="display:flex;justify-content:center;align-items:center;height:100%;width:100%;text-align:center;" ng-show='isLoading'>
+            <div ng-show="isTimeout==false"><ion-spinner class='cp-spinner' ng-if='isLoading'></ion-spinner><br>
+                <h4>Please wait a moment...</h4>
+            </div>
+            <div ng-show="isTimeout==true">
+                <h4>Oops, something is wrong here...<br/><small> Tap <span style='font-weight:bold;'>Reload</span> to try again.</small></h4>
+                <input type="button" 
+                       style='font-size:20px;'
+                       class="cp-button"  ng-click="retryLoadContent()" value="Reload"/>
+            </div>
+        </div>
+        <div ng-hide='isLoading'>
+            <div class="item item-image" style='height:100%;width:100%'>
+                <img ng-src="{{content_data.img_src}}"/>
+            </div>
+        </div>
+        <button ng-repeat="product in products track by $index" ng-if="$index < products.length - 1" ng-click="buy(product.productId)"
+                class="button button-block cp-button">
+                {{product.description}} - {{product.price}}
+        </button>
+        <button ng-repeat="product in products track by $index" ng-if="$index == products.length - 1" ng-click="buy(product.productId)"
+                class="button button-block button-positive">
+                {{product.description}} - {{product.price}}
+        </button>
+
+<!--        <h3>Test TopUp</h3>
+        <button ng-click="topUpAccount(365)" class="button button-block button-balanced">
+            <i class="ion-refresh"></i> Top Up
+        </button>-->
+
+    </ion-content>
+</ion-view>

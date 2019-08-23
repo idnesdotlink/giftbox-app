@@ -1,0 +1,107 @@
+<!-- extended from product-list-2 -->
+<!--<link href="css/templates/product-list-4.css" rel="stylesheet"> <!-- comment this line when deploying -->
+
+<ion-view view-title="{{content_data.title}}" class="cp-page" cache-view="true">
+    {{hasTabsTop = (menu_type == 'sidebar' || (menu_type == 'tabs' && tab_type=='tabs-bottom'));""}}
+    {{hasTabsBottom = (menu_type == 'tabs' && tab_type == 'tabs-top');""}}
+    {{totalCategory = category_list.length+1;""}}
+    {{maxCategory = 2;""}}
+    {{vPadding = 3;""}}
+    {{vMaxWidth = 100/(totalCategory <= maxCategory ? totalCategory : maxCategory+0.5);""}}
+    {{vTotalWidth=(vMaxWidth+1+1/maxCategory) * totalCategory;""}}
+    <div class="cp-tabs bar bar-subheader tabs-top sliding-tabs" ng-hide="isLoading" ng-if="hasTabsTop == true">
+        <ion-scroll delegate-handle="tabScroll" direction="x" style="width:100%;">
+            <div class="sliding-tabs-scroller" style="min-width:{{vTotalWidth}}%;">
+                <div class="tab-item slide-tab"
+                     id="tab-0"
+                     style="min-width:{{vMaxWidth}}vw; max-width:{{vMaxWidth}}vw; padding-left:{{vPadding/2}}%; padding-right:{{vPadding/2}}%;"
+                     ng-click="changeTab(-1); scrollTo('tabScroll',0,0); loadCategory();"
+                     ng-class="{active:input.categorySelected==='',inactive:input.categorySelected!==''}">
+                    <span>{{ ui_text_all }}</span>
+                </div>
+                <div class="tab-item slide-tab"
+                     id="tab-{{$index+1}}"
+                     ng-repeat="category in category_list track by $index"
+                     style="min-width:{{vMaxWidth}}vw; max-width:{{vMaxWidth}}vw; padding-left:{{vPadding/2}}%; padding-right:{{vPadding/2}}%;"
+                     ng-click="changeTab($index); scrollToElement('tabScroll','tab-'+($index+1)); loadCategory();"
+                     ng-class="{active:input.categorySelected===category,inactive:input.categorySelected!==category}">
+                    <span>{{category | uppercase}}</span>
+                </div>
+            </div>
+        </ion-scroll>
+    </div>
+
+    <div class="cp-tabs tabs tabs-bottom sliding-tabs"  ng-hide="isLoading" ng-if="hasTabsBottom == true" style="width:100% inherit; overflow-x: scroll;">
+        <ion-scroll delegate-handle="tabScroll" direction="x" style="width:100%;">
+            <div class="sliding-tabs-scroller" style="min-width:{{vTotalWidth}}%;">
+                <div class="tab-item slide-tab"
+                     style="min-width:{{vMaxWidth}}vw; max-width:{{vMaxWidth}}vw; padding-left:{{vPadding/2}}%; padding-right:{{vPadding/2}}%;"
+                     ng-click="changeTab(-1); scrollTo('tabScroll',0,0); loadCategory();"
+                     ng-class="{active:input.categorySelected==='',inactive:input.categorySelected!==''}">
+                    <span>ALL</span>
+                </div>
+                <div class="tab-item slide-tab"
+                     ng-repeat="category in category_list track by $index"
+                     style="min-width:{{vMaxWidth}}vw; max-width:{{vMaxWidth}}vw; padding-left:{{vPadding/2}}%; padding-right:{{vPadding/2}}%;"
+                     ng-click="changeTab($index); scrollTo('tabScroll',($index+1) * vMaxWidth + vPadding,0); loadCategory();"
+                     ng-class="{active:input.categorySelected===category,inactive:input.categorySelected!==category}">
+                    <span>{{category | uppercase}}</span>
+                </div>
+            </div>
+        </ion-scroll>
+    </div>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.products.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.products.length == 0'>
+        <ion-content has-header="true" style="top:88px;">
+            <div class="bar bar-header item-input-inset cp-page-content" ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_product_search').value == 'YES'" style="margin-bottom: 8px;">
+              <div class="item-input-wrapper cp-header">
+                <i class="icon ion-ios-search placeholder-icon"></i>
+                <input ng-model="product_search.search_text" type="search" placeholder="..." class="cp-header">
+                  <button class="button cp-button" ng-click="clearProductSearch()">
+                    Clear
+                  </button>
+              </div>
+              <button class="button cp-button" ng-click="productSearch()">
+                Search
+              </button>
+            </div>
+        </ion-content>
+    </ion-pane>
+    <ion-pane ng-if='!isLoading && content_data.products.length > 0'>
+    <ion-content ng-class="{'has-tabs-top':hasTabsTop===true, 'has-tabs-bottom':hasTabsBottom===true}" style="margin-top:-6px;">
+        <div class="bar bar-header item-input-inset cp-page-content" ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_product_search').value == 'YES'" style="margin-bottom: 8px;">
+          <div class="item-input-wrapper cp-header">
+            <i class="icon ion-ios-search placeholder-icon"></i>
+            <input ng-model="product_search.search_text" type="search" placeholder="..." class="cp-header">
+              <button class="button cp-button" ng-click="clearProductSearch()">
+                Clear
+              </button>
+          </div>
+          <button class="button cp-button" ng-click="productSearch()">
+            Search
+          </button>
+        </div>
+        <div class="list cp-list">
+          <a class="item item-thumbnail-left" href="#/app/{{product.post_template.name}}/{{product.id}}" ng-repeat="product in content_data.products">
+            <!--<img ng-src="{{product.featured_image_path}}"  style="width:auto; height:auto;">-->
+            <img class="image-product-cover" style="background-image: url({{product.featured_image_path}});">
+            <h2 class="cp-post-title normal_white_space"><b>{{product.title}}</b></h2>
+            <h3 class="cp-post-subtitle normal_white_space">{{getPostMetaValueById(product.post_meta, "subtitle").value}}</h3>
+            <h3 class="cp-post-subtitle normal_white_space" ng-if="getPostMetaValueById(product.post_meta, 'stock') && stock_status_visible=='YES'" >
+              <span ng-if="getPostMetaValueById(product.post_meta, 'stock').value == '0'" style="color:#EF5350">{{ui_text_out_of_stock}}</span>
+              <span ng-if="getPostMetaValueById(product.post_meta, 'stock').value !== '0'" style="color:#8BC34A">{{ui_text_in_stock}} <strong ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_stock_value').value == 'YES'">- {{getPostMetaValueById(product.post_meta, "stock").value}}</strong></span>
+            </h3>
+            <h3 ng-if="shopping_enabled=='YES'" class="cp-post-old-price normal_white_space text-decoration-line-through text-align-right" ng-show="getPostMetaValueById(product.post_meta, 'old_price').value !== ''"><b>{{getPostMetaValueById(product.post_meta, "old_price").value | currency:currency}}</b></h3>
+            <h3 ng-if="shopping_enabled=='NO'" class="cp-post-old-price normal_white_space text-decoration-line-through text-align-right" ng-show="getPostMetaValueById(product.post_meta, 'small_label').value !== ''"><b>{{getPostMetaValueById(product.post_meta, "small_label").value}}</b></h3>
+            <h2 ng-if="shopping_enabled=='YES'" class="cp-post-price normal_white_space text-align-right"><b>{{getPostMetaValueById(product.post_meta, "price").value | currency:currency}}</b></h2>
+            <h2 ng-if="shopping_enabled=='NO'" class="cp-post-price normal_white_space text-align-right"><b>{{getPostMetaValueById(product.post_meta, "label").value}}</b></h2>
+          </a>
+          <ion-infinite-scroll distance="2"
+                               on-infinite="loadMoreData()"
+                               ng-if="!moredata">
+
+          </ion-infinite-scroll>
+        </div>
+    </ion-content>
+  </ion-pane>
+</ion-view>

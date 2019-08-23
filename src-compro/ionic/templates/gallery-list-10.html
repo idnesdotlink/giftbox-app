@@ -1,0 +1,39 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.galleries.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.galleries.length > 0'>
+        <ion-content class='gallery-small-padding cp-page-content'>
+            <div class="home-panel-menu square no-border" style="width:100%;overflow-x:scroll;">
+                <div ng-repeat="image in content_data.galleries" ng-if="$index % 3 === 0">
+                    <div class="row" ng-if="$index%3==0">
+                        <div class="col cp-home-grid-menu" style="margin-left:2vw;background:url({{content_data.galleries[$index].featured_image_path}}) no-repeat center !important; background-size: cover !important;" ng-click="gallery($index,'templates/gallery-detail-2-no-date.html');">
+                            <!--<img class="image-product-cover" style="background-image: url({{content_data.galleries[$index].featured_image_path}});" ng-click="gallery($index,'templates/gallery-detail-2-no-date.html');">-->
+                        </div>
+
+                        <div class="col cp-home-grid-menu" ng-if="$index + 1 < content_data.galleries.length" style="margin-left:2vw;margin-right:2vw;background:url({{content_data.galleries[$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important;" ng-click="gallery($index + 1,'templates/gallery-detail-2-no-date.html');">
+                            <!--<img class="image-product-cover" style="background-image: url({{content_data.galleries[$index+1].featured_image_path}});" ng-click="gallery($index + 1,'templates/gallery-detail-2-no-date.html');">-->
+                        </div>
+                        <div class="col cp-home-grid-menu" style="visibility:hidden;margin-left:2vw;margin-right:2vw;" ng-if="$index + 1 >=content_data.galleries.length"></div>
+
+                        <div class="col cp-home-grid-menu" ng-if="$index + 2 < content_data.galleries.length" style="margin-right:2vw;background:url({{content_data.galleries[$index+2].featured_image_path}}) no-repeat center !important; background-size: cover !important;" ng-click="gallery($index + 2,'templates/gallery-detail-2-no-date.html');">
+                            <!--<img class="image-product-cover" style="background-image: url({{content_data.galleries[$index+2].featured_image_path}});" ng-click="gallery($index + 2,'templates/gallery-detail-2-no-date.html');">-->
+                        </div>
+                        <div class="col" style="visibility:hidden;margin-right:2vw;" ng-if="$index + 2 >=content_data.galleries.length"></div>
+
+                    </div>
+                </div>
+            </div>
+            <ion-infinite-scroll distance="2"
+                                 on-infinite="loadMoreData()"
+                                 ng-if="!moredata">
+
+            </ion-infinite-scroll>
+
+            <div class="row">
+                <div class="col text-center">
+                    <input type="button" class="cp-button" ng-click="loadMoreData()" value="Load More Image"/>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

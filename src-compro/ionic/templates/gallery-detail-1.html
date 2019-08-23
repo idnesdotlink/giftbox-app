@@ -1,0 +1,22 @@
+<ion-modal-view>
+    <ion-header-bar class="header-no-border cp-gallery-background">
+        <h1 class="title cp-gallery-title">{{content_data.galleries[modal_index].title}}</h1>
+        <div class="buttons">
+            <button class="button button-clear cp-button" ng-show="isPhoneGap()" ng-click="socialShare(modal_index)" style="margin-right: 10px">Share</button>
+            <button class="button button-clear cp-button" ng-click="closeGallery()">Close</button>
+        </div>
+    </ion-header-bar>
+    
+    <ion-content class="cp-gallery-background">
+        <ion-slide-box show-pager="false" active-slide="modal_index" class="slider-image-full cp-full-slider-background" on-slide-changed="slideHasChanged($index)" ng-show='!isLoading && content_data.galleries.length > 0'>
+            <ion-slide class="slider-slide-full" ng-repeat='image in content_data.galleries'>
+                <div class="box" style="display:flex;justify-content:center;align-items:center;width:100%;height:inherit;">
+<!--                <ion-scroll zooming="true" min-zoom="1" direction="xy" locked="false" style="" overflow-scroll="false">-->                
+                    <ion-scroll zooming="true" min-zoom="1" direction="xy" locked="false" style="display:flex;justify-content:center;align-items:center;width:100%;height:inherit;" overflow-scroll="false">
+                            <img ng-src="{{image.featured_image_path}}" class="full_page_image fix-aspect-ratio" style="width:100%"/>
+                    </ion-scroll>
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-modal-view>

@@ -1,0 +1,124 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> {{title}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-button'>
+            <div class="list card" style="margin: 20px 30px;">
+              <div class="item item-image" style="margin:10% 10% 5% 10%; border-width:0px">
+                <img src="https://organicthemes.com/demo/profile/files/2012/12/profile_img.png" style="width:70%; border-radius:50%;">
+                <h2 style="margin-top:10%; font-size:25px;"><strong>{{input.username}}</strong></h2>
+                <p>{{input.email}}</p>
+              </div>
+              <div class="row" ng-if="!showDetail" ng-click="showMore()">
+                <div class="col">
+                  <button class="button button-block cp-button">
+                    Show More
+                  </button>
+                </div>
+              </div>
+              <div class="row" ng-if="showDetail" ng-click="showMore()">
+                <div class="col">
+                  <button class="button button-block cp-button">
+                    Hide
+                  </button>
+                </div>
+              </div>
+
+            <form ng-if="showDetail" name="frmRegister" novalidate>
+                <div class="list">
+                    <label class="item item-input item-stacked-label cp-item-input" style="background-color:#DDDDDD !important;">
+                        <span class="input-label">{{default_register_fields.email.field_name}}</span>
+                        <input type="text" placeholder="{{default_register_fields.email.field_name}}" name="email" ng-model="input.email" readonly>
+                    </label>
+
+                    <div ng-show="expired_required">
+                        <label class="item item-input item-floating-label cp-item-input">
+                            <span class="input-label">Expired Date</span>
+                            <input type="text" placeholder="Expired Date" ng-model="input.meta['expired_date']" readonly>
+                        </label>
+                    </div>
+
+                    <label class="item item-input item-stacked-label cp-item-input">
+                        <span class="input-label">{{default_register_fields.username.field_name}} <i style="color: red;">*</i></span></span>
+                        <input type="text" placeholder="{{default_register_fields.username.field_name}}" name="username" ng-model="input.username" required>
+                    </label>
+                    <span ng-show="frmRegister.username.$error.required && !frmRegister.username.$pristine"
+                          style="color: red;padding-left: 16px;">{{default_register_fields.username.field_name}} must be filled</span>
+                    <span ng-show="frmRegister.username.$invalid && !frmRegister.username.$pristine && !frmRegister.username.$error.required"
+                          style="color: red;padding-left: 16px;">Wrong format for {{default_register_fields.username.field_name}} field</span>
+
+                    <div ng-repeat ="field in custom_register_fields track by $index">
+                        <div ng-if="field.type === 'password'">
+                          <label class="item item-input item-stacked-label cp-item-input">
+                            <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                            <input type="password" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+                          </label>
+                          <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                                style="color: red;padding-left: 16px;">{{field.field_name}} must be filled</span>
+                          <!-- <span ng-show="frmRegister.{{field.field_key}}.$error.minlength && !frmRegister.{{field.field_key}}.$pristine"
+                                style="color: red;padding-left: 16px;">{{field.field_name}} must be min length 6 characters</span>  -->
+                        </div>
+
+                        <div ng-if="field.type === 'text'">
+                            <label class="item item-input item-stacked-label cp-item-input">
+                              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                              <input type="text" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+                          </label>
+                          <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} must be filled</span>
+                        </div>
+
+                        <div ng-if="field.type === 'textarea'">
+                            <label class="item item-input item-stacked-label cp-item-input">
+                              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                              <textarea type="text" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}" rows="3"></textarea>
+                          </label>
+                          <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} must be filled</span>
+                        </div>
+
+                        <div ng-if="field.type === 'number'">
+                            <label class="item item-input item-stacked-label cp-item-input">
+                              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                              <input type="number" string-to-number placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}" min="1" step="1" >
+                          </label>
+                          <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} must be filled</span>
+                        </div>
+
+                        <div ng-if="field.type === 'email'">
+                            <label class="item item-input item-stacked-label cp-item-input">
+                                <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                                <input type="email" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+                            </label>
+                            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                            style="color: red;padding-left: 16px;">{{field.field_name}} must be filled</span>
+                            <span ng-show="frmRegister.{{field.field_key}}.$invalid && !frmRegister.{{field.field_key}}.$pristine && !frmRegister.{{field.field_key}}.$error.required"
+                            style="color: red;padding-left: 16px;">Wrong format for {{field.field_name}} field, please input a valid email</span>
+                        </div>
+
+                        <div ng-if="field.type === 'date'">
+                            <label class="item item-input item-stacked-label cp-item-input">
+                              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                              <input type="date" placeholder="{{field.field_name}}" value="{{input.meta[field.field_key] | date:MM/dd/yyyy}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" maxdate="todays" ng-required="{{field.required === 'yes'}}" validatedateformat data-date-format="mm/dd/yyyy">
+                          </label>
+                          <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} must be filled</span>
+                          <span ng-show="frmRegister.{{field.field_key}}.$invalid && !frmRegister.{{field.field_key}}.$pristine && !frmRegister.{{field.field_key}}.$error.required"
+                          style="color: red;padding-left: 16px;">Wrong format for {{field.field_name}} field, please input a valid date</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col">
+                        <button class="button button-block cp-button" ng-click="saveProfile()"
+                        ng-disabled="frmRegister.$invalid">{{save_changes}}
+                        </button>
+                    </div>
+                </div>
+            </form>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

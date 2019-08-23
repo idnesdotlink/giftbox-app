@@ -1,0 +1,50 @@
+<ion-view cache-view="false" class="cp-page" hide-nav-bar="true">
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-content scroll="true">
+        <section class="login-container cp-gradient-1" ng-if='!isLoading'>
+            <div class="col header text-center">
+                <img src="https://compro.id/wp-content/themes/compro/images/compro/logo_720.png"
+                     style="width:100%; align-content:center; margin-bottom:-27.5%;"/>
+                <div class="welcome-center">
+                    <h2 class="cp-header-button" style="color:#212121 !important;">
+                        {{welcome_title}}
+                    </h2>
+                    <h4 class="cp-header-button" style="color:#212121 !important; font-style: italic;">
+                        <!--Please Sign in or <a class="cp-header-button" href="#/register">Sign up</a> to continue-->
+                        <!--Please Sign in or <a class="cp-header-button" href="#/custom-register">Sign up</a> to continue-->
+                        {{welcome_subtitle}}
+                    </h4>
+                </div>
+            </div>
+            <div class="list cp-list">
+                <div class="col button-row text-center">
+                    <label class="item item-input item-stacked-label" style="margin:auto; padding: 0px; width:80%">
+                        <span class="input-label text-center">Email</span>
+                        <input type="email" ng-model="input.email" class="text-center" placeholder="johndoe@email.com"
+                               style="font-weight:bold">
+                    </label>
+                </div>
+                <div class="col button-row text-center">
+                    <label class="item item-input item-stacked-label" style="margin:auto; padding: 0px; width:80%">
+                       <span class="input-label text-center">Password</span>
+                        <input type="password" ng-model="input.password" class="text-center" placeholder="password"
+                               style="font-weight:bold">
+                    </label>
+                </div>
+                <div class="col button-row text-center">
+                    <button type="button" class="button button-positive cp-button" ng-click="login()" style="width:80%">
+                        {{button_text_login}}
+                    </button>
+
+                    <p style="margin-top:10px; color:darkred;">
+                        <i class="icon-width-30 ion-alert-circled"></i> This app requires internet connection
+                    </p>
+                </div>
+            </div>
+        </section>
+    </ion-content>
+    <ion-nav-bar class="has-tab-tops cp-header header-no-border">
+        <ion-nav-back-button class="cp-header-button"></ion-nav-back-button>
+
+    </ion-nav-bar>
+</ion-view>

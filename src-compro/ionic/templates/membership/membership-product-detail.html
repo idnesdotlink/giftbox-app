@@ -1,0 +1,53 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.name}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="row">
+                <div class="col">
+                    <div class='spinner' style="background-color:{{ content_data.imgLoadOK ? 'none' : '#eeeeee' }}; width:100%;">
+                        <img ng-src="{{content_data.image}}" class="full-image"
+                             ng-show="content_data.imgLoadOK && content_data.image !== null && content_data.image !== ''" imageonload="loadImageComplete()"/>
+                        <ion-spinner icon="spiral" class='cp-spinner' ng-hide='content_data.imgLoadOK'></ion-spinner>
+                    </div>
+                    <div class="button cp-button btn-redeem-item small" ng-click="redeemItem(content_data.id)" ng-if="content_data.quantity > 0">{{button_text_membership_product_buy}}</div>
+                    <div class="button cp-button btn-redeem-item small" ng-click="redeemItem(content_data.id)" ng-if="content_data.quantity === 0" disabled>{{button_text_membership_product_buy}}</div>
+                    <h4 class="cp-post-title post_title normal_white_space"><b>{{content_data.name}}</b></h4>
+                    <h5 class="cp-post-subtitle post_subtitle normal_white_space" style='font-weight:bold !important;'><i class="icon ion-star"></i> {{content_data.price | number:0}} Points</h5>
+                </div>
+            </div>
+            <ion-tabs class="tabs-icon-top tab-membership">
+                <ion-tab class="cp-header tab-item-member" title="{{ button_text_membership_product_description }}" icon="icon ion-android-list" style="height:60px; padding-top:5px;">
+                    <ion-nav-view class="tab-view-member">
+                        <div class="row">
+                            <div class="col">
+                                <p class="cp-post-content normal_white_space justify_text_align"
+                                   ng-bind-html='content_data.description | unsafe'></p>
+                            </div>
+                        </div>
+                    </ion-nav-view>
+                </ion-tab>
+                <ion-tab class="cp-header tab-item-member" title="{{ button_text_membership_product_tutorial }}" icon="icon ion-help">
+                    <ion-nav-view class="tab-view-member">
+                        <div class="row">
+                            <div class="col">
+                                <p class="cp-post-content normal_white_space justify_text_align"
+                                   ng-app=""ng-bind-html='content_data.tutorial | unsafe'></p>
+                            </div>
+                        </div>
+                    </ion-nav-view>
+                </ion-tab>
+                <ion-tab class="cp-header tab-item-member" title="{{ button_text_membership_product_terms_conditions }}" icon="icon ion-document-text">
+                    <ion-nav-view class="tab-view-member">
+                         <div class="row">
+                            <div class="col">
+                                <p class="cp-post-content normal_white_space justify_text_align"
+                                   ng-bind-html='content_data.terms_conditions | unsafe'></p>
+                            </div>
+                         </div>
+                    </ion-nav-view>
+                </ion-tab>
+            </ion-tabs>
+        </ion-content>
+    </ion-pane>
+</ion-view>

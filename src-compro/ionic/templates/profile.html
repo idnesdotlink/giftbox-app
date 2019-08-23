@@ -1,0 +1,18 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry='retryLoadContent()'></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content'>
+            <div class="item item-image">
+                <img  ng-src="{{content_data.img_src}}" />
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h2 class="cp-post-title"><b>{{content_data.name}}</b></h2>
+                    <div ng-bind-html="content_data.biography | unsafe" class="justify_text_align cp-post-content note-editable"></div>
+                </div>
+            </div>
+            <social-share share="customSocialShare(content_data.name, content_data.biography)"></social-share>
+        </ion-content>
+    </ion-pane>
+</ion-view>

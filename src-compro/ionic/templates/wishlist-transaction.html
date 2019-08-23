@@ -1,0 +1,33 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.wishlist_transactions.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.wishlist_transactions.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list" >
+                <div ng-repeat='wishlist_transaction in content_data.wishlist_transactions'>
+                    <!-- <div class="item item-divider cp-term-divider">
+                        {{transaction.date_created}}
+                    </div> -->
+                    <a class="item" href="#/app/wishlist-transaction-detail/{{wishlist_transaction.id}}">
+                        <div class="row" style="margin-bottom:20px">
+                            <div class="col col-50">
+                                <h3 class="cp-post-subtitle normal_white_space"><strong>{{wishlist_transaction.order_id}}</strong></h3>
+                                <h3 class="cp-post-subtitle normal_white_space">{{wishlist_transaction.date_created}}</h3>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h3 class="cp-post-subtitle normal_white_space"><strong>{{wishlist_transaction.total_price | currency:currency}}</strong></h3>
+                                <h3 ng-if="wishlist_transaction.status == 0" class="badge badge-energized" style="right:25px; top:50px">Not Confirmed</h3>
+                                <h3 ng-if="wishlist_transaction.status == 1" class="badge badge-balanced" style="right:25px; top:50px">Confirmed</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

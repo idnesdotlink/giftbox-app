@@ -1,0 +1,101 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>{{content_data.wishlist_transaction_master.order_id}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_total}}
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center normal_white_space" >
+                        <span class="cp-post-title" style="font-weight:bold !important; font-size:20px !important;">{{content_data.wishlist_transaction_master.total_price | currency:currency}}</span><br>
+                        <span ng-if="content_data.wishlist_transaction_master.status==0"
+                              class="badge badge-energized text-center">Not Confirmed</span>
+                        <span ng-if="content_data.wishlist_transaction_master.status==1"
+                              class="badge badge-balanced text-center">Confirmed</span>
+                    </h1>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_wishlist_transaction_detail}}
+            </div>
+            <div class="cp-list">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_wishlist_transaction_code}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.wishlist_transaction_master.order_id | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_date}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.wishlist_transaction_master.date_created | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_admin_notes}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.wishlist_transaction_master.admin_notes | unsafe'></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_product_detail}}
+            </div>
+            <div class="cp-list">
+                <div ng-repeat='wishlist_transaction_detail in content_data.wishlist_transaction_details' class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_product_name}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">
+                              <span style="font-weight:bold;">{{wishlist_transaction_detail.product_name}}</span>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_product_price}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{wishlist_transaction_detail.product_price |
+                                currency:currency}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_quantity}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{wishlist_transaction_detail.quantity}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_subtotal}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"><b>{{wishlist_transaction_detail.total |
+                                currency:currency}}</b></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

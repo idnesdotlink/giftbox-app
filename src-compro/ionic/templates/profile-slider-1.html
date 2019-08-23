@@ -1,0 +1,21 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <ion-content class="cp-page-content" ng-init="loadImages()">
+        <div class="row">
+            <div class="col">
+                <h2 class="cp-post-title normal_white_space"><b>PUTRA CHANDRA PROFILE</b></h2>
+                <h3 class="cp-post-subtitle  normal_white_space">Since 1998</h3>
+                <ion-slide-box class="cp-full-slider-background" on-slide-changed="slideHasChanged($index)">
+                    <ion-slide class="slider-slide-full" ng-repeat="image in images">
+                        <div class="box"><img ng-src="{{images[$index].src}}" ng-click="gallery($index);" class="image-fix-ratio-2-1 fix-aspect-ratio"/></div>
+                    </ion-slide>
+                </ion-slide-box>
+                <br/>
+                <p class="cp-post-content normal_white_space justify_text_align">
+                    Putra Chandra Sentosa is a company engaged in the distribution of food processing and packaging machinery. It was founded in 2004 as a commercial enterprise for small-scale business in the area of North Jakarta. Thanks to its professionalism and health management expertise, the company has grown rapidly into one of the three biggest companies that supply food processing and packaging machines in Indonesia.
+                </p>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

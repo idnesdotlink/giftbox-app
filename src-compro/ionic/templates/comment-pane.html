@@ -1,0 +1,68 @@
+<div class="row" ng-show="content_data.comment_status != 0">
+    <p>
+        <a ng-click="" class="subdued">{{ text_comment_like }}: {{content_data.total_likes}} </a> <!-- scrollBottom()-->
+        <a ng-click="" class="subdued">{{ text_comment_button }}: {{content_data.total_comments}}</a> <!-- scrollBottom()-->
+    </p>
+</div>
+
+<div class="row" ng-show='liked'>
+    <p>
+        <a class="subdued">{{ text_comment_you_liked_this }}</a>
+    </p>
+</div>
+
+<div class="item tabs tabs-secondary tabs-icon-left cp-comment-tab" ng-show="isLogin && content_data.comment_status != 0">
+    <div class="tab-item" ng-click='likeFunction()' ng-hide='liked'>
+        <i class="icon ion-thumbsup"></i>
+        {{ text_comment_like }}
+    </div>
+
+    <div class="tab-item" ng-show='liked' style='opacity: 0.3'>
+        <i class="icon ion-thumbsup"></i>
+        {{ text_comment_like }}
+    </div>
+
+    <a class="tab-item" ng-click=""> <!-- scrollBottom()-->
+        <i class="icon ion-chatbox"></i>
+        {{ text_comment_button }}
+    </a>
+
+    <a class="tab-item" ng-show="true" ng-click="socialShare()">
+        <i class="icon ion-share"></i>
+        {{ text_share }}
+    </a>
+</div>
+
+<div class="item tabs tabs-secondary tabs-icon-left cp-comment-tab" ng-if="!isLogin">
+    <a class="tab-item" ng-click="socialShare()">
+        <i class="icon ion-share"></i>
+      {{ text_share }}
+    </a>
+</div>
+
+<div class="row" ng-show="content_data.comment_status != 0 && content_data.total_comments > 3">
+    <div class="col">
+        <a class="cp-post-subtitle" style="text-decoration:none;" href="#/app/comment-list/{{content_data.id}}">view more {{content_data.total_comments - 3}} comment(s)</a>
+    </div>
+</div>
+<div class="list cp-comment-list">
+    <div class="item" ng-repeat='comment in content_data.comments'>
+        <p class="normal_white_space cp-comment-text">
+            <span class="cp-comment-author">{{comment.author}}</span>
+            {{comment.content}}
+        </p>
+    </div>
+
+    <div class="item item-input-inset cp-item-input-inset" ng-show="isLogin && content_data.comment_status != 0">
+        <label class="item-input-wrapper">
+            <input type="text" placeholder="{{ text_comment_button }}" ng-model='input.comment' class='cp-item-input'>
+        </label>
+        <button class="button button-small cp-button icon ion-android-send" ng-click='postComment()'></button>
+    </div>
+
+    <div class="item item-input-inset cp-item-input-inset" ng-show="!isLogin && content_data.comment_status != 0">
+          <a class="button button-block cp-button" style="width:100%;" ng-click= "showLoginToCommentAlert()">
+          {{ text_comment_btn_login_to_comment }}
+          </a>
+    </div>
+</div>

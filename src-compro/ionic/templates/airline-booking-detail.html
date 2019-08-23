@@ -1,0 +1,96 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>Flight Detail</ion-nav-title>
+    <ion-pane>
+        <ion-content class="cp-page-content has-header">
+            <div class="item item-divider cp-term-divider">
+                {{content_data.flights[airline.booking_id].Origin}}-{{content_data.flights[airline.booking_id].Destination}}
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;">
+                <div class="item" ng-repeat="flight in content_data.flights track by $index" ng-if="$index == airline.booking_id">
+                    <div ng-if="flight.IsConnecting == true">
+                        <div class="row" ng-if="flight.IsMultiClass == true">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right" ng-if="airline.menu != 'transaction'"><b>{{flight.Fare | currency:currency}}</b></div>
+                        </div>
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right" ng-if="airline.menu != 'transaction'"><b>{{flight.ClassObjects[0].Fare | currency:currency}}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}} <span ng-if="flight.TotalTransit>0">({{flight.TotalTransit}} Transit)</span></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == false">
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.AirlineName}} <span><img ng-src="{{flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right" ng-if="airline.menu != 'transaction'"><b>{{flight.ClassObjects[0].Fare | currency:currency}}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="item item-divider cp-term-divider">
+                Detail
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;">
+                <div class="item" ng-repeat="flight in content_data.flights track by $index" ng-if="$index == airline.booking_id">
+                    <div ng-if="flight.IsConnecting == true && flight.IsMultiClass == true" ng-repeat="connecting_flight in flight.ConnectingFlights">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{connecting_flight.AirlineName}} <span><img ng-src="{{connecting_flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.ClassObjects[0].Category}}</b></div>
+                            <!-- <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.Fare | currency:currency}}</b></div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{connecting_flight.DepartTime}} - {{connecting_flight.ArriveTime}} <span ng-if="connecting_flight.TotalTransit>0">({{connecting_flight.TotalTransit}} Transit)</span></h3>
+                                <h3>{{connecting_flight.Origin}}-{{connecting_flight.Destination}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == true && flight.IsMultiClass == false" ng-repeat="connecting_flight in flight.ConnectingFlights">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{connecting_flight.AirlineName}} <span><img ng-src="{{connecting_flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Category}}</b></div>
+                            <!-- <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.Fare | currency:currency}}</b></div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{connecting_flight.DepartTime}} - {{connecting_flight.ArriveTime}} <span ng-if="connecting_flight.TotalTransit>0">({{connecting_flight.TotalTransit}} Transit)</span></h3>
+                                <h3>{{connecting_flight.Origin}}-{{connecting_flight.Destination}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == false && flight.IsMultiClass == false">
+                    	<div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.AirlineName}} <span><img ng-src="{{flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Category}}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

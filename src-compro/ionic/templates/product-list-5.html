@@ -1,0 +1,116 @@
+<ion-view view-title="{{content_data.title}}" class="cp-page product-list-5" cache-view="true">
+    <ion-header-bar class="bar-subheader" ng-show='!isLoading' style="padding:0px">
+        <select class="" ng-model="input.categorySelected" ng-change="loadCategory()"
+                style="width:50%;border:0px;padding:5px;">
+            <option value="" selected>All</option>
+            <option value="{{category}}" ng-repeat="category in category_list">{{category}}</option>
+        </select>
+        <select class="" ng-model="input.orderBySelected" ng-change="sortList()"
+                style="width:50%;border:0px;padding:5px;">
+            <option value="{{order_by.key}}" ng-repeat="order_by in order_by_list">{{order_by.value}}</option>
+        </select>
+    </ion-header-bar>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.products.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.products.length == 0'>
+        <ion-content has-header="true">
+            <div class="bar bar-header item-input-inset cp-page-content" ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_product_search').value == 'YES'" style="margin-bottom: 8px;">
+              <div class="item-input-wrapper cp-header">
+                <i class="icon ion-ios-search placeholder-icon"></i>
+                <input ng-model="product_search.search_text" type="search" placeholder="..." class="cp-header">
+                  <button class="button cp-button" ng-click="clearProductSearch()">
+                    Clear
+                  </button>
+              </div>
+              <button class="button cp-button" ng-click="productSearch()">
+                Search
+              </button>            
+            </div>
+        </ion-content>
+    </ion-pane>
+    <ion-pane ng-if='!isLoading && content_data.products.length > 0'>
+        <ion-content has-header="true" class="gallery-small-padding cp-page-content">
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="bar bar-header item-input-inset cp-page-content" ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_product_search').value == 'YES'" style="margin-bottom: 8px;">
+              <div class="item-input-wrapper cp-header">
+                <i class="icon ion-ios-search placeholder-icon"></i>
+                <input ng-model="product_search.search_text" type="search" placeholder="..." class="cp-header">
+                  <button class="button cp-button" ng-click="clearProductSearch()">
+                    Clear
+                  </button>
+              </div>
+              <button class="button cp-button" ng-click="productSearch()">
+                Search
+              </button>            
+            </div>
+            <div class="list cp-list" style="margin-top:-1vh">
+                <div ng-repeat-start='product in content_data.products track by $index'></div>
+                <div class="row" ng-if="$index % 2 == 0">
+                    <div class="col col-50 card cp-page-content" ng-if="$index < content_data.products.length">
+                        <a href="#/app/{{content_data.products[$index].post_template.name}}/{{content_data.products[$index].id}}">
+                            <div class="image-container">
+                                <img ng-src="{{content_data.products[$index].featured_image_path}}" class="col">
+                            </div>
+                        </a>
+                        <div class="text-center cp-post-title normal_white_space">
+                            {{content_data.products[$index].title}}
+                        </div>
+                        <h3 class="cp-post-subtitle normal_white_space text-center"
+                            ng-if="getPostMetaValueById(content_data.products[$index].post_meta, 'stock') && stock_status_visible=='YES'">
+                            <span ng-if="getPostMetaValueById(content_data.products[$index].post_meta, 'stock').value == '0'"
+                                  style="color:#EF5350">{{ui_text_out_of_stock}}</span>
+                            <span ng-if="getPostMetaValueById(content_data.products[$index].post_meta, 'stock').value !== '0'"
+                                  style="color:#8BC34A">{{ui_text_in_stock}} <strong ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_stock_value').value == 'YES'">- {{getPostMetaValueById(product.post_meta, "stock").value}}</strong></span>
+                        </h3>
+                        <div ng-if="shopping_enabled=='YES'" class="text-center">
+                            <h3 class="cp-post-old-price normal_white_space text-decoration-line-through"
+                                ng-show="getPostMetaValueById(content_data.products[$index].post_meta, 'old_price').value !== ''"><b>{{getPostMetaValueById(content_data.products[$index].post_meta,
+                                "old_price").value | currency:currency}}</b></h3>
+                            <h2 class="cp-post-price normal_white_space"><b>{{getPostMetaValueById(content_data.products[$index].post_meta,
+                                "price").value | currency:currency}}</b></h2>
+                        </div>
+                        <div ng-if="shopping_enabled=='NO'" class="text-center">
+                            <h3 class="cp-post-old-price normal_white_space text-decoration-line-through"
+                                ng-show="getPostMetaValueById(content_data.products[$index].post_meta, 'small_label').value !== ''"><b>{{getPostMetaValueById(content_data.products[$index].post_meta,
+                                "small_label").value}}</b></h3>
+                            <h2 class="cp-post-price normal_white_space"><b>{{getPostMetaValueById(content_data.products[$index].post_meta,
+                                "label").value}}</b></h2>
+                        </div>
+                    </div>
+                    <div class="col col-50 card cp-page-content" ng-if="$index+1 < content_data.products.length">
+                        <a href="#/app/{{content_data.products[$index+1].post_template.name}}/{{content_data.products[$index+1].id}}">
+                            <div class=image-container>
+                                <img ng-src="{{content_data.products[$index+1].featured_image_path}}" class="col">
+                            </div>
+                        </a>
+                        <div class="text-center cp-post-title normal_white_space">
+                            {{content_data.products[$index+1].title}}
+                        </div>
+                        <h3 class="cp-post-subtitle normal_white_space text-center"
+                            ng-if="getPostMetaValueById(content_data.products[$index+1].post_meta, 'stock') && stock_status_visible=='YES'">
+                            <span ng-if="getPostMetaValueById(content_data.products[$index+1].post_meta, 'stock').value == '0'"
+                                  style="color:#EF5350">{{ui_text_out_of_stock}}</span>
+                            <span ng-if="getPostMetaValueById(content_data.products[$index+1].post_meta, 'stock').value !== '0'"
+                                  style="color:#8BC34A">{{ui_text_in_stock}} <strong ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_stock_value').value == 'YES'">- {{getPostMetaValueById(product.post_meta, "stock").value}}</strong></span>
+                        </h3>
+                        <div ng-if="shopping_enabled=='YES'" class="text-center">
+                            <h3 class="cp-post-old-price normal_white_space text-decoration-line-through"
+                                ng-show="getPostMetaValueById(content_data.products[$index+1].post_meta, 'old_price').value !== ''"><b>{{getPostMetaValueById(content_data.products[$index+1].post_meta,
+                                "old_price").value | currency:currency}}</b></h3>
+                            <h2 class="cp-post-price normal_white_space"><b>{{getPostMetaValueById(content_data.products[$index+1].post_meta,
+                                "price").value | currency:currency}}</b></h2>
+                        </div>
+                        <div ng-if="shopping_enabled=='NO'" class="text-center">
+                            <h3 class="cp-post-old-price normal_white_space text-decoration-line-through"
+                                ng-show="getPostMetaValueById(content_data.products[$index+1].post_meta, 'small_label').value !== ''"><b>{{getPostMetaValueById(content_data.products[$index+1].post_meta,
+                                "small_label").value}}</b></h3>
+                            <h2 class="cp-post-price normal_white_space"><b>{{getPostMetaValueById(content_data.products[$index+1].post_meta,
+                                "label").value}}</b></h2>
+                        </div>
+                    </div>
+                </div>
+                <div ng-repeat-end></div>
+                <ion-infinite-scroll distance="2" on-infinite="loadMoreData()" ng-if="!moredata"></ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

@@ -1,0 +1,51 @@
+<ion-view class="cp-page" hide-nav-bar="true">
+    <div class="bar bar-clear" ng-if="menu_type=='sidebar'">
+        <button class="button button-icon button-clear ion-navicon cp-header-button" menu-toggle="left"></button>
+    </div>
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if="!isLoading">
+        <ion-content class='cp-page-content home-5' scroll="false">
+            <img ng-src="{{content_data.img_src}}" style="position:absolute;width:100%;height:100%;"/>
+            {{vMaxCol=4;""}}
+            {{vGap=30/vMaxCol;""}}
+            {{vMaxWidth=(100/vMaxCol) - vGap;""}}
+            {{vIconSize=vMaxWidth/2;""}}
+            {{vFontSize=vMaxWidth/1.5;""}}
+            <div style="position:absolute;width:100%;bottom:0px;">
+                <div class="home-panel-menu" style="width:100%;overflow-x:scroll;">
+                    <div class="row-5">
+                        <div ng-repeat-start='menu in content_data.menus track by $index'> </div>
+                            {{vIndex = $index;""}}
+                            <!--
+                                if is the beginning of row, and total_last_column is less than vMaxCol
+                                add margin-left as many as: ((vMaxCol - (totalMenu - vIndex)) * (vMaxWidth + vGap/2)) / 2
+                                total_last_column = vMaxCol - content_data.menus.length - vIndex
+                            -->
+                            {{totalMenu=content_data.menus.length;""}}
+                            {{extraMargin = (vIndex % vMaxCol == 0) && (totalMenu - vIndex < vMaxCol) ?
+                                ((vMaxCol - (totalMenu - vIndex)) * (vMaxWidth + vGap))/2 : 0 ;""}}
+
+                            <div class="col-5 cp-home-grid-menu" ng-if="vIndex < totalMenu" style='margin-left:{{(vGap/2)+extraMargin}}%; margin-right:{{vGap/2}}%; margin-bottom:{{vGap/2}}%; width:{{vMaxWidth}}%;'>
+                                <span class='cp-modal-menu-item text' style="font-size:{{vFontSize}}px; max-width:{{vMaxWidth}}% inherit; max-height:{{vMaxWidth+vGap}}% inherit; width:100%; height:100%;">
+                                    <div class='circle' style=" height:{{vMaxWidth}}vw; padding-top:{{vIconSize/2}}vw;">
+                                        <a class="cp-modal-menu-item" ng-if='content_data.menus[vIndex].id == -5' ng-click="socialShare()">
+                                            <i class="icon {{content_data.menus[vIndex].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i>
+                                        </a>
+                                        <a class="cp-modal-menu-item" ng-if='content_data.menus[vIndex].content_type_id == "1" || content_data.menus[vIndex].content_type_id == "2"' href="#/app/{{content_data.menus[vIndex].term_template.name}}/{{content_data.menus[vIndex].id}}">
+                                            <i class="icon {{content_data.menus[vIndex].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i>
+                                        </a>
+                                        <a class="cp-modal-menu-item" ng-if='content_data.menus[vIndex].content_type_id == "3"' href="#/app/{{content_data.menu_post[content_data.menus[vIndex].id].post_template.name}}/{{content_data.menu_post[content_data.menus[vIndex].id].id}}">
+                                            <i class="icon {{content_data.menus[vIndex].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i>
+                                        </a>
+                                    </div>
+                                    {{content_data.menus[vIndex].title}}
+                                </span>
+                            </div>
+                        <div ng-repeat-end> </div>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

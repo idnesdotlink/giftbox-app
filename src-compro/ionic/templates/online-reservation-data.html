@@ -1,0 +1,83 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> Online Reservation Data</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content has-header'>
+            <form name="frmOnlineReservation" novalidate>
+                <div class="list cp-list">
+                    <div class="item item-divider cp-term-divider">
+                        Fill In Contact Details
+                    </div>
+                    <div>
+                        <label class="item item-input item-stacked-label cp-item-input">
+                            <span class="input-label">Name</span>
+                            <input type="text" name="mname" ng-model="master.fullname" required>
+                        </label>
+                        <span ng-show="frmOnlineReservation.mname.$error.required && !frmOnlineReservation.mname.$pristine"
+                          style="color: red;padding-left: 16px;">Name must be filled</span>
+                    </div>
+                    <div>
+                        <label class="item item-input item-stacked-label cp-item-input">
+                            <span class="input-label">Email</span>
+                            <input type="email" name="memail" ng-model="master.email" required>
+                        </label>
+                        <span ng-show="frmOnlineReservation.memail.$error.required && !frmOnlineReservation.memail.$pristine"
+                            style="color: red;padding-left: 16px;">Email must be filled</span>
+                        <span ng-show="frmOnlineReservation.memail.$invalid && !frmOnlineReservation.memail.$pristine && !frmOnlineReservation.memail.$error.required"
+                            style="color: red;padding-left: 16px;">Wrong format for email field</span>
+                    </div>
+                    <div>
+                        <label class="item item-input item-stacked-label cp-item-input">
+                            <span class="input-label">Mobile Phone</span>
+                            <input type="text" name="mhandphone" ng-model="master.nohandphone" required>
+                        </label>
+                        <span ng-show="frmOnlineReservation.mhandphone.$error.required && !frmOnlineReservation.mhandphone.$pristine"
+                          style="color: red;padding-left: 16px;">Mobile Phone must be filled</span>
+                    </div>
+                    <div class="item item-divider cp-term-divider">
+                        Fill In Participant Details 
+                    </div>
+                    <div class="item item-divider cp-term-divider">
+                        <input type="checkbox" id="autofill" ng-click="fillForm()" value="1"/> Same with contact detail
+                    </div>
+                    <div ng-repeat="person in persons track by $index">
+                        <div>
+                            <label class="item item-input item-stacked-label cp-item-input">
+                                <span class="input-label">Name {{$index+1}}</span>
+                                <input type="text" name="name{{$index + 1}}" ng-model="person.fullname" required>
+                            </label>
+                            <span ng-show="frmOnlineReservation.name{{$index + 1}}.$error.required && !frmOnlineReservation.name{{$index + 1}}.$pristine"
+                                style="color: red;padding-left: 16px;">Name {{$index+1}} must be filled</span>
+                        </div>
+                        <div>
+                            <label class="item item-input item-stacked-label cp-item-input">
+                                <span class="input-label">Email {{$index+1}}</span>
+                                <input type="email" name="email{{$index + 1}}" ng-model="person.email" required>
+                            </label>
+                            <span ng-show="frmOnlineReservation.email{{$index + 1}}.$error.required && !frmOnlineReservation.email{{$index + 1}}.$pristine"
+                                style="color: red;padding-left: 16px;">Email {{$index+1}} must be filled</span>
+                            <span ng-show="frmOnlineReservation.email{{$index + 1}}.$invalid && !frmOnlineReservation.email{{$index + 1}}.$pristine && !frmOnlineReservation.email{{$index + 1}}.$error.required"
+                                style="color: red;padding-left: 16px;">Wrong format for email {{$index+1}} field</span>
+                        </div>
+                        <div>
+                            <label class="item item-input item-stacked-label cp-item-input">
+                                <span class="input-label">Mobile Phone {{$index+1}}</span>
+                                <input type="text" name="handphone{{$index + 1}}" ng-model="person.nohandphone" required>
+                            </label>
+                            <span ng-show="frmOnlineReservation.handphone{{$index + 1}}.$error.required && !frmOnlineReservation.handphone{{$index + 1}}.$pristine"
+                                style="color: red;padding-left: 16px;">Mobile Phone {{$index+1}} must be filled</span>    
+                        </div>
+                        <div style="margin-bottom:20px"></div>
+                    </div>
+                </div>
+                <section>
+                    <div class="row">
+                        <div class="col">
+                            <a class="button button-block cp-button" href="" ng-click="validateInput()" ng-disabled="frmOnlineReservation.$invalid">Reserve</a>
+                        </div>
+                    </div>
+                </section>
+            </form>
+        </ion-content>
+    </ion-pane>
+</ion-view>

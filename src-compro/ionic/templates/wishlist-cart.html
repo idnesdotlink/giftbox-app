@@ -1,0 +1,29 @@
+<div>
+    <div class="row">
+      <div class="col col-center text-center">
+        <h4 class="cp-post-subtitle normal_white_space">{{ui_text_quantity_to_buy}}</h4>
+      </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-33 text-center">
+            <button class="button button-block cp-button" ng-click='subTotal("substract");'>
+                <i class="ion-ios-minus-outline"></i>
+            </button>
+        </div>
+        <div class="col col-33 col-center text-center cp-button-outline" style="border: 1px solid white">
+            <input class="text-center" type="number" placeholder="0" ng-model="input.qty" style="width:100%"/>
+        </div>
+        <div class="col col-33 text-center">
+            <button class="button button-block cp-button" ng-click='subTotal("add");'>
+                <i class="ion-ios-plus-outline"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="item item-input-inset cp-item-input-inset">
+        <a class="button button-block cp-button" style="width:100%;" ng-click="goToWishlistTransactionDetail(content_data)">
+            Contribute
+        </a>
+    </div>
+</div>

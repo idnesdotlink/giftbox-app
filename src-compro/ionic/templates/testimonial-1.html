@@ -1,0 +1,39 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <ion-nav-buttons side="right">
+        <a href="#/app/add-testimonial/{{post_id}}">
+            <button class="button button-icon button-clear ion-android-add cp-header-button" menu-toggle="right">
+            </button>
+        </a>
+    </ion-nav-buttons>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" timeout="isTimeout" loading="isLoading" exist="content_data.comments.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane>
+        <ion-content class='cp-page-content'>
+            <!-- <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher> -->
+            <div class="list cp-list" ng-show='!isLoading && content_data.comments.length > 0'>
+                <div class="item" ng-repeat='comment in content_data.comments'>
+                    <div class="row">
+                        <div class="col">
+                            <h3 class="cp-post-title normal_white_space"><b>{{comment.author}}</b></h3>
+                        </div>
+                        <div class="col" ng-if="user_id != '' && user_id == comment.user_id" style="text-align:right;">
+                            <a href="#/app/edit-testimonial/{{post_id}}/{{comment.id}}">Edit</a>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='comment.content | unsafe'></p>
+                        </div>
+                    </div>
+                </div>
+                <!-- <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll> -->
+            </div>
+            <div class="list cp-list" ng-show='!isLoading && content_data.comments.length == 0' style="display:flex; justify-content:center; align-items:center; height:100%; width:100%; text-align:center;">
+                <a href="#/app/add-testimonial/{{post_id}}" class="button button-block cp-button"><i class="icon-width-30 ion-plus"></i>Add Comment Here</a>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

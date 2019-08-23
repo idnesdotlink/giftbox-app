@@ -1,0 +1,23 @@
+<ion-modal-view>
+    <ion-header-bar class="header-no-border cp-gallery-background">
+        <h1 class="title cp-gallery-title">{{images[modal_index].title}}</h1>
+        <div class="buttons">
+            <button class="button button-clear cp-button" ng-click="closeGallery()">Close</button>
+        </div>
+    </ion-header-bar>
+    
+    <ion-content class="cp-gallery-background" scroll="false">
+        <!--<img ng-src="{{images[modal_index].src}}" class="full-image full-image-centered"/>-->
+        <!--<img ng-src="{{images[modal_index].src}}" class="full-image"/>-->
+        <!--<img class="image-product-cover" style="background-image: {{images[modal_index].src}}" />-->
+        <ion-slide-box show-pager="true" active-slide="modal_index" class="slider-image-full cp-full-slider-background" on-slide-changed="slideHasChanged($index)" ng-show='!isLoading && images.length > 0'>
+            <ion-slide class="slider-slide-full" ng-repeat='image in images'>
+                <div class="box" style="display:flex;justify-content:center;align-items:center;width:100%;height:inherit;">
+                    <ion-scroll zooming="true" min-zoom="1" direction="xy" locked="false" style="display:flex;justify-content:center;align-items:center;width:100%;height:inherit;" overflow-scroll="false">
+                        <img ng-src="{{image.src}}" class="full_page_image fix-aspect-ratio" style="width:100%"/>
+                    </ion-scroll>
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-modal-view>

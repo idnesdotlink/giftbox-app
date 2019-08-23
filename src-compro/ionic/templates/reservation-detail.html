@@ -1,0 +1,72 @@
+<ion-view cache-view="false" class="cp-page">
+        <ion-nav-title class='cp-header'>{{content_data.reservation_master.order_id}}</ion-nav-title>
+        <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+        <ion-pane ng-if='!isLoading'>
+            <ion-content class="cp-page-content">
+                <div class="row">
+                    <div class="col">
+                        <h1 class="text-center post_title normal_white_space" style="margin: 30px 0;">
+                            <span class="cp-post-title" style="font-weight:bold !important; font-size:20px !important;">{{content_data.reservation_master.post.title}}</span><br>
+                            <span ng-if="content_data.reservation_master.approve=='NO'"
+                                  class="badge badge-energized text-center">NOT APPROVED</span>
+                            <span ng-if="content_data.reservation_master.approve=='YES'"
+                                  class="badge badge-balanced text-center">APPROVE</span>
+                        </h1>
+                    </div>
+                </div>
+    
+                <div class="item item-divider cp-term-divider">
+                    Contact Details
+                </div>
+                <div class="list cp-list" style="margin-bottom:0px;">
+                    <div class="item">
+                        <label class="item item-input cp-item-input">
+                            <span class="input-label">Full Name</span>
+                            <input type="text" ng-model="content_data.reservation_master.name" class="text-right" disabled>
+                        </label>
+                        <label class="item item-input cp-item-input">
+                            <span class="input-label">Email</span>
+                            <input type="text" ng-model="content_data.reservation_master.email" class="text-right" disabled>
+                        </label>
+                        <label class="item item-input cp-item-input">
+                            <span class="input-label">Mobile Phone</span>
+                            <input type="text" ng-model="content_data.reservation_master.phone_number" class="text-right" disabled>
+                        </label>
+                    </div>
+                </div>
+                <div class="item item-divider cp-term-divider">
+                    Participant Details
+                </div>
+                <div class="list cp-list" style="margin-bottom:0px;" ng-repeat="participant in content_data.reservation_detail
+                 track by $index">
+                    <div class="item">
+                        <label class="cp-item-input"><span class="input-label">Participant {{$index+1}}</span></label>
+                        <label class="item item-input cp-item-input">
+                            <span class="input-label">Full Name</span>
+                            <input type="text" ng-model="participant.name" class="text-right" disabled>
+                        </label>
+                        <label class="item item-input cp-item-input">
+                            <span class="input-label">Email</span>
+                            <input type="text" ng-model="participant.email" class="text-right" disabled>
+                        </label>
+                        <label class="item item-input cp-item-input">
+                            <span class="input-label">Mobile Phone</span>
+                            <input type="text" ng-model="participant.phone_number" class="text-right" disabled>
+                        </label>
+                        <label class="item item-input cp-item-input">
+                            <span class="input-label">Attend</span>
+                            <input type="text" ng-model="participant.attend" class="text-right" disabled>
+                        </label>
+                        <label class="item item-input cp-item-input">
+                            <div class="row">
+                                <div class="col">
+                                    <img ng-src="{{participant.qr_code}}" class="text-center"/>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </ion-content>
+        </ion-pane>
+    </ion-view>
+    

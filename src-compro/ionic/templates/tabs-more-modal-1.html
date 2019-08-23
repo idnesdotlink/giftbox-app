@@ -1,0 +1,67 @@
+<ion-modal-view cache-view="false">
+    <ion-header-bar class="header-no-border cp-modal-menu-bg">
+        <h1 class="title"></h1>
+        <div class="buttons">
+            <button class="button button-clear cp-modal-menu-bg" ng-click="closeMenu()">Close</button>
+        </div>
+    </ion-header-bar>
+
+    <ion-content class="cp-modal-menu-bg">
+        <div class="full-modal-menu">
+            <div ng-repeat-start='menus in main_menu track by $index'> </div>
+            <div class="row" ng-if="($index+1)%4==0 && ($index >= 3)">
+
+                <div class="col col-25 cp-modal-menu-item-container">
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index].content_type_id == "1" || main_menu[$index].content_type_id == "2"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu[$index].term_template.name}}/{{main_menu[$index].id}}"><i class="icon {{main_menu[$index].icon_code}}"></i>{{main_menu[$index].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index].content_type_id == "3"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu_post.posts[main_menu[$index].id].post_template.name}}/{{main_menu_post.posts[main_menu[$index].id].id}}"><i class="icon {{main_menu[$index].icon_code}}"></i>{{main_menu[$index].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if="main_menu[$index].title == 'Share Apps'" ng-click="closeMenu();clearHistory();socialShare()"><i class="icon ion-android-share-alt"></i>Share Apps</a>
+
+                </div>
+                <div class="col col-25 cp-modal-menu-item-container"  ng-if="$index + 1 < main_menu.length">
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index + 1].content_type_id == "1" || main_menu[$index + 1].content_type_id == "2"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu[$index + 1].term_template.name}}/{{main_menu[$index + 1].id}}"><i class="icon {{main_menu[$index + 1].icon_code}}"></i>{{main_menu[$index + 1].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index + 1].content_type_id == "3"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu_post.posts[main_menu[$index + 1].id].post_template.name}}/{{main_menu_post.posts[main_menu[$index + 1].id].id}}"><i class="icon {{main_menu[$index + 1].icon_code}}"></i>{{main_menu[$index + 1].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if="main_menu[$index+1].title == 'Share Apps'" ng-click="closeMenu();clearHistory();socialShare()"><i class="icon ion-android-share-alt"></i>Share Apps</a>
+
+                </div>
+                <div class="col col-25 cp-modal-menu-item-container"  ng-if="$index + 2 < main_menu.length">
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index + 2].content_type_id == "1" || main_menu[$index + 2].content_type_id == "2"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu[$index + 2].term_template.name}}/{{main_menu[$index + 2].id}}"><i class="icon {{main_menu[$index + 2].icon_code}}"></i>{{main_menu[$index + 2].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index + 2].content_type_id == "3"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu_post.posts[main_menu[$index + 2].id].post_template.name}}/{{main_menu_post.posts[main_menu[$index + 2].id].id}}"><i class="icon {{main_menu[$index + 2].icon_code}}"></i>{{main_menu[$index + 2].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if="main_menu[$index+2].title == 'Share Apps'" ng-click="closeMenu();clearHistory();socialShare()"><i class="icon ion-android-share-alt"></i>Share Apps</a>
+
+                </div>
+                <div class="col col-25 cp-modal-menu-item-container"  ng-if="$index + 3 < main_menu.length">
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index + 3].content_type_id == "1" || main_menu[$index + 3].content_type_id == "2"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu[$index + 3].term_template.name}}/{{main_menu[$index + 3].id}}"><i class="icon {{main_menu[$index + 3].icon_code}}"></i>{{main_menu[$index + 3].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if='main_menu[$index + 3].content_type_id == "3"' ng-click="closeMenu();clearHistory();" href="#/app/{{main_menu_post.posts[main_menu[$index + 3].id].post_template.name}}/{{main_menu_post.posts[main_menu[$index + 3].id].id}}"><i class="icon {{main_menu[$index + 3].icon_code}}"></i>{{main_menu[$index + 3].title}}</a>
+                    <a class="cp-modal-menu-item" ng-if="main_menu[$index+3].title == 'Share Apps'" ng-click="closeMenu();clearHistory();socialShare()"><i class="icon ion-android-share-alt"></i>Share Apps</a>
+
+                </div>
+
+
+                <div class="col-25" ng-if="$index + 1 >= main_menu.length">
+
+                </div>
+                <div class="col-25" ng-if="$index + 2 >= main_menu.length">
+
+                </div>
+                <div class="col-25"  ng-if="$index + 3 >= main_menu.length">
+
+                </div>
+            </div>
+            <div ng-repeat-end> </div>
+
+            <!--<div class="row">
+                <div class="col col-25 cp-modal-menu-item-container">
+                    <a class="cp-modal-menu-item" ng-click="closeMenu();clearHistory();" href="#/app/shopping-cart-1" ng-show="shopping_enabled == 'YES'">Shopping Cart</a>
+                </div>
+
+                <div class="col col-25 cp-modal-menu-item-container">
+                <a class="cp-modal-menu-item" ng-click="closeMenu();clearHistory();" href="#/app/shopping-cart-2" ng-show="shopping_enabled == 'YES'">Shopping Cart 2</a>
+                </div>
+
+                <div class="col col-25 cp-modal-menu-item-container">
+                <a class="cp-modal-menu-item" ng-click="closeMenu();clearHistory();" href="#/app/login" ng-show="login_enabled == 'YES'">Login</a>
+                </div>
+            </div>-->
+        </div>
+    </ion-content>
+</ion-modal-view>

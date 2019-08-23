@@ -1,0 +1,32 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> {{ui_text_title}} </ion-nav-title>
+    <ion-pane>
+        <ion-content class='cp-page-content'>
+            <div class="row">
+                <div class="col">
+                    <h3 class="cp-post-title"><b>{{ui_text_subtitle}}</b></h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='manual_payment_instruction | unsafe'></p>
+                </div>
+            </div>
+            <ion-list>
+                <div ng-repeat="group in groups">
+                  <ion-item class="item-stable"
+                            ng-click="toggleGroup(group)"
+                            ng-class="{active: isGroupShown(group)}">
+                      <i class="icon" ng-class="isGroupShown(group) ? 'ion-minus' : 'ion-plus'"></i>
+                    &nbsp;
+                    {{group.name}}
+                  </ion-item>
+                  <ion-item class="item-accordion"
+                            ng-repeat="item in group.items"
+                            ng-show="isGroupShown(group)">
+                    <p ng-bind-html='item | unsafe'></p>
+                  </ion-item>
+                </div>
+              </ion-list>
+    </ion-pane>
+</ion-view>

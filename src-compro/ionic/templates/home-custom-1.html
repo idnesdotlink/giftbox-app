@@ -1,0 +1,381 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content' ng-class="(getTermMetaValueByKey(content_data.term_meta, 'show_login').value == 'YES' && !isLoggedIn) ? 'bottom-50' : ''">
+            <div class="bar bar-header item-input-inset cp-page-content" ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_search').value == 'YES'">
+              <label class="item-input-wrapper cp-header">
+                <i class="icon ion-ios-search placeholder-icon"></i>
+                <input ng-model="search.search_text" type="search" placeholder="{{menu_text_search}}" class="cp-header">
+              </label>
+              <button class="button cp-button" ng-click="redirectToSearch()">
+                Search
+              </button>
+            </div>
+<!--
+            <div class="item item-image" ng-if="content_data.img_src!='' && content_data.img_src!=null">
+                <img ng-src="{{content_data.img_src}}" />
+            </div>
+-->
+            <div ng-repeat='menu in content_data.menus' ng-if="menu.content_type_id != '3'">
+                <!--carousel image for gallery templates-->
+                <div ng-if="gallery_template_ids.indexOf(menu.term_template.post_template_group_id.toString())!=-1">
+                    <div style="display:flex;align-self:center;justify-content:center;align-items:center;width:100%;height:50vw;" ng-show='content_data.isLoading[menu.id]'>
+                        <div><ion-spinner class='cp-spinner' ng-if='content_data.isLoading[menu.id]'></ion-spinner></div>
+                    </div>
+                    <div style="position:relative; width:100%; height:auto;">
+                        <div ng-show='content_data.menu_post[menu.id].length < 1' style="display:flex;justify-content:center;align-items:center;width:100%;font-size: 30px;min-height:160px;">
+                            No Data Found
+                        </div>
+                        <ion-slide-box class="slider-image-full cp-transparent-slider-background cp-page-content"
+                                       auto-play='true'
+                                       slide-interval='3000'
+                                       does-continue='true'
+                                       ng-show='content_data.menu_post[menu.id].length > 0'>
+                            <ion-slide class="slider-slide-full" ng-repeat="menu_post in content_data.menu_post[menu.id] track by $index">
+                                <a class="box" ng-click="openLink(content_data.menu_post[menu.id][$index].post_meta)">
+                                    <img ng-src="" class="image-fix-ratio-2-1" style="background:url({{menu_post.featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                                </a>
+                            </ion-slide>
+                        </ion-slide-box>
+                    </div>
+                </div>
+                <!--product templates-->
+                <div ng-if="product_template_ids.indexOf(menu.term_template.post_template_group_id.toString())!=-1">
+                    <div class="row">
+                        <div class="col"  ng-if='menu.content_type_id == 1 || menu.content_type_id == 2'>
+                            <a href="#/app/{{menu.term_template.name}}/{{menu.id}}" style="text-decoration:none;" >
+                                <h3 class="cp-post-title normal_white_space">{{menu.title}}<span style="float:right;">{{ content_data.ui_text_more }}</span></h3>
+                            </a>
+                            <hr/>
+                        </div>
+                        <div class="col"  ng-if='menu.content_type_id == 3'>
+                            <a href="#/app/{{content_data.menu_post[menu.id].post_template.name}}/{{content_data.menu_post[menu.id].id}}" style="text-decoration:none;" >
+                                <h3 class="cp-post-title normal_white_space">{{menu.title}}</h3>
+                            </a>
+                            <hr/>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-self:center;justify-content:center;align-items:center;width:100%;height:25vh;" ng-show='content_data.isLoading[menu.id]'>
+                        <div><ion-spinner class='cp-spinner' ng-if='content_data.isLoading[menu.id]'></ion-spinner></div>
+                    </div>
+                    <div style="position:relative; width:100%; height:auto;">
+
+                        <div ng-show='content_data.menu_post[menu.id].length < 1' style="display:flex;justify-content:center;align-items:center;width:100%;font-size: 30px;min-height:150px;">
+                            No Data Found
+                        </div>
+
+                        <ion-slide-box class="slider-image-full cp-transparent-slider-background"
+                                       auto-play='false'
+                                       slide-interval='3000'
+                                       ng-show='content_data.menus.length > 0'>
+                            <ion-slide class="slider-slide-full" ng-repeat="menu_post in content_data.menu_post[menu.id] track by $index" ng-if="$index % 2 == 0">
+                                <div class="box">
+                                    <div class="row">
+                                        <a class="col-50" style="padding:5px; text-decoration:none;" href="#/app/{{content_data.menu_post[menu.id][$index].post_template.name}}/{{content_data.menu_post[menu.id][$index].id}}">
+                                            <img ng-src="" style="width:100%;height:37.5vw; background:url({{content_data.menu_post[menu.id][$index].featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                                            <div style="width:100%;">
+                                                <h3 class="cp-post-title normal_white_space" style="text-align:left;">{{content_data.menu_post[menu.id][$index].title}}</h3>
+                                                <h3 class="cp-post-old-price normal_white_space text-decoration-line-through" style="text-align:right;" ng-show="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'old_price').value !== ''"><b>{{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, "old_price").value | currency:currency}}</b></h3>
+                                                <h2 class="cp-post-price normal_white_space" style="text-align:right;"><b>{{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, "price").value | currency:currency}}</b></h2>
+                                                <h3 class="cp-post-subtitle normal_white_space" ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'stock') && stock_status_visible=='YES'" >
+                                                     <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'stock').value == '0'"
+                                                              style="color:#EF5350">{{ui_text_out_of_stock}}</span>
+                                                        <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'stock').value !== '0'"
+                                                              style="color:#8BC34A">{{ui_text_in_stock}} <strong ng-if="getPostMetaValueById(updated_data[menu.id].term_meta, 'show_stock_value').value == 'YES'">- {{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, "stock").value}}</strong></span>
+                                                </h3>
+                                            </div>
+                                            <div style="width:100%;height:20px;">
+
+                                            </div>
+                                        </a>
+                                        <a class="col-50" style="padding:5px; text-decoration:none;" ng-if="$index + 1 < content_data.menu_post[menu.id].length"  href="#/app/{{content_data.menu_post[menu.id][$index+1].post_template.name}}/{{content_data.menu_post[menu.id][$index+1].id}}">
+                                            <img ng-src="" style="width:100%;height:37.5vw; background:url({{content_data.menu_post[menu.id][$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                                            <div style="width:100%;">
+                                                <h3 class="cp-post-title normal_white_space" style="text-align:left;">{{content_data.menu_post[menu.id][$index+1].title}}</h3>
+                                                <h3 class="cp-post-old-price normal_white_space text-decoration-line-through" style="text-align:right;" ng-show="getPostMetaValueById(content_data.menu_post[menu.id][$index+1].post_meta, 'old_price').value !== ''"><b>{{getPostMetaValueById(content_data.menu_post[menu.id][$index+1].post_meta, "old_price").value | currency:currency}}</b></h3>
+                                                <h2 class="cp-post-price normal_white_space" style="text-align:right;"><b>{{getPostMetaValueById(content_data.menu_post[menu.id][$index+1].post_meta, "price").value | currency:currency}}</b></h2>
+                                                <h3 class="cp-post-subtitle normal_white_space" ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index+1].post_meta, 'stock') && stock_status_visible=='YES'" >
+                                                    <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index+1].post_meta, 'stock').value == '0'"
+                                                          style="color:#EF5350">{{ui_text_out_of_stock}}</span>
+                                                    <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index+1].post_meta, 'stock').value !== '0'"
+                                                          style="color:#8BC34A">{{ui_text_in_stock}} <strong ng-if="getPostMetaValueById(updated_data[menu.id].term_meta, 'show_stock_value').value == 'YES'">- {{getPostMetaValueById(content_data.menu_post[menu.id][$index+1].post_meta, "stock").value}}</strong></span>
+                                                </h3>
+                                            </div>
+                                            <div style="width:100%;height:20px;">
+
+                                            </div>
+                                        </a>
+
+                                    </div>
+                                </div>
+                            </ion-slide>
+                        </ion-slide-box>
+                    </div>
+                </div>
+                <!-- webview templates -->
+                <div class="list cp-list" ng-if="webview_template_ids.indexOf(menu.term_template.post_template_group_id.toString())!=-1">
+                    <div class="row">
+                        <div class="col"  ng-if='menu.content_type_id == 1 || menu.content_type_id == 2'>
+                            <a href="#/app/{{menu.term_template.name}}/{{menu.id}}" style="text-decoration:none;" >
+                                <span class="cp-post-title normal_white_space">{{menu.title}}<span style="float:right;">{{ content_data.ui_text_more }}</span></span>
+                            </a>
+                        </div>
+                    </div>
+                    <div ng-repeat="menu_post in content_data.menu_post[menu.id] track by $index" ng-if='$index < 3'>
+                        <a href="#/app/{{menu_post.post_template.name}}/{{menu_post.id}}" class="item">
+                            {{menu_post.title}}
+                        </a>
+                    </div>
+                </div>
+                <!--other templates accept above-->
+                <div ng-if="exception_template_ids.indexOf(menu.term_template.post_template_group_id.toString())==-1 && menu.content_type_id == '1'">
+                    <div class="row">
+                        <div class="col"  ng-if='menu.content_type_id == 1 || menu.content_type_id == 2'>
+                            <a href="#/app/{{menu.term_template.name}}/{{menu.id}}" style="text-decoration:none;" >
+                                <h3 class="cp-post-title normal_white_space">{{menu.title}}<span style="float:right;">{{ content_data.ui_text_more }}</span></h3>
+                            </a>
+                            <hr/>
+                        </div>
+                        <div class="col"  ng-if='menu.content_type_id == 3'>
+                            <a href="#/app/{{content_data.menu_post[menu.id].post_template.name}}/{{content_data.menu_post[menu.id].id}}" style="text-decoration:none;" >
+                                <h3 class="cp-post-title normal_white_space">{{menu.title}}</h3>
+                            </a>
+                            <hr/>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-self:center;justify-content:center;align-items:center;width:100%;height:25vh;" ng-show='content_data.isLoading[menu.id]'>
+                        <div><ion-spinner class='cp-spinner' ng-if='content_data.isLoading[menu.id]'></ion-spinner></div>
+                    </div>
+                    <div style="position:relative; width:100%; height:auto;">
+
+                        <div ng-show='content_data.menu_post[menu.id].length < 1' style="display:flex;justify-content:center;align-items:center;width:100%;font-size: 30px;min-height:150px;">
+                            No Data Found
+                        </div>
+
+                        <ion-slide-box class="slider-image-full cp-transparent-slider-background"
+                                       auto-play='false'
+                                       slide-interval='3000'
+                                       ng-show='content_data.menus.length > 0'>
+                            <ion-slide class="slider-slide-full" ng-repeat="menu_post in content_data.menu_post[menu.id] track by $index" ng-if="$index % 2 == 0">
+                                <div class="box">
+                                    <div class="row" ng-if="menu.term_template.id != 5">
+                                        <a class="col-50" style="padding:5px; text-decoration:none;" href="#/app/{{content_data.menu_post[menu.id][$index].post_template.name}}/{{content_data.menu_post[menu.id][$index].id}}">
+                                            <img ng-src="" style="width:100%;height:37.5vw; background:url({{content_data.menu_post[menu.id][$index].featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                                            <div style="width:100%;">
+                                                <h3 class="cp-post-title normal_white_space">{{content_data.menu_post[menu.id][$index].title}}</h3>
+                                                <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'need').value"
+                                                        class="cp-post-subtitle normal_white_space">Need {{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'need').value}}</span>
+                                                <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'get').value"
+                                                        class="cp-post-subtitle normal_white_space">Has {{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'get').value}}</span>
+                                            </div>
+                                            <div style="width:100%;height:20px;">
+
+                                            </div>
+                                        </a>
+                                        <a class="col-50" style="padding:5px; text-decoration:none;" ng-if="$index + 1 < content_data.menu_post[menu.id].length"  href="#/app/{{content_data.menu_post[menu.id][$index+1].post_template.name}}/{{content_data.menu_post[menu.id][$index+1].id}}">
+                                            <img ng-src="" style="width:100%;height:37.5vw; background:url({{content_data.menu_post[menu.id][$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+
+                                            <div style="width:100%;">
+                                                <h3 class="cp-post-title normal_white_space">{{content_data.menu_post[menu.id][$index+1].title}}</h3>
+                                                <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'need').value"
+                                                        class="cp-post-subtitle normal_white_space">Need {{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'need').value}}</span>
+                                                <span ng-if="getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'get').value"
+                                                        class="cp-post-subtitle normal_white_space">Has {{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'get').value}}</span>
+                                            </div>
+                                            <div style="width:100%;height:20px;">
+
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="row" ng-if="menu.term_template.id == 5">
+                                      <!--#/app/check-audio/{{audio.post_template.name}}/{{getPostMetaValueById(audio.post_meta, 'mp3_name').value}}/{{audio.id}}-->
+                                      <!--#/app/check-audio/{{content_data.menu_post[menu.id][$index].post_template.name}}/{{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'mp3_name').value}}/{{content_data.menu_post[menu.id][$index].id}}-->
+                                      <a class="col-50" style="padding:5px; text-decoration:none;" href="#/app/check-audio/{{content_data.menu_post[menu.id][$index].post_template.name}}/{{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'mp3_name').value}}/{{content_data.menu_post[menu.id][$index].id}}">
+                                        <img ng-src="" style="width:100%;height:37.5vw; background:url({{content_data.menu_post[menu.id][$index].featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                                        <div style="width:100%;">
+                                          <h3 class="cp-post-title normal_white_space">{{content_data.menu_post[menu.id][$index].title}}</h3>
+                                        </div>
+                                        <div style="width:100%;height:20px;">
+
+                                        </div>
+                                      </a>
+                                      <a class="col-50" style="padding:5px; text-decoration:none;" ng-if="$index + 1 < content_data.menu_post[menu.id].length"  href="#/app/check-audio/{{content_data.menu_post[menu.id][$index].post_template.name}}/{{getPostMetaValueById(content_data.menu_post[menu.id][$index].post_meta, 'mp3_name').value}}/{{content_data.menu_post[menu.id][$index].id}}">
+                                        <img ng-src="" style="width:100%;height:37.5vw; background:url({{content_data.menu_post[menu.id][$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                                        <div style="width:100%;">
+                                          <h3 class="cp-post-title normal_white_space">{{content_data.menu_post[menu.id][$index+1].title}}</h3>
+                                        </div>
+                                        <div style="width:100%;height:20px;">
+                                        </div>
+                                      </a>
+                                    </div>
+                                </div>
+                            </ion-slide>
+                        </ion-slide-box>
+                    </div>
+                </div>
+                <!--ng-if term list home 1-->
+                <div ng-if="menu.content_type_id == '2' && menu.term_template.name == 'home-1'">
+                    <div style="display:flex;align-self:center;justify-content:center;align-items:center;width:100%;height:50vw;" ng-show='content_data.isLoading[menu.id]'>
+                        <div><ion-spinner class='cp-spinner' ng-if='content_data.isLoading[menu.id]'></ion-spinner></div>
+                    </div>
+                    <div class="list cp-list">
+                        <div ng-repeat='menu_level_2 in content_data.menu_term[menu.id].term_child track by $index'>
+                            <div ng-if='menu_level_2.content_type_id == 1 || menu_level_2.content_type_id == 2'>
+                                <a href="#/app/{{menu_level_2.term_template.name}}/{{menu_level_2.id}}" class="item item-icon-left">
+                                    <i class="{{menu_level_2.icon_code}}"></i>
+                                    {{menu_level_2.title}}
+                                </a>
+                            </div>
+                            <div ng-if='menu_level_2.content_type_id == 3'>
+                                <a href="#/app/{{content_data.menu_term[menu.id].term_child_posts[menu_level_2.id].post_template.name}}/{{content_data.menu_term[menu.id].term_child_posts[menu_level_2.id].id}}" class="item item-icon-left">
+                                    <i class="{{menu_level_2.icon_code}}"></i>
+                                    {{menu_level_2.title}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--ng-if term list home 3-->
+                <div ng-if="menu.content_type_id == '2' &&(menu.term_template.name == 'home-3' || menu.term_template.name == 'home-3-2')">
+                    <div style="display:flex;align-self:center;justify-content:center;align-items:center;width:100%;height:50vw;" ng-show='content_data.isLoading[menu.id]'>
+                        <div><ion-spinner class='cp-spinner' ng-if='content_data.isLoading[menu.id]'></ion-spinner></div>
+                    </div>
+                    <div class="home-panel-menu square no-border" style="width:100%;overflow-x:scroll;">
+                        <div ng-repeat='menu_level_2 in content_data.menu_term[menu.id].term_child track by $index'>
+                            <div class="row" ng-if="$index%3==0">
+                                <div class="col" style="margin-left:2vw;background:url({{content_data.menu_term[menu.id].term_child[$index].featured_image_path}}) no-repeat center !important; background-size: cover !important;" ng-if="$index<content_data.menu_term[menu.id].term_child.length">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index].id == -5' ng-click="socialShare()" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index].title}}</span>
+                                        </div>
+                                    </a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index].content_type_id == "1" || content_data.menu_term[menu.id].term_child[$index].content_type_id == "2"' href="#/app/{{content_data.menu_term[menu.id].term_child[$index].term_template.name}}/{{content_data.menu_term[menu.id].term_child[$index].id}}" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index].title}}</span>
+                                        </div>
+                                    </a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index].content_type_id == "3"' href="#/app/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index].id].post_template.name}}/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index].id].id}}" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index].title}}</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col" style="margin-left:3vw;margin-right:3vw;background:url({{content_data.menu_term[menu.id].term_child[$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important;" ng-if="$index + 1 <content_data.menu_term[menu.id].term_child.length">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+1].id == -5' ng-click="socialShare()" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index+1].title}}</span>
+                                        </div>
+                                    </a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+1].content_type_id == "1" || content_data.menu_term[menu.id].term_child[$index+1].content_type_id == "2"' href="#/app/{{content_data.menu_term[menu.id].term_child[$index+1].term_template.name}}/{{content_data.menu_term[menu.id].term_child[$index+1].id}}" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index+1].title}}</span>
+                                        </div>
+                                    </a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+1].content_type_id == "3"' href="#/app/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+1].id].post_template.name}}/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+1].id].id}}" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index+1].title}}</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col cp-home-grid-menu" style="visibility:hidden;margin-left:3vw;margin-right:3vw;" ng-if="$index + 1 >=content_data.menu_term[menu.id].term_child.length">
+
+                                </div>
+                                <div class="col" style="margin-right:2vw;background:url({{content_data.menu_term[menu.id].term_child[$index+2].featured_image_path}}) no-repeat center !important; background-size: cover !important;" ng-if="$index + 2 <content_data.menu_term[menu.id].term_child.length">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+2].id == -5' ng-click="socialShare()" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index+2].title}}</span>
+                                        </div>
+                                    </a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+2].content_type_id == "1" || content_data.menu_term[menu.id].term_child[$index+2].content_type_id == "2"' href="#/app/{{content_data.menu_term[menu.id].term_child[$index+2].term_template.name}}/{{content_data.menu_term[menu.id].term_child[$index+2].id}}" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index+2].title}}</span>
+                                        </div>
+                                    </a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+2].content_type_id == "3"' href="#/app/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+2].id].post_template.name}}/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+2].id].id}}" style="color:white !important;">
+                                        <div class="cp-menu-image-overlay cp-menu-image-text" style="border: 1px solid;">
+                                            <span ng-if="home_category_text">{{content_data.menu_term[menu.id].term_child[$index+2].title}}</span>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col" style="visibility:hidden;margin-right:2vw;" ng-if="$index + 2 >=content_data.menu_term[menu.id].term_child.length">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--ng-if term list other home-->
+                <div ng-if="menu.content_type_id == '2' && menu.term_template.name != 'home-1' && menu.term_template.name != 'home-3' && menu.term_template.name != 'home-3-2'">
+                    <div style="display:flex;align-self:center;justify-content:center;align-items:center;width:100%;height:50vw;" ng-show='content_data.isLoading[menu.id]'>
+                        <div><ion-spinner class='cp-spinner' ng-if='content_data.isLoading[menu.id]'></ion-spinner></div>
+                    </div>
+                    <div class="home-panel-menu square no-border" style="width:100%;overflow-x:scroll;">
+                        <div ng-repeat='menu_level_2 in content_data.menu_term[menu.id].term_child track by $index'>
+                            <div class="row" ng-if="$index%3==0">
+                            <div class="col cp-home-grid-menu" style="margin-left:2vw;" ng-if="$index<content_data.menu_term[menu.id].term_child.length">
+                                <div>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index].id == -5' ng-click="socialShare()"><i class="icon {{content_data.menu_term[menu.id].term_child[$index].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index].content_type_id == "1" || content_data.menu_term[menu.id].term_child[$index].content_type_id == "2"' href="#/app/{{content_data.menu_term[menu.id].term_child[$index].term_template.name}}/{{content_data.menu_term[menu.id].term_child[$index].id}}"><i class="icon {{content_data.menu_term[menu.id].term_child[$index].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index].content_type_id == "3"' href="#/app/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index].id].post_template.name}}/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index].id].id}}"><i class="icon {{content_data.menu_term[menu.id].term_child[$index].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index].title}}</a>
+                                </div>
+                            </div>
+                            <div class="col cp-home-grid-menu" style="margin-left:3vw;margin-right:3vw;" ng-if="$index + 1 <content_data.menu_term[menu.id].term_child.length">
+                                <div>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+1].id == -5' ng-click="socialShare()"><i class="icon {{content_data.menu_term[menu.id].term_child[$index+1].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index+1].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+1].content_type_id == "1" || content_data.menu_term[menu.id].term_child[$index+1].content_type_id == "2"' href="#/app/{{content_data.menu_term[menu.id].term_child[$index+1].term_template.name}}/{{content_data.menu_term[menu.id].term_child[$index+1].id}}"><i class="icon {{content_data.menu_term[menu.id].term_child[$index+1].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index+1].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+1].content_type_id == "3"' href="#/app/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+1].id].post_template.name}}/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+1].id].id}}"><i class="icon {{content_data.menu_term[menu.id].term_child[$index+1].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index+1].title}}</a>
+                                </div>
+                            </div>
+                            <div class="col cp-home-grid-menu" style="visibility:hidden;margin-left:3vw;margin-right:3vw;" ng-if="$index + 1 >=content_data.menu_term[menu.id].term_child.length">
+
+                            </div>
+                            <div class="col cp-home-grid-menu" style="margin-right:2vw;" ng-if="$index + 2 <content_data.menu_term[menu.id].term_child.length">
+                                <div>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+2].id == -5' ng-click="socialShare()"><i class="icon {{content_data.menu_term[menu.id].term_child[$index+2].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index+2].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+2].content_type_id == "1" || content_data.menu_term[menu.id].term_child[$index+2].content_type_id == "2"' href="#/app/{{content_data.menu_term[menu.id].term_child[$index+2].term_template.name}}/{{content_data.menu_term[menu.id].term_child[$index+2].id}}"><i class="icon {{content_data.menu_term[menu.id].term_child[$index+2].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index+2].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menu_term[menu.id].term_child[$index+2].content_type_id == "3"' href="#/app/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+2].id].post_template.name}}/{{content_data.menu_term[menu.id].term_child_posts[content_data.menu_term[menu.id].term_child[$index+2].id].id}}"><i class="icon {{content_data.menu_term[menu.id].term_child[$index+2].icon_code}}"></i>{{content_data.menu_term[menu.id].term_child[$index+2].title}}</a>
+                                </div>
+                            </div>
+                            <div class="col" style="visibility:hidden;margin-right:2vw;" ng-if="$index + 2 >=content_data.menu_term[menu.id].term_child.length">
+
+                            </div>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list cp-list">
+                <div ng-repeat='menu in content_data.menus' ng-if="menu.content_type_id == '3'">
+                    <div ng-if='menu.id == -5'>
+                        <a class="item item-icon-left" ng-click='socialShare()'>
+                            <i class="{{menu.icon_code}}"></i>
+                            {{menu.title}}
+                        </a>
+                    </div>
+                    <div ng-if='menu.content_type_id == 1 || menu.content_type_id == 2'>
+                        <a href="#/app/{{menu.term_template.name}}/{{menu.id}}" class="item item-icon-left">
+                            <i class="{{menu.icon_code}}"></i>
+                            {{menu.title}}
+                        </a>
+                    </div>
+                    <div ng-if='menu.content_type_id == 3'>
+                        <a href="#/app/{{content_data.menu_post[menu.id].post_template.name}}/{{content_data.menu_post[menu.id].id}}" class="item item-icon-left">
+                            <i class="{{menu.icon_code}}"></i>
+                            {{menu.title}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+        <div class="tabs" ng-if="getTermMetaValueByKey(content_data.term_meta, 'show_login').value == 'YES' && !isLoggedIn">
+          <a href="#/app/login/-1" class="tab-item cp-button" style="max-width:none; opacity:1;">
+            Login
+          </a>
+          <a href="#/app/custom-register" class="tab-item" style="max-width:none; opacity:1;">
+            Register
+          </a>
+        </div>
+    </ion-pane>
+</ion-view>

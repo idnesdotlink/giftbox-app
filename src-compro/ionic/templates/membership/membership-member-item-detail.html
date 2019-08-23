@@ -1,0 +1,69 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.name}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="row">
+                <div class="col">
+                    <div class='spinner' style="background-color:{{ content_data.imgLoadOK ? 'none' : '#eeeeee' }}; width:100%;">
+                        <img ng-src="{{content_data.image}}" class="full-image"
+                             ng-show="content_data.imgLoadOK && content_data.image != null && content_data.image != ''" imageonload="loadImageComplete()"/>
+                        <ion-spinner icon="spiral" class='cp-spinner' ng-hide='content_data.imgLoadOK'></ion-spinner>
+                    </div>
+<!--                    <div class="button cp-button btn-redeem-item small" ng-click="redeemItem(content_data.id)" ng-if="content_data.quantity > 0">{{button_text_membership_member_item_buy}}</div>
+                    <div class="button cp-button btn-redeem-item small" ng-click="redeemItem(content_data.id)" ng-if="content_data.quantity === 0" disabled>{{button_text_membership_member_item_buy}}</div>-->
+                    <div class="text-center">
+                        <h4 class="cp-post-title post_title normal_white_space" style="text-align:center;">
+                            <b>{{content_data.name}}</b>
+                        </h4>
+                        <div style="margin-top:-10px;">
+                            <h4 ng-if="content_data.status == 'USED'" class="badge badge-energized" style="text-align:center;">{{ content_data.status }}</h4>
+                            <h4 ng-if="content_data.status == 'ACTIVE'" class="badge badge-balanced" style="text-align:center;">{{ content_data.status + " " + text_membership_member_item_until + " " + content_data.expired_date }}</h4>
+                            <h4 ng-if="content_data.status == 'EXPIRED'" class="badge badge-assertive" style="text-align:center;">{{ content_data.status }}</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <ion-tabs class="tabs-icon-top tab-membership" style="max-width:none;">
+                <ion-tab class="cp-header tab-item-member" title="{{ button_text_membership_member_item_description }}" icon="icon ion-android-list" id="tabDescription">
+                    <ion-nav-view class="tab-view-member">
+                        <div class="row">
+                            <div class="col">
+                                <p class="cp-post-content normal_white_space justify_text_align"
+                                   ng-bind-html='content_data.description | unsafe'></p>
+                            </div>
+                        </div>
+                    </ion-nav-view>
+                </ion-tab>
+                <ion-tab class="cp-header tab-item-member" title="{{ button_text_membership_member_item_confirm }}" icon="icon ion-android-checkbox-outline" ng-if="enableConfirmTab">
+                    <ion-nav-view class="tab-view-member">
+                        <div class="row" ng-if="content_data.status === 'ACTIVE' && content_data.has_expired === 'FALSE'">
+                            <div class="col">
+                                <form name="frmSubmitRedeemPassword" novalidate>
+                                    <label class="item item-input item-stacked-label cp-item-input">
+                                        <span class="input-label" required>{{  text_input_membership_member_item_label_redeem_password }} <i style="color: red;">*</i></span>
+                                        <input type="text" placeholder="{{ text_input_membership_member_item_label_redeem_password_placeholder }}" name="redeem_password" ng-model="input.redeem_password" required>
+                                    </label>
+                                    <div class="button button-block cp-button" ng-click="confirmPassword()" ng-disabled="frmSubmitRedeemPassword.$invalid">
+                                        {{ button_text_membership_member_item_confirm_button_submit }}
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </ion-nav-view>
+                </ion-tab>
+    <!--            <ion-tab class="cp-header tab-item-member" title="{{ button_text_membership_member_item_delivery }} (COMING SOON!)" ng-if="content_data.item_type != 'VOUCHER' " icon="icon ion-paper-airplane" disabled="true">
+                    <ion-nav-view>
+                         <div class="row">
+                            <div class="col">
+                                 default delivery item here, check tokopedia for example
+                            </div>
+                         </div>
+                    </ion-nav-view>
+                </ion-tab>-->
+                 <!--ADD ion-tab for voucher-->
+            </ion-tabs>
+        </ion-content>
+
+    </ion-pane>
+</ion-view>

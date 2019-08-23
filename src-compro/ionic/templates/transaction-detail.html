@@ -1,0 +1,465 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>{{content_data.trans_master.order_id}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_total}}
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center normal_white_space" >
+                        <span class="cp-post-title" style="font-weight:bold !important; font-size:20px !important;">{{content_data.trans_master.total_price | currency:currency}}</span><br>
+                        <span ng-if="content_data.trans_master.trans_status=='Pending'"
+                              class="badge badge-energized text-center">{{ status_pending }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Capture'"
+                              class="badge badge-energized text-center">{{ status_capture }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Settlement'"
+                              class="badge badge-energized text-center">{{ status_settlement }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Challenge'"
+                              class="badge badge-energized text-center">{{ status_challenge }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='In Process'"
+                              class="badge badge-energized text-center">{{ status_in_process }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Delivery'"
+                              class="badge badge-energized text-center">{{ status_delivery }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Completed'"
+                              class="badge badge-balanced text-center">{{ status_completed }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Cancelled'"
+                              class="badge badge-assertive text-center">{{ status_cancelled }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Payment In Process'"
+                              class="badge badge-energized text-center">{{ status_payment_in_process }}</span>
+                    </h1>
+                </div>
+            </div>
+            <!-- TODO: Add VT Payment Here -->
+            <div class="row" ng-if="content_data.trans_master.trans_status=='Pending' &&
+                                  ((vt_payment_service =='YES' && content_data.trans_master.payment_type == 'vt') ||
+                                  content_data.trans_master.payment_type.indexOf('sa') > -1 ||
+                                  content_data.trans_master.payment_type.indexOf('ij') > -1 ||
+                                  content_data.trans_master.payment_type.indexOf('ipay88') > -1 || 
+                                  content_data.trans_master.payment_type.indexOf('senangpay') > -1) ||
+                                  content_data.trans_master.payment_type.indexOf('espay') > -1 ">
+                <div class="col" ng-if="content_data.trans_master.trans_status=='Pending'">
+                    <div class="button button-block cp-button" ng-click="makePayment()">{{button_text_pay_now}}</div>
+                </div>
+            </div>
+
+            <div ng-if="(content_data.trans_master.trans_status == 'Delivery' || content_data.trans_master.trans_status == 'Completed')">
+                <div class="item item-divider cp-term-divider">
+                    {{ subtitle_text_delivery_status + ((content_data.delivery_status_data.delivery_sent_by !== '' || content_data.delivery_status_data.delivery_received_by !== '') ? ": " + subtitle_text_delivery_status_completed : "") }}
+                </div>
+                <div class="cp-list" ng-if="(content_data.delivery_status_data.delivery_sent_by !== '' || content_data.delivery_status_data.delivery_received_by !== '')">
+                    <div class="item">
+                        <div class="row">
+                            <div class="col col-50">
+                                <h5 class="cp-post-subtitle normal_white_space"><b>{{ ui_text_sent_by }}</b>: </h5>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h5 class="cp-post-content normal_white_space"><b>{{ content_data.delivery_status_data.delivery_sent_by }}</b></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-50">
+                                <h5 class="cp-post-subtitle normal_white_space"><b>{{ ui_text_received_by }}</b>: </h5>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h5 class="cp-post-content normal_white_space"><b>{{ content_data.delivery_status_data.delivery_received_by }}</b></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div ng-if="(content_data.delivery_status_data.delivery_sent_by == '' || content_data.delivery_status_data.delivery_received_by == '')">
+                    <div class="row" ng-if="sicepat_enabled=='YES' && content_data.delivery_data.delivery_courier != '-' && (content_data.trans_master.payment_type == 'vt' || content_data.trans_master.payment_type == 'manual')">
+                        <div class="col">
+                            <div class="button button-block cp-button" ng-click="trackSicepatStatus(content_data.trans_master.resi_number)">{{ button_text_track_sicepat_status }}</div>
+                        </div>
+                    </div>
+                    <div class="row" ng-if="toggleConfirmDelivery !== true">
+                        <div class="col">
+                            <div class="button button-block cp-button" ng-click="switchToggleConfirmDelivery()">{{ button_text_confirm_delivery }}</div>
+                        </div>
+                    </div>
+                    <div ng-if="toggleConfirmDelivery === true">
+                        <div class="item item-divider cp-term-divider" ng-click="switchToggleConfirmDelivery()">
+                            {{ button_text_confirm_delivery }}
+                        </div>
+                        <form name="frmConfirmDelivery">
+                            <div class="list" style="margin-bottom: 0px; padding-top:0px;">
+                                <label class="item item-input item-stacked-label cp-item-input">
+                                    <span class="input-label">{{ ui_text_sent_by }} <i style="color: red;">*</i></span>
+                                    <input type="text" placeholder="{{ ui_placeholder_text_sent_by }}" name="sent_by" ng-model="input.delivery_sent_by" required>
+                                </label>
+                                <span ng-show="frmConfirmDelivery.sent_by.$error.required && !frmConfirmDelivery.sent_by.$pristine"
+                                      style="color: red;padding-left: 16px;">{{ ui_text_sent_by }} must be filled</span>
+                                <span ng-show="frmConfirmDelivery.sent_by.$invalid && !frmConfirmDelivery.sent_by.$pristine && !frmConfirmDelivery.sent_by.$error.required"
+                                      style="color: red;padding-left: 16px;">Wrong format for {{ ui_text_sent_by }} field</span>
+
+                                <label class="item item-input item-stacked-label cp-item-input">
+                                    <span class="input-label">{{ ui_text_received_by }} <i style="color: red;">*</i></span>
+                                    <input type="text" placeholder="{{ ui_placeholder_text_received_by }}" name="received_by" ng-model="input.delivery_received_by" required>
+                                </label>
+                                <span ng-show="frmConfirmDelivery.received_by.$error.required && !frmConfirmDelivery.received_by.$pristine"
+                                      style="color: red;padding-left: 16px;">{{ ui_text_received_by }} must be filled</span>
+                                <span ng-show="frmConfirmDelivery.received_by.$invalid && !frmConfirmDelivery.received_by.$pristine && !frmConfirmDelivery.received_by.$error.required"
+                                      style="color: red;padding-left: 16px;">Wrong format for {{ ui_text_received_by }} field</span>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="button button-block cp-button" ng-click="confirmDelivery()" ng-disabled="frmConfirmDelivery.$invalid">{{ button_text_confirm_delivery }}</div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="content_data.trans_master.trans_status=='Pending' && content_data.trans_master.payment_type != 'cod'">
+                <div class="item item-divider cp-term-divider">
+                    {{subtitle_text_payment}}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a href="#/app/manual-payment" class="button button-block cp-button">{{button_text_how_to_pay}}</a>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="content_data.trans_master.trans_status=='Pending' && content_data.trans_master.payment_type == 'cod' && wishlist == true">
+                <div class="item item-divider cp-term-divider">
+                    {{subtitle_text_contribute}}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a href="#/app/how-to-contribute" class="button button-block cp-button">{{button_text_how_to_contribute}}</a>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="content_data.trans_master.payment_type == 'manual' && content_data.trans_master.trans_status=='Pending'">
+                <div class="item item-divider cp-term-divider">
+                    {{subtitle_text_transaction_receipt}}
+                </div>
+                <div class="row" ng-show="imgURI !== undefined || content_data.trans_master.transfer_receipt !== ''">
+                    <div class="col" style="text-align:center">
+                        <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}" style="text-align: center; width:100%;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+
+                        <div class="button button-block cp-button" ng-click="takePhoto(content_data.trans_master.id)">
+                            {{button_text_take_photo}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="button button-block cp-button" ng-click="choosePhoto(content_data.trans_master.id)">
+                            {{button_text_choose_photo}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_transaction_detail}}
+            </div>
+            <div class="cp-list">
+                <div class="item">
+                    <div class="row" ng-if="content_data.trans_master.payment_type">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ ui_text_payment_type }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.payment_type_description | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_transaction_code}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.order_id | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_date}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.date_created | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_status}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.trans_status_desc | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_comments}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.comments | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_admin_notes}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.admin_notes | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Resi Number</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.resi_number | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div ng-repeat ="field in custom_transaction_fields track by $index" ng-if="wishlist == false">
+                        <div class="row">
+                            <div class="col col-50">
+                                <h5 class="cp-post-subtitle normal_white_space"><b>{{ field['field_name'] }}</b>: </h5>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h5 class="cp-post-content normal_white_space"
+                                    ng-bind-html="content_data.trans_master[field['field_key']] | unsafe"></h5>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="wishlist == true">
+                        <div class="row">
+                            <div class="col col-50">
+                                <h5 class="cp-post-subtitle normal_white_space"><b>Full name</b>: </h5>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h5 class="cp-post-content normal_white_space"
+                                    ng-bind-html='content_data.trans_master.name | unsafe'></h5>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col col-50">
+                                <h5 class="cp-post-subtitle normal_white_space"><b>Email</b>: </h5>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h5 class="cp-post-content normal_white_space"
+                                    ng-bind-html='content_data.trans_master.email | unsafe'></h5>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TODO: Add JNE Tracking Here -->
+            <div ng-show="shipper_enabled=='NO' && custom_delivery_enabled == 'NO'">
+              <div class="row" ng-if="jne_service=='YES' && content_data.delivery_data.delivery_courier != '-' && (content_data.trans_master.payment_type == 'vt' || content_data.trans_master.payment_type == 'manual')">
+                  <div class="col">
+                      <div class="button button-block cp-button" ng-click="trackJNEStatus()">{{button_text_track_jne}}</div>
+                  </div>
+              </div>
+
+              <div class="row" ng-show="sicepat_enabled=='YES'">
+                  <div class="col">
+                      <div class="button button-block cp-button" ng-click="trackSicepatStatus(content_data.trans_master.resi_number)">{{ delivery_button_track_status }}</div>
+                  </div>
+              </div>
+
+              <div class="row" ng-show="go_send_enabled=='YES'" ng-if="content_data.trans_master.trans_status=='In Process'">
+                <div class="col">
+                    <div class="button button-block cp-button" ng-click="trackGoSendStatus(content_data.trans_master.resi_number)">Track GO-SEND Status</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_product_detail}}
+            </div>
+            <div class="cp-list">
+                <div ng-repeat='trans_detail in content_data.trans_details' class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_product_name}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">
+                              <span style="font-weight:bold;">{{trans_detail.product_name}}</span><br><small style="font-style:italic;">{{trans_detail.variants}}</small>
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_product_price}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{trans_detail.product_price |
+                                currency:currency}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_quantity}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{trans_detail.quantity}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_subtotal}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"><b>{{trans_detail.total |
+                                currency:currency}}</b></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TODO: Add JNE Delivery Here -->
+            <div class="item item-divider cp-term-divider" ng-show="(rajaongkir_enabled == 'YES' || sicepat_enabled == 'YES' || shipper_enabled == 'YES' || shipper_intl_enabled == 'YES' || custom_delivery_enabled == 'YES') && (content_data.trans_master.payment_type != 'cod')">
+                {{subtitle_text_delivery_price}}
+            </div>
+            <div class="cp-list" ng-show="(rajaongkir_enabled == 'YES' || sicepat_enabled == 'YES' || shipper_enabled == 'YES' || shipper_intl_enabled == 'YES' || custom_delivery_enabled == 'YES') && (content_data.trans_master.payment_type != 'cod')">
+                <div class="item">
+                    <div class="row" ng-if="content_data.delivery_data.delivery_courier != content_data.delivery_data.delivery_method">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_carrier}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.delivery_data.delivery_courier | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_service}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.delivery_data.delivery_method | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_price}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{ content_data.delivery_data.delivery_price | currency:currency }}</h5>
+                        </div>
+                    </div>
+                    <div ng-if="content_data.delivery_data.delivery_courier != 'Pos Malaysia'">
+                        <div class="row" ng-if="(shipper_enabled == 'YES' && content_data.delivery_data.order_id != '') || custom_delivery_enabled == 'YES'">
+                          <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_delivery_delivery_time}}</b>: </h5>
+                          </div>
+                          <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{ content_data.delivery_data.min_day == content_data.delivery_data.max_day ? content_data.delivery_data.min_day : (content_data.delivery_data.min_day + ' - ' + content_data.delivery_data.max_day) }} {{ui_text_delivery_delivery_days}}</h5>
+                          </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                      <div class="col col-50">
+                        <h5 class="cp-post-subtitle normal_white_space"><b>{{ ui_text_delivery_airway_bill }}</b>: </h5>
+                      </div>
+                      <div class="col col-50 text-right">
+                        <h5 class="cp-post-content normal_white_space">{{ content_data.delivery_data.airway_bill ? content_data.delivery_data.airway_bill : '-' }}</h5>
+                      </div>
+                    </div>
+                    <div class="row" ng-if="(shipper_enabled == 'YES' || custom_delivery_enabled == 'YES')">
+                      <div class="col col-50">
+                        <h5 class="cp-post-subtitle normal_white_space"><b>{{ delivery_button_track_status }}</b>: </h5>
+                      </div>
+                      <div class="col col-50 text-right">
+                        <h5 class="cp-post-content normal_white_space">{{ content_data.delivery_data.status }}</h5>
+                      </div>
+                    </div>
+                    <!--<div class="row" ng-show="shipper_enabled == 'YES'">-->
+                      <!--<div class="col">-->
+                        <!--<div class="button button-block cp-button button-small" ng-click="trackShipperStatus()">{{ delivery_button_track_status }}</div>-->
+                      <!--</div>-->
+                    <!--</div>-->
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider" ng-if="is_voucher==1">
+                Promo Code
+            </div>
+            <div class="cp-list" ng-if="is_voucher==1">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Code</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{voucher_code}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Discount</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{voucher_price_detail |
+                                currency:currency}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider" ng-if="tax_enabled=='YES' || has_taxes==true">
+                {{subtitle_text_taxes}}
+            </div>
+            <div class="cp-list" ng-if="tax_enabled=='YES' || has_taxes==true">
+                <div class="item">
+                    <div class="row" ng-repeat='tax_data in content_data.taxes_data'>
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{tax_data.label}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{tax_data.value |
+                                currency:currency}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider" ng-if="has_others === true">
+                {{subtitle_text_others}}
+            </div>
+            <div class="cp-list" ng-if="has_others === true">
+                <div class="item">
+                    <div class="row" ng-repeat='other_data in content_data.other_data'>
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{other_data.label}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{other_data.value |
+                                currency:currency}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br><br>
+        </ion-content>
+    </ion-pane>
+    <div class="bar bar-footer" ng-if="content_data.trans_master.trans_status=='Pending' && content_data.trans_master.payment_type != 'cod'">
+        <a class="button cp-button" style="width:100%;" ng-href="#/app/manual-payment"><i class="ion-help-circled"></i>
+            {{button_text_how_to_pay}}</a>
+    </div>
+    <div class="bar bar-footer" ng-if="content_data.trans_master.trans_status=='Pending' && content_data.trans_master.payment_type == 'cod' && wishlist == true">
+        <a class="button cp-button" style="width:100%;" ng-href="#/app/how-to-contribute"><i class="ion-help-circled"></i>
+            {{button_text_how_to_contribute}}</a>
+    </div>
+</ion-view>

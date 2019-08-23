@@ -1,0 +1,21 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='content_data.posts.length' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.posts.length > 0'>
+        <ion-content class='cp-page-content'>
+            <div class="item item-image" ng-if="content_data.img_src!='' && content_data.img_src!=null" style="border:0;">
+                <img ng-src="{{content_data.img_src}}" />
+            </div>
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list" >
+                <a ng-repeat='post in content_data.posts' class="item" href="#/app/{{post.post_template.name}}/{{post.id}}">
+                    <h2 class="cp-post-title normal_white_space"><b>{{post.title}}</b></h2> <!-- title -->
+                </a>
+                <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

@@ -1,0 +1,53 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title> {{title_search}} </ion-nav-title>
+    <ion-content class='cp-page-content'>
+        <div class="list cp-list" style="margin-bottom: 0; ">
+            <label class="item item-input cp-item-input">
+                <i class="icon ion-search placeholder-icon"></i>
+                <input type="text" ng-model="input.keyword" placeholder="{{ text_placeholder_keyword }}">
+            </label>
+            <div class="item" style="border-bottom: none; ">
+                <button type="button" class="button button-block button-positive cp-button" ng-click="search()">{{button_text_search}}</button>
+            </div>
+        </div>
+        <div class="list cp-list" ng-hide='isLoading'>
+            <div class="text-center cp-post-title" ng-hide='notSearching' style="margin-bottom:25px;"><span ng-bind="post_length"></span> result found for keyword '<span ng-bind="post_keyword"></span>'.</div>
+
+            <div ng-repeat='term in content_data.terms track by $index'>
+                <a ng-if="term.content_type_id != 3" href="#/app/{{term.term_template_name}}/{{term.id}}" class="cp-no-underline">
+                    <div class="item item-divider cp-term-divider">
+                        {{term.title}}
+                    </div>
+                </a>
+                <a ng-if="term.content_type_id == 3" href="#/app/{{term.posts[0].post_template.name}}/{{term.posts[0].id}}" class="cp-no-underline">
+                    <div class="item item-divider cp-term-divider">
+                        {{term.title}}
+                    </div>
+                </a>
+                <div ng-repeat='post in term.posts'>
+                    {{ isSpecialCase = special_case.indexOf(post.term_template_name) != -1;"" }}
+                    <a ng-if="(post.term.content_type_id != 3 && !isSpecialCase)
+                                || post.term.content_type_id == 3" class="item" href="#/app/{{post.post_template.name}}/{{post.id}}">
+                        <h2 class="cp-post-title normal_white_space"><b>{{post.title}}</b></h2> <!-- title -->
+                        <h3 class="cp-post-subtitle normal_white_space">{{post.date_created}}</h3>  <!-- Subtitle -->
+                        <img ng-src="{{post.featured_image_path}}" ng-show="false && post.featured_image_path !== null && post.featured_image_path !== ''" class="full-image"/>
+                        <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='post.summary | unsafe'></p>  <!-- Summary -->
+                    </a>
+                    <a ng-if="(post.term.content_type_id != 3 && isSpecialCase)" class="item" href="#/app/{{term.term_template_name}}/{{term.id}}{{isSpecialCase ? '?post_id=' + post.id : ''}}">
+                        <h2 class="cp-post-title normal_white_space"><b>{{post.title}}</b></h2> <!-- title -->
+                        <h3 class="cp-post-subtitle normal_white_space">{{post.date_created}}</h3>  <!-- Subtitle -->
+                        <img ng-src="{{post.featured_image_path}}" ng-show="false && post.featured_image_path !== null && post.featured_image_path !== ''" class="full-image"/>
+                        <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='post.summary | unsafe'></p>  <!-- Summary -->
+                    </a>
+                </div>
+            </div>
+
+
+            <ion-infinite-scroll distance="2"
+                                 on-infinite="loadMoreData()"
+                                 ng-if="!moredata">
+
+            </ion-infinite-scroll>
+        </div>
+    </ion-content>
+</ion-view>

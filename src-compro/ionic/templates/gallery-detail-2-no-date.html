@@ -1,0 +1,34 @@
+<!--
+    Modified from gallery-detail-1.html
+    Features:
+    1. Zoom
+    2. Swipe L/R to browse pic.
+    3. Added text detail.
+-->
+<!-- Ericko Yap @COMPRO, 2016 -->
+
+<ion-modal-view>
+    <ion-header-bar class="header-no-border cp-gallery-background">
+        <h1 class="title cp-gallery-title">{{content_data.galleries[modal_index].title}}</h1>
+        <div class="buttons">
+            <button class="button button-clear cp-button" ng-show="isPhoneGap()" ng-click="socialShare(modal_index)" style="margin-right: 10px">Share</button>
+            <button class="button button-clear cp-button" ng-click="closeGallery()">Close</button>
+        </div>
+    </ion-header-bar>
+    
+    <ion-content class="cp-gallery-background">
+        <ion-slide-box show-pager="false" active-slide="modal_index" class="slider-image-full cp-page" on-slide-changed="slideHasChanged($index)" ng-show='!isLoading && content_data.galleries.length > 0'>
+            <ion-slide class="slider-slide-full" ng-repeat='image in content_data.galleries'>
+                <div class="box" style="display:flex;width:100%;height:calc(100vh - 50px);overflow-y:scroll;">
+                    <ion-scroll zooming="true" min-zoom="1" direction="xy" locked="false" style="" overflow-scroll="false">             
+                        <img ng-src="{{image.featured_image_path}}" class="full_page_image fix-aspect-ratio" style="width:100%;"/>
+                        <div class="half-page-content" style="padding:10px;">
+                            <h2 class="cp-post-title normal_white_space"><b>{{content_data.galleries[$index].title}}</b></h2>
+                            <p class="cp-post-content normal_white_space justify_text_align" compile="image.content"></p>
+                        </div>
+                    </ion-scroll>
+                </div>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-content>
+</ion-modal-view>

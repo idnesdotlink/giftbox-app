@@ -1,0 +1,20 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> {{notification_title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.notifications.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading  && content_data.notifications.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="Pull to refresh..." on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list">
+                <a ng-repeat='notif in content_data.notifications' class="item">
+                    <h2 class="cp-post-title normal_white_space"><b>{{notif.title}}</b></h2> <!-- title -->
+                    <h5 class="cp-post-subtitle post_subtitle normal_white_space">{{notif.created_at}}</h5>
+                    <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='notif.message | unsafe'></p>  <!-- Summary -->
+                </a>
+                <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

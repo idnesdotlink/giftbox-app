@@ -1,0 +1,41 @@
+<ion-view class="cp-page" cache-view="false" hide-nav-bar="false">
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="isExist" retry="retryLoadContent()"></loading-pane>
+    <ion-content ng-if='!isLoading && isExist'>
+        <div class="bar bar-subheader" style="text-align:center; background-color:#eeeeee; ">
+            <h4 class="title cp-post-title">Tap icon to download app.</h4>
+        </div>
+        <ion-content scroll='true' style='overflow-y:auto; margin-top:11.5%;'>
+            <div>
+                <div class="row" ng-repeat="app in appList" ng-if="$index % 3 === 0">
+                    <div class="col col-33 studio-col">
+                        <a ng-href="{{ appList[$index].playstore_link }}" class="external-link">
+                        <img ng-src="{{appList[$index].icon}}" class="external-link studio-icon"
+                             imageonload="loadImageComplete($index)"
+                             ng-show='appList[$index].icLoadOK'/>
+                        <ion-spinner icon="spiral" class='cp-spinner studio-icon' ng-hide='appList[$index].icLoadOK'></ion-spinner>
+                        <br><span class="studio-icon-text">{{ appList[$index].name }}</span>
+                        </a>
+                    </div>
+                    <div class="col col-33 studio-col" ng-show='$index+1 < appList.length'>
+                        <a ng-href="{{ appList[$index+1].playstore_link }}" class="external-link">
+                        <img ng-src="{{appList[$index+1].icon}}" class="studio-icon external-link"
+                             imageonload="loadImageComplete($index+1)"
+                             ng-show='appList[$index+1].icLoadOK'/>
+                        <ion-spinner  icon="spiral" class='cp-spinner studio-icon' ng-hide='appList[$index+1].icLoadOK'></ion-spinner>
+                        <br><span class="studio-icon-text">{{ appList[$index+1].name }}</span>
+                        </a>
+                    </div>
+                    <div class="col col-33 studio-col" ng-show='$index+2 < appList.length'>
+                        <a ng-href="{{ appList[$index+2].playstore_link }}" class="external-link">
+                        <img ng-src="{{appList[$index+2].icon}}" class="studio-icon external-link"
+                             imageonload="loadImageComplete($index+2)"
+                             ng-show='appList[$index+2].icLoadOK'/>
+                        <ion-spinner icon="spiral" class='cp-spinner studio-icon' ng-hide='appList[$index+2].icLoadOK'></ion-spinner>
+                        <br><span class="studio-icon-text">{{ appList[$index+2].name }}</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-content>
+</ion-view>

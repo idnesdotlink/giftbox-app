@@ -1,0 +1,161 @@
+<ion-view cache-view="false" class="cp-page">
+  <ion-nav-bar class="has-tab-tops cp-header header-no-border">
+    <ion-nav-back-button class="cp-header-button"></ion-nav-back-button>
+
+  </ion-nav-bar>
+  <ion-nav-title class='cp-header'> {{ custom_register_title }}</ion-nav-title>
+
+
+  <ion-content class='cp-page-content'>
+    <form name="frmRegister" novalidate>
+      <div class="list">
+        <label class="item item-input item-stacked-label cp-item-input">
+            <span class="input-label" required>{{default_register_fields.email.field_name}} <i style="color: red;">*</i></span>
+            <input type="email" placeholder="{{default_register_fields.email.field_name}}" name="email" ng-model="input.email" required>
+        </label>
+        <span ng-show="frmRegister.email.$error.required && !frmRegister.email.$pristine"
+              style="color: red;padding-left: 16px;">{{default_register_fields.email.field_name}} {{ input_error_text_must_be_filled }}</span>
+        <span ng-show="frmRegister.email.$invalid && !frmRegister.email.$pristine && !frmRegister.email.$error.required"
+              style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }} {{default_register_fields.email.field_name}}</span>
+
+        <label class="item item-input item-stacked-label cp-item-input">
+            <span class="input-label">{{default_register_fields.password.field_name}} <i style="color: red;">*</i></span>
+            <input type="password" placeholder="{{default_register_fields.password.field_name}}" name="password" ng-model="input.password"
+                   ng-minlength="6" required>
+        </label>
+        <span ng-show="frmRegister.password.$error.required && !frmRegister.password.$pristine"
+              style="color: red;padding-left: 16px;">{{default_register_fields.password.field_name}} {{ input_error_text_must_be_filled }}</span>
+        <span ng-show="frmRegister.password.$error.minlength && !frmRegister.password.$pristine"
+              style="color: red;padding-left: 16px;">{{default_register_fields.password.field_name}}: {{ input_error_text_min_characters }}</span>
+
+        <label class="item item-input item-stacked-label cp-item-input">
+            <span class="input-label">{{default_register_fields.passwordConf.field_name}} <i style="color: red;">*</i></span>
+            <input type="password" placeholder="{{default_register_fields.passwordConf.field_name}}" name="passwordConf"
+                   ng-model="input.passwordConf" required compare-to="input.password">
+        </label>
+        <span ng-show="frmRegister.passwordConf.$error.required && !frmRegister.passwordConf.$pristine"
+              style="color: red;padding-left: 16px;">{{default_register_fields.passwordConf.field_name}} {{ input_error_text_must_be_filled }}</span>
+        <span ng-show="frmRegister.passwordConf.$error.compareTo && !frmRegister.passwordConf.$pristine && !frmRegister.passwordConf.$error.required"
+              style="color: red;padding-left: 16px;">{{ input_error_password_match }}</span>
+
+        <label class="item item-input item-stacked-label cp-item-input">
+            <span class="input-label">{{default_register_fields.username.field_name}} <i style="color: red;">*</i></span>
+            <input type="text" placeholder="{{default_register_fields.username.field_name}}" name="username" ng-model="input.username" required>
+        </label>
+        <span ng-show="frmRegister.username.$error.required && !frmRegister.username.$pristine"
+              style="color: red;padding-left: 16px;">{{default_register_fields.username.field_name}} {{ input_error_text_must_be_filled }}</span>
+        <span ng-show="frmRegister.username.$invalid && !frmRegister.username.$pristine && !frmRegister.username.$error.required"
+              style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }} {{default_register_fields.username.field_name}}</span>
+
+        <div ng-repeat ="field in custom_register_fields track by $index">
+        <div ng-if="field.type === 'password'">
+            <label class="item item-input item-stacked-label cp-item-input">
+              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+              <input type="password" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+            </label>
+            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+            <!-- <span ng-show="frmRegister.{{field.field_key}}.$error.minlength && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} must be min length 6 characters</span>  -->
+          </div>
+
+          <div ng-if="field.type === 'date'">
+            <label class="item item-input item-stacked-label cp-item-input">
+              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+              <input type="date" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" maxdate="todays" ng-required="{{field.required === 'yes'}}" validatedateformat data-date-format="mm/dd/yyyy">
+            </label>
+            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+            <span ng-show="frmRegister.{{field.field_key}}.$invalid && !frmRegister.{{field.field_key}}.$pristine && !frmRegister.{{field.field_key}}.$error.required"
+                  style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }} {{field.field_name}}, {{ input_error_text_please_input_valid }} {{ input_field_type_date }}</span>
+          </div>
+
+          <div ng-if="field.type === 'text'">
+            <label class="item item-input item-stacked-label cp-item-input">
+              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+              <input type="text" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+            </label>
+            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+          </div>
+
+          <div ng-if="field.type === 'textarea'">
+            <label class="item item-input item-stacked-label cp-item-input">
+              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+              <textarea type="text" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}" rows="3"></textarea>
+            </label>
+            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+          </div>
+
+          <div ng-if="field.type === 'number'">
+            <label class="item item-input item-stacked-label cp-item-input">
+              <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+              <input type="number" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}" min="1" step="1">
+            </label>
+            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+          </div>
+
+          <div ng-if="field.type === 'email'">
+            <label class="item item-input item-stacked-label cp-item-input">
+                <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                <input type="email" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+            </label>
+            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+            <span ng-show="frmRegister.{{field.field_key}}.$invalid && !frmRegister.{{field.field_key}}.$pristine && !frmRegister.{{field.field_key}}.$error.required"
+                  style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }} {{field.field_name}}, {{ input_error_text_please_input_valid }} {{ input_field_type_email }}</span>
+          </div>
+
+          <div ng-if="field.type === 'image'">
+            <div class="item item-stacked-label cp-item-input">
+                <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                <div class="row" ng-show="input.meta[field.field_key] !== undefined">
+                    <div class="col" style="text-align:center">
+                        <img ng-show="input.meta[field.field_key] !== undefined" ng-src="{{input.meta[field.field_key]}}" style="text-align: center;width:100%;">
+                    </div>
+                </div>
+                <input type="hidden" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+                <div class="row">
+                    <div class="col">
+                        <div class="button button-block cp-button" ng-click="showUploadSelection(field.field_key)" style="margin-right:15px; margin-left:15px;">
+                            {{button_text_change}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <span ng-show="frmRegister.{{field.field_key}}.$error.required && !frmRegister.{{field.field_key}}.$pristine"
+                  style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+            <span ng-show="frmRegister.{{field.field_key}}.$invalid && !frmRegister.{{field.field_key}}.$pristine && !frmRegister.{{field.field_key}}.$error.required"
+                  style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }} {{field.field_name}}, {{ input_error_text_please_input_valid }} {{ input_field_type_image }}</span>
+
+
+<!--
+            <label class="item item-input item-stacked-label cp-item-input">
+                <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                <input type="button" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+            </label>
+
+-->
+          </div>
+
+          <div ng-if="field.type === 'generate_id'">
+              <input type="hidden" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-value="">
+          </div>
+
+          <div ng-if="field.type === 'admin_generated'">
+              <input type="hidden" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-value="">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <button class="button button-block cp-button" ng-click="register()"
+          ng-disabled="frmRegister.$invalid">{{ button_register }}
+          </button>
+        </div>
+      </div>
+    </form>
+  </ion-content>
+</ion-view>

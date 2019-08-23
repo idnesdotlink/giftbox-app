@@ -1,0 +1,127 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>{{content_data.member_trans.membership_transaction_uid}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="item item-divider cp-term-divider">
+                {{ text_membership_history_detail_title }}
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center post_title normal_white_space" style="margin: 30px 0;"><b>
+                        {{ ((content_data.member_trans.type == 'PURCHASE' || content_data.member_trans.type.indexOf('ADMIN_ADD') > -1 ? '+' : '-') + content_data.member_trans.user_points) | number:0 }} PTS</b><br>
+                        <span ng-if="content_data.member_trans.status=='PENDING'"
+                              class="badge badge-energized text-center">{{ content_data.member_trans.typeBadge + " " + content_data.member_trans.status }}</span>
+                        <span ng-if="content_data.member_trans.status=='APPROVED'"
+                              class="badge badge-balanced text-center">{{ content_data.member_trans.typeBadge + " " + content_data.member_trans.status }}</span>
+                        <span ng-if="content_data.member_trans.status=='REJECTED'"
+                              class="badge badge-assertive text-center">{{ content_data.member_trans.typeBadge + " " + content_data.member_trans.status }}</span>
+                    </h1>
+                </div>
+            </div>
+
+            <!-- Show purchase data, on click go to transaction history detail. -->
+            <div class="item item-divider cp-term-divider" ng-if="content_data.member_trans.type == 'PURCHASE'">
+                {{text_membership_history_detail_subtitle_purchase}}
+            </div>
+            <a href="#/app/transaction-detail/{{content_data.trans.id}}" class="cp-list" ng-if="content_data.member_trans.type == 'PURCHASE'" style="text-decoration: none;">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_purchase_order_id }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans.order_id | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_purchase_price }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans.total_price | currency:currency'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_purchase_date }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans.date_created'></h5>
+                        </div>
+                    </div>
+
+                </div>
+            </a>
+
+            <!-- Show what item was redeemed, on click go to item detail. -->
+            <div class="item item-divider cp-term-divider" ng-if="content_data.member_trans.type == 'REDEEM'">
+                {{text_membership_history_detail_subtitle_redeem}}
+            </div>
+            <a href="#/app/membership-member-item-detail/{{content_data.item.id}}" class="cp-list" ng-if="content_data.member_trans.type == 'REDEEM'" style="text-decoration: none;">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_redeem_item_name }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.item.name | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_redeem_item_status }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.item.status | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_redeem_item_acquired_date }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.item.acquired_date'></h5>
+                        </div>
+                    </div>
+                </div>
+            </a>
+
+            <!-- Show bonus injected to user account, with reasons why. -->
+            <div class="item item-divider cp-term-divider" ng-if="content_data.member_trans.type.indexOf('ADMIN') > -1">
+                {{text_membership_history_detail_subtitle_bonus}}
+            </div>
+            <div class="cp-list" ng-if="content_data.member_trans.type.indexOf('ADMIN') > -1">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_bonus_added_at }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.member_trans.date_created | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_membership_history_detail_bonus_description }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.member_trans.history_text | unsafe'></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <br><br>
+        </ion-content>
+    </ion-pane>
+</ion-view>

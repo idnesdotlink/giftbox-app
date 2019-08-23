@@ -1,0 +1,31 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='content_data.careers.length' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.careers.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list">
+                <div ng-repeat='career in content_data.careers'>
+                    <a href="#/app/career-detail-1/{{career.id}}" class="text-decoration-none">
+                        <div class="item">
+                            <h2 class="cp-post-title">{{career.title}}</h2>
+                            <!--<p class="cp-post-subtitle">{{getPostMetaValueById(career.post_meta,"start_date").value}}</p>-->
+                        </div>
+                        <div class="item item-image">
+                            <img ng-src="{{career.featured_image_path}}">
+                        </div>
+                        <div class="item">
+                            <p class="cp-post-content normal_white_space justify_text_align"
+                               ng-bind-html='career.summary | unsafe'></p>
+                            <!--<p class="cp-post-subtitle">{{getPostMetaValueById(career.post_meta,"created_date").value}}</p>-->
+                        </div>
+                    </a>
+                </div>
+                <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

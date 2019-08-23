@@ -1,0 +1,7 @@
+<ion-view class="cp-page" cache-view="false" >
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='content_data.posts.length' retry="retryLoadContent()"></loading-pane>
+    <ion-content class='cp-page-content' scroll="false">
+        <div id="map" class="map-full" data-tap-disabled="true"></div>
+    </ion-content>
+</ion-view>

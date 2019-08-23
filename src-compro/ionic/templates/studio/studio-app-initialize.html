@@ -1,0 +1,7 @@
+<!-- studio-app-initialize.html -->
+<ion-view class="cp-page" hide-nav-bar="true" cache-view="false">
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="isExist" retry="retryLoadContent()"></loading-pane>
+    <ion-content ng-if='!isLoading && isExist'>
+        <img id="studioSplash" class="image-product-cover" style="width:100%; height:100vh; background-image: url({{ app.splash }});">
+    </ion-content>
+</ion-view>

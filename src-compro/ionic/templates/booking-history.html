@@ -1,0 +1,40 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.bookings.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.bookings.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list card cp-list" ng-repeat='booking in content_data.bookings'>
+                <div class="item">
+                    <a href="#/app/{{booking.post.post_template.name}}/{{booking.post.id}}" style="text-decoration:none;">
+                        <div class="row" style="" ng-style="{ 'opacity' : (booking.booking_status == 'canceled' || booking.booking_status == 'rejected') ? '0.4' : '1' }">
+                            <div class="col col-100">
+                                <h2 class="cp-post-title normal_white_space"><strong>{{ booking.booking_number }}</strong></h2>
+                                <div ng-repeat="upm in booking.user_post_meta track by $index" ng-if="upm.key != 'booking_status' && upm.key != 'booking_number'">
+                                    <div class="row cp-post-subtitle normal_white_space">
+                                        <div class="col-50">{{ upm.field_name }}</div>
+                                        <div class="col-50">: {{ upm.value }}</div>
+                                    </div>
+                                </div>
+                                <div class="row cp-post-subtitle normal_white_space">
+                                    <div class="col-50">Status </div>
+                                    <div class="col-50">: {{ booking.booking_status.charAt(0).toUpperCase() + booking.booking_status.slice(1) }}</div>
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="item">
+                    <div ng-show="booking.booking_status=='placed'" class="button cp-devider" style="width:100%;"  ng-click="cancelBooking({{booking.id}})">{{button_text_cancel_booking}} {{ booking.booking_number }}</div>
+                    <span ng-show="booking.booking_status=='canceled'" class="button cp-devider" style="width:100%;" disabled>{{ booking.booking_number }} {{button_text_cancelLed}}</span>
+                    <span ng-show="booking.booking_status=='rejected'" class="button cp-devider" style="width:100%;" disabled>{{ booking.booking_number }} {{button_text_rejected}}</span>
+                    <span ng-show="booking.booking_status=='confirmed'" class="button cp-devider" style="width:100%;" disabled>{{ booking.booking_number }} {{button_text_confirmed}}</span>
+                </div>
+            </div>
+            <ion-infinite-scroll distance="2"
+                                 on-infinite="loadMoreData()"
+                                 ng-if="!moredata">
+            </ion-infinite-scroll>
+        </ion-content>
+    </ion-pane>
+</ion-view>

@@ -1,0 +1,35 @@
+<!--
+Template: Profile List
+Derived from home-3.html
+
+Ericko Yap @COMPRO 2016
+-->
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.profiles.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.profiles.length > 0'>
+
+        <ion-content class='cp-page-content'>
+
+            <div ng-hide='isLoading'>
+                <div ng-repeat='profile in content_data.profiles'>
+                    <div style="position:relative;width:100vw;height:50vw;">
+
+                        <a href="#/app/{{profile.post_template.name}}/{{profile.id}}">
+                            <img ng-src="{{profile.featured_image_path}}" style="position:absolute;width:100vw;height:50vw;"/>
+                            <div class="cp-menu-image-overlay" style="position:absolute;width:100vw;height:50vw;border-top:1px solid;border-bottom:1px solid;"></div>
+                            <div class="cp-menu-image-text" style="position:absolute;text-align:right;bottom:5vw;right:5vw;font-size:{{profile.flexible_font_size}}%;line-height:120%;padding:10px;">
+                                {{profile.title}}
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <ion-infinite-scroll distance="2"
+                                 on-infinite="loadMoreData()"
+                                 ng-hide="!moredata">
+
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

@@ -1,0 +1,60 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> Select Your Return Flight </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content has-header'>
+        	<!-- <ion-refresher pulling-text="Pull to refresh..." on-refresh=""></ion-refresher> -->
+            <div class="list cp-list">
+                <div class="item" ng-if="content_data.return_flights.length == 0">
+                    There is no available airline on this date. Please try rebooking
+                </div>
+                <div class="item" ng-if="content_data.return_flights.length > 0" ng-repeat="flight in content_data.return_flights track by $index">
+                    <div ng-if="flight.IsConnecting == true">
+                        <div class="row" ng-if="flight.IsMultiClass == true">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.Fare | currency:currency}}</b></div>
+                        </div>
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Fare | currency:currency}}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}} <span ng-if="flight.TotalTransit>0">({{flight.TotalTransit}} Transit)</span></h3>
+                                <!-- More flights from this airline -->
+                                <h3 ng-if="flight.IsMultiClass == true"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true">Detail</a></h3>
+                                <h3 ng-if="flight.IsMultiClass == false"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true">Detail</a></h3>
+                            </div>
+                            <div class="col text-align-right">
+                                <a class="button cp-button" href="#/app/airline-booking-summary?airline_booking_id1={{airline.booking_id1}}&airline_booking_id2={{$index}}">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == false">
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.AirlineName}} <span><img ng-src="{{flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Fare | currency:currency}}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}}</h3>
+                                <!-- More flights from this airline -->
+                                <h3 ng-if="flight.IsMultiClass == true"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true">Detail</a></h3>
+                                <h3 ng-if="flight.IsMultiClass == false"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true">Detail</a></h3>
+                            </div>
+                            <div class="col text-align-right">
+                                <a class="button cp-button" href="#/app/airline-booking-summary?airline_booking_id1={{airline.booking_id1}}&airline_booking_id2={{$index}}">Book Now</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

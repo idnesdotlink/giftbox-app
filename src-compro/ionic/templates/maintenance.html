@@ -1,0 +1,26 @@
+<ion-view cache-view="false" class="cp-page home" hide-nav-bar="true">
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-content scroll="true">
+        <div class="col header text-center" ng-if="!isLoading">
+            <img ng-src="https://engine.compro.id/assets/id.compro.{{package_name}}/icon.png" style="width:50%; align-content:center;"/>
+            <br>
+            <br>
+            <div class="welcome-center">
+                <h2 class="cp-header-button" style="color:#212121 !important;">
+                    We are currently<br>under maintenance
+                </h2>
+                <h4 class="cp-header-button" style="color:#212121 !important;">
+                    Please try again later
+                </h4>
+                <br>
+                <h4 ng-if="admin_email" class="cp-header-button" style="color:#212121 !important;">
+                    For more information contact us at:<br>
+                    <a href="mailto:{{ admin_email }}">{{ admin_email }}</a>
+                </h4>
+            </div>
+        </div>
+    </ion-content>
+    <ion-nav-bar class="has-tab-tops cp-header header-no-border">
+        <ion-nav-back-button class="cp-header-button"></ion-nav-back-button>
+    </ion-nav-bar>
+</ion-view>

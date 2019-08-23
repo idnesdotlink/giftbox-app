@@ -1,0 +1,45 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content'>
+            <div class="item item-image" style="position:relative;width:100vw;height:50vw;" ng-if="content_data.img_src!=null && content_data.img_src!=''">
+                <img style="position:relative;width:100vw;height:50vw;" ng-src="{{content_data.img_src}}" />
+            </div>
+            <div ng-repeat='menu in content_data.menus'>
+                <div style="position:relative;width:100vw;height:50vw;">
+                    <a ng-if='menu.id == -5' ng-click="socialShare()" style="text-decoration:none;">
+                        <img ng-src="" style="position:absolute;width:100vw;height:50vw;background:url({{menu.featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                        <div style="padding-top:40vw;">
+                            <div class="cp-menu-image-overlay" style="position:absolute;width:100vw;height:10vw;">
+                                <div class="cp-menu-image-text" style="position:relative;margin:0;font-size:3.75vw;line-height:10vw; text-align:center; text-overflow: ellipsis; white-space:nowrap;">
+                                    {{menu.title}}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a ng-if='menu.content_type_id == 1 || menu.content_type_id == 2' href="#/app/{{menu.term_template.name}}/{{menu.id}}" style="text-decoration:none;">
+                        <img ng-src="" style="position:absolute;width:100vw;height:50vw;background:url({{menu.featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                        <div style="padding-top:40vw;">
+                            <div class="cp-menu-image-overlay" style="position:absolute;width:100vw;height:10vw;">
+                                <div class="cp-menu-image-text" style="position:relative;margin:0;font-size:3.75vw;line-height:10vw; text-align:center; text-overflow: ellipsis; white-space:nowrap;">
+                                    {{menu.title}}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                    <a ng-if='menu.content_type_id == 3' href="#/app/{{content_data.menu_post[menu.id].post_template.name}}/{{content_data.menu_post[menu.id].id}}" style="text-decoration:none;">
+                        <img ng-src="" style="position:absolute;width:100vw;height:50vw;background:url({{menu.featured_image_path}}) no-repeat center !important; background-size: cover !important;"/>
+                        <div style="padding-top:40vw;">
+                            <div class="cp-menu-image-overlay" style="position:absolute;width:100vw;height:10vw;">
+                                <div class="cp-menu-image-text" style="position:relative;margin:0;font-size:3.75vw;line-height:10vw; text-align:center; text-overflow: ellipsis; white-space:nowrap;">
+                                    {{menu.title}}
+                                </div>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

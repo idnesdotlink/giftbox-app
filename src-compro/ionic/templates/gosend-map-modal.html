@@ -1,0 +1,10 @@
+<ion-modal-view>
+     <ion-content class="cp-page-content" ng-init="">
+        <div class="item item-input controls">
+            <i class="icon ion-search placeholder-icon"></i>
+            <input id="pac-input" type="text" placeholder="Search Location" data-tap-disabled="true" ng-change='disableTap()' ng-model="search">
+        </div>
+        <div id="map_gosend"></div>
+        <a class="button button-block button-positive cp-button" ng-click="closeModal()" style="margin-left:20px; margin-right:20px;">Done</a>
+    </ion-content>
+</ion-modal-view>

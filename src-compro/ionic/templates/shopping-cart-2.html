@@ -1,0 +1,117 @@
+<ion-view view-title="Shopping Cart" class="cp-page" cache-view="false">
+    <ion-content class="cp-page-content">
+        <div class="row">
+            <div class="col">
+                <h2 class="cp-post-title"><b>Items in Cart</b></h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <p class="cp-post-subtitle">swipe left to remove item</p>
+            </div>
+        </div>
+        <hr/>
+
+        <ion-list show-delete="shouldShowDelete"
+                  show-reorder="shouldShowReorder"
+                  can-swipe="listCanSwipe"
+                  class="cp-list cp-swippable-list height-50vh">
+
+            <div ng-show='!isLoading && shoppingCarts.length < 1'
+                 style="display:flex;justify-content:center;align-items:center;width: 100%;height:100%;font-size: 20px">
+                No Item in Shopping Cart
+            </div>
+
+            <ion-item ng-repeat="item in shoppingCarts"
+                      class="item-remove-animate">
+
+                <div class="row">
+                    <div class="col">
+                        <h4 class="normal_white_space cp-col-text"><b>{{item.title}}</b></h4>
+                    </div>
+
+                    <div class="col">
+                        <h4 class="normal_white_space cp-col-text">qty: <b>{{item.qty}}</b></h4>
+                    </div>
+
+                    <div class="col">
+                        <h4 class="normal_white_space cp-col-text"><b>{{(item.price * item.qty) |
+                            currency:currency}}</b></h4>
+                    </div>
+                </div>
+
+                <ion-option-button class="button-assertive icon-left ion-android-delete"
+                                   style="width:80vw; text-align:center;"
+                                   ng-click="onItemDelete($index)">
+                    Remove
+                </ion-option-button>
+
+                <ion-delete-button class="ion-minus-circled"
+                                   ng-click="items.splice($index, 1)">
+                </ion-delete-button>
+
+                <ion-reorder-button class="ion-navicon"
+                                    on-reorder="reorderItem(item, $fromIndex, $toIndex)">
+                </ion-reorder-button>
+
+            </ion-item>
+        </ion-list>
+        <hr/>
+
+        <div class="row">
+            <div class="col">
+                <h4 class="normal_white_space"></h4>
+            </div>
+
+            <div class="col">
+                <h4 class="normal_white_space">Total</h4>
+            </div>
+
+            <div class="col">
+                <h4 class="normal_white_space"><b>{{totalPrice | currency:currency}}</b></h4>
+            </div>
+        </div>
+
+        <form name="frmSubmitOrder" novalidate>
+            <div class="list">
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Name</span>
+                    <input type="text" placeholder="Name" ng-model="input.name" required>
+                </label>
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Email</span>
+                    <input type="email" placeholder="Email" ng-model="input.email" required>
+                </label>
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Phone</span>
+                    <div class="numeric">
+                        <input type="text" placeholder="Phone" ng-model="input.phone"
+                               onkeypress="return isNumberKey(event)" required>
+                    </div>
+                </label>
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Address</span>
+                    <input type="text" placeholder="Address" ng-model="input.address" required>
+                </label>
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Comments</span>
+                    <textarea placeholder="Comments" ng-model="input.comments"></textarea>
+                </label>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <button class="button button-block cp-button" ng-click="submitOrder()"
+                            ng-disabled="frmSubmitOrder.$invalid"> Submit Order
+                    </button>
+                </div>
+            </div>
+        </form>
+
+    </ion-content>
+</ion-view>

@@ -1,0 +1,415 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>{{content_data.order_id}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center post_title normal_white_space" style="margin: 30px 0;">
+                        {{airline.grand_total_price | currency:currency}}<br>
+                        <span ng-if="content_data.trans_status=='Pending'"
+                              class="badge badge-energized text-center">Pending</span>
+                              <span ng-if="content_data.trans_status=='User Has Confirmed'"
+                              class="badge badge-energized text-center">User Has Confirmed</span>
+                              <br>
+                              <span ng-if="content_data.trans_status=='User Has Confirmed'" style="font-size:16px;">You have confirm this transaction. Please ignore instruction on Booking Status.</span>
+                        <span ng-if="content_data.trans_status=='Capture'"
+                              class="badge badge-energized text-center">Capture</span>
+                        <span ng-if="content_data.trans_status=='Settlement'"
+                              class="badge badge-energized text-center">Settlement</span>
+                        <span ng-if="content_data.trans_status=='Challenge'"
+                              class="badge badge-energized text-center">Challenge</span>
+                        <span ng-if="content_data.trans_status=='In Process'"
+                              class="badge badge-energized text-center">In Process<br>(Payment Received)</span>
+                        <span ng-if="content_data.trans_status=='Delivery'"
+                              class="badge badge-energized text-center">Delivery</span>
+                        <span ng-if="content_data.trans_status=='Completed'"
+                              class="badge badge-balanced text-center">Completed</span>
+                        <span ng-if="content_data.trans_status=='Cancelled'"
+                              class="badge badge-assertive text-center">Cancelled</span>
+                    </h1>
+                </div>
+            </div>
+            <div class="item item-divider cp-term-divider">
+                Booking Status
+            </div>
+             <div class="list cp-list" style="margin-bottom:0px;">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-100 text-left">
+                            <div>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'Saved'">Waiting for airline response.</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if= "content_data.pnr_status == 'Reserved'">Your booking is confirmed. Please make your payment before: <strong> {{content_data.payment_time_limit}}</strong></h3>
+                                <span class="cp-item-input"><br>We will not proceed order after time limit<br></span>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'Ticketed'">Ticket confirmed.</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'Canceled'">Your booking is canceled. Please ignore this transaction and book another flight.</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'BookingError'">Something wrong with the airlines. Please ignore this transaction and book another flight.</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'FlightUnavailable'">This flight is not available anymore. Please ignore this transaction and book another flight</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'TicketingError'">Something wrong with the airlines. Please ignore this transaction and book another flight.</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'Expired'">Your booking is expired. Please ignore this transaction and book another flight.</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'FormValidationError'">Something wrong with the airlines. Please ignore this transaction and book another flight.</h3>
+                                <h3 class="cp-post-title normal_white_space" ng-if="content_data.pnr_status == 'TimeoutError'">Something wrong with the airlines. Please ignore this transaction and book another flight.</h3>
+                                <br>
+                            </div>
+                            <div ng-if="content_data.pnr_status == 'Reserved'">
+                                <div ng-if="content_data.trans_status=='Pending'">
+                                    <!-- <div> -->
+                                        <!-- <div> -->
+                                    <select ng-model="payment.selectedPaymentType" class="" style="width:100%; font-size:16px; background:rgba(0,0,0,0);" ng-change="selectPaymentType(payment.selectedPaymentType)" ng-if="content_data.payment_type == '-' || content_data.payment_type == ''">
+                                        <option value="" disabled selected>{{ ui_text_select_payment_type }}</option>
+                                        <option value="manual" ng-if="payment_type.manual == 'YES'">{{ ui_text_payment_bank_transfer }}</option>
+                                        <option value="vt" ng-if="payment_type.vt == 'YES'">{{ ui_text_payment_online_payment }}</option>
+                                        <option value="cod" ng-if="payment_type.cod == 'YES'">{{ ui_text_payment_cod }}</option>
+                                    </select>
+                                    <span class="cp-item-input" ng-if="payment.selectedPaymentType && ( payment.selectedPaymentType == 'manual' || payment.selectedPaymentType == 'cod')"><br>Please tap and read 'How To Pay' below<br></span>
+                                    <div class="button button-block cp-button" ng-click="makePayment('manual')"  ng-if="payment.selectedPaymentType && payment.selectedPaymentType == 'manual'">Pay Now (Manual Payment)</div>
+                                    <div class="button button-block cp-button" ng-click="makePayment('vt')"  ng-if="payment.selectedPaymentType && payment.selectedPaymentType == 'vt'">Pay Now</div>
+                                    <div class="button button-block cp-button" ng-click="makePayment('cod')"  ng-if="payment.selectedPaymentType && payment.selectedPaymentType == 'cod'">Confirm Payment</div>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div ng-if="content_data.payment_type == 'manual' && content_data.trans_status=='Pending'">
+                <div class="item item-divider cp-term-divider">
+                    {{subtitle_text_transaction_receipt}}
+                </div>
+                <div class="row" ng-show="imgURI !== undefined || content_data.transfer_receipt !== ''">
+                    <div class="col" style="text-align:center">
+                        <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}" style="text-align: center; width:100%;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+
+                        <div class="button button-block cp-button" ng-click="takePhoto(content_data.id)">
+                            {{button_text_take_photo}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="button button-block cp-button" ng-click="choosePhoto(content_data.id)">
+                            {{button_text_choose_photo}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                Booking Details
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;">
+                <div class="item">
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">Booking Code</span>
+                        <input type="text" ng-model="content_data.pnr_meta.BookingCode" class="text-right" disabled>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">Status</span>
+                        <input type="text" ng-model="content_data.pnr_status" class="text-right" disabled>
+                    </label>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                E-Ticket
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;">
+                <div class="item">
+                    <div class="row" ng-if="content_data.trans_status=='User Has Confirmed' || content_data.trans_status=='Pending' || content_data.trans_status=='Cancelled' || content_data.trans_status=='Capture' || content_data.trans_status=='Challenge'">
+                        <div class="col col-100 text-left cp-post-title">
+                            Your E-Ticket will appear here 
+                        </div>
+                    </div>
+                    <div class="row" ng-if="(content_data.trans_status=='Settlement' || content_data.trans_status=='In Process' || content_data.trans_status=='Delivery' || content_data.trans_status=='Completed') && content_data.pnr_status != 'Ticketed'">
+                        <div class="col col-100 text-left cp-post-title">
+                            Your E-Ticket will appear here 
+                        </div>
+                    </div>
+                    <div class="row" ng-if="(content_data.trans_status=='Settlement' || content_data.trans_status=='In Process' || content_data.trans_status=='Delivery' || content_data.trans_status=='Completed') && content_data.pnr_status == 'Ticketed'">
+                        <div class="col col-100 text-left cp-post-title">
+                            <a class="button button-block cp-button external-link" style="width:100%;" ng-href="{{e_ticket_departure}}"><strong>View Departure Ticket</strong></a>
+                            <a class="button button-block cp-button external-link" style="width:100%;" ng-href="{{e_ticket_arrival}}" ng-if="content_data.search_return_result"><strong>View Arrival Ticket</strong></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                
+            <div class="item item-divider cp-term-divider">
+                Price Detail
+            </div>
+             <div class="list cp-list" style="margin-bottom:0px;">
+                <div class="item">
+                    <div class="row">
+                        <div class="col text-left">
+                            <h3 class="cp-post-title normal_white_space">
+                                <span style="font-size:14px" ng-if="airline.adult>0">{{airline.adult}} Adult</span>
+                                <span style="font-size:14px" ng-if="airline.child>0">{{airline.child}} Child</span>
+                                <span style="font-size:14px" ng-if="airline.infant>0">{{airline.infant}} Infant</span>
+                            </h3>
+                        </div>
+                        <div class="col cp-post-price normal_white_space text-right"><b>{{airline.grand_total_price | currency:currency}}</b></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider" ng-if="content_data.search_result">
+                {{content_data.search_result.Origin}}-{{content_data.search_result.Destination}}
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;" ng-if="content_data.search_result">
+                <div class="item" ng-repeat="flight in content_data.flights track by $index">
+                    <div ng-if="flight.IsConnecting == true">
+                        <div class="row" ng-if="flight.IsMultiClass == true">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}} <span ng-if="flight.TotalTransit>0">({{flight.TotalTransit}} Transit)</span></h3>
+                                <!-- More flights from this airline -->
+                                <h3 ng-if="flight.IsMultiClass == true"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&menu=transaction">Detail</a></h3>
+                                <h3 ng-if="flight.IsMultiClass == false"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&menu=transaction">Detail</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == false">
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.AirlineName}} <span><img ng-src="{{flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}}</h3>
+                                <!-- More flights from this airline -->
+                                <h3 ng-if="flight.IsMultiClass == true"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&menu=transaction">Detail</a></h3>
+                                <h3 ng-if="flight.IsMultiClass == false"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&menu=transaction">Detail</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="cp-post-title normal_white_space text-center" style="font-size:10px!important;">*Details are below</h3>
+            </div>
+            <div class="item item-divider cp-term-divider" ng-if="content_data.search_return_result">
+                {{content_data.search_return_result.Origin}}-{{content_data.search_return_result.Destination}}
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;" ng-if="content_data.search_return_result">
+                <div class="item" ng-repeat="flight in content_data.return_flights track by $index">
+                    <div ng-if="flight.IsConnecting == true">
+                        <div class="row" ng-if="flight.IsMultiClass == true">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                        </div>
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.ConnectingFlights[0].AirlineName}} <span><img ng-src="{{flight.ConnectingFlights[0].AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}} <span ng-if="flight.TotalTransit>0">({{flight.TotalTransit}} Transit)</span></h3>
+                                <!-- More flights from this airline -->
+                                <h3 ng-if="flight.IsMultiClass == true"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true&menu=transaction">Detail</a></h3>
+                                <h3 ng-if="flight.IsMultiClass == false"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true&menu=transaction">Detail</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == false">
+                        <div class="row" ng-if="flight.IsMultiClass == false">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.AirlineName}} <span><img ng-src="{{flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}}</h3>
+                                <!-- More flights from this airline -->
+                                <h3 ng-if="flight.IsMultiClass == true"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true&menu=transaction">Detail</a></h3>
+                                <h3 ng-if="flight.IsMultiClass == false"><a href="#/app/airline-booking-detail?airline_booking_id={{$index}}&return=true&menu=transaction">Detail</a></h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h3 class="cp-post-title normal_white_space text-center" style="font-size:10px!important;">*Details are below</h3>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                Contact Details
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;">
+                <div class="item">
+                    <label class="item item-input item-select cp-item-input">
+                        <span class="input-label">Title</span>
+                        <select ng-model="content_data.pnr_meta.Contact.Title" class="input-label" disabled>
+                          <option selected>MR</option>
+                          <option>MRS</option>
+                          <option>MS</option>
+                        </select>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">First Name</span>
+                        <input type="text" ng-model="content_data.pnr_meta.Contact.FirstName" class="text-right" disabled>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">Last Name</span>
+                        <input type="text" ng-model="content_data.pnr_meta.Contact.LastName" class="text-right" disabled>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">Mobile Phone</span>
+                        <input type="text" ng-model="content_data.pnr_meta.Contact.MobilePhone" class="text-right" disabled>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">Email</span>
+                        <input type="text" ng-model="content_data.pnr_meta.Contact.Email" class="text-right" disabled>
+                    </label>
+                </div>
+            </div>
+            <div class="item item-divider cp-term-divider">
+                Traveler Details
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;" ng-repeat="passenger in content_data.pnr_meta.Passengers track by $index">
+                <div class="item">
+                    <label class="cp-item-input"><span class="input-label">Traveler {{$index+1}} - {{passenger.Type}}</span></label>
+                    <label class="item item-input item-select cp-item-input">
+                        <span class="input-label">Title</span>
+                        <select ng-model="passenger.Title" class="input-label" disabled>
+                          <option selected>MR</option>
+                          <option>MRS</option>
+                          <option>MS</option>
+                        </select>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">First Name</span>
+                        <input type="text" ng-model="passenger.FirstName" class="text-right" disabled>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">Last Name</span>
+                        <input type="text" ng-model="passenger.LastName" class="text-right" disabled>
+                    </label>
+                    <label class="item item-input cp-item-input">
+                        <span class="input-label">Mobile Phone</span>
+                        <input type="text" ng-model="passenger.MobilePhone" class="text-right" disabled>
+                    </label>
+                </div>
+            </div>
+
+
+            <div class="item item-divider cp-term-divider" ng-if="content_data.search_result">
+                {{content_data.search_result.Origin}}-{{content_data.search_result.Destination}} Detail
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;" ng-if="content_data.search_result">
+                <div class="item" ng-repeat="flight in content_data.flights track by $index">
+                    <div ng-if="flight.IsConnecting == true && flight.IsMultiClass == true" ng-repeat="connecting_flight in flight.ConnectingFlights">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{connecting_flight.AirlineName}} <span><img ng-src="{{connecting_flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.ClassObjects[0].Category}}</b></div>
+                            <!-- <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.Fare | currency:currency}}</b></div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{connecting_flight.DepartTime}} - {{connecting_flight.ArriveTime}} <span ng-if="connecting_flight.TotalTransit>0">({{connecting_flight.TotalTransit}} Transit)</span></h3>
+                                <h3>{{connecting_flight.Origin}}-{{connecting_flight.Destination}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == true && flight.IsMultiClass == false" ng-repeat="connecting_flight in flight.ConnectingFlights">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{connecting_flight.AirlineName}} <span><img ng-src="{{connecting_flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Category}}</b></div>
+                            <!-- <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.Fare | currency:currency}}</b></div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{connecting_flight.DepartTime}} - {{connecting_flight.ArriveTime}} <span ng-if="connecting_flight.TotalTransit>0">({{connecting_flight.TotalTransit}} Transit)</span></h3>
+                                <h3>{{connecting_flight.Origin}}-{{connecting_flight.Destination}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == false && flight.IsMultiClass == false">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.AirlineName}} <span><img ng-src="{{flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Category}}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider" ng-if="content_data.search_return_result">
+                {{content_data.search_return_result.Origin}}-{{content_data.search_return_result.Destination}} Detail
+            </div>
+            <div class="list cp-list" style="margin-bottom:0px;" ng-if="content_data.search_return_result">
+                <div class="item" ng-repeat="flight in content_data.return_flights track by $index">
+                    <div ng-if="flight.IsConnecting == true && flight.IsMultiClass == true" ng-repeat="connecting_flight in flight.ConnectingFlights">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{connecting_flight.AirlineName}} <span><img ng-src="{{connecting_flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.ClassObjects[0].Category}}</b></div>
+                            <!-- <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.Fare | currency:currency}}</b></div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{connecting_flight.DepartTime}} - {{connecting_flight.ArriveTime}} <span ng-if="connecting_flight.TotalTransit>0">({{connecting_flight.TotalTransit}} Transit)</span></h3>
+                                <h3>{{connecting_flight.Origin}}-{{connecting_flight.Destination}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == true && flight.IsMultiClass == false" ng-repeat="connecting_flight in flight.ConnectingFlights">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{connecting_flight.AirlineName}} <span><img ng-src="{{connecting_flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Category}}</b></div>
+                            <!-- <div class="col cp-post-price normal_white_space text-right"><b>{{connecting_flight.Fare | currency:currency}}</b></div> -->
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{connecting_flight.DepartTime}} - {{connecting_flight.ArriveTime}} <span ng-if="connecting_flight.TotalTransit>0">({{connecting_flight.TotalTransit}} Transit)</span></h3>
+                                <h3>{{connecting_flight.Origin}}-{{connecting_flight.Destination}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="flight.IsConnecting == false && flight.IsMultiClass == false">
+                        <div class="row">
+                            <div class="col text-left">
+                                <h3 class="cp-post-title normal_white_space">{{flight.AirlineName}} <span><img ng-src="{{flight.AirlineImageUrl}}" style="height:25px;"></span></h3>
+                            </div>
+                            <div class="col cp-post-price normal_white_space text-right"><b>{{flight.ClassObjects[0].Category}}</b></div>
+                        </div>
+                        <div class="row">
+                            <div class="col cp-post-subtitle normal_white_space text-left" style="padding:0px;">
+                                <h3>{{flight.DepartTime}} - {{flight.ArriveTime}}</h3>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+    <div class="bar bar-footer" ng-show="payment_type.manual == 'YES'">
+        <a class="button cp-button" style="width:100%;" ng-href="#/app/manual-payment"><i class="ion-help-circled"></i>
+            How To Pay</a>
+    </div>
+</ion-view>

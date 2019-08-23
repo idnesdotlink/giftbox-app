@@ -1,0 +1,24 @@
+<ion-view view-title="{{content_data.title}}" class="cp-page" cache-view="true">
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found" timeout="isTimeout" loading="isLoading" exist="content_data.persons.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.persons.length > 0'>
+        <ion-content>
+          <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list" >
+                <div class="item item-divider cp-term-divider">
+                    List of Attendance
+                </div>
+                <a class="item" ng-repeat="person in content_data.persons">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h3 class="cp-post-subtitle normal_white_space"><strong>{{person.name}} - {{person.phone_number}}</strong></h3>
+                            <h3 class="cp-post-subtitle normal_white_space">{{person.email}}</h3>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h3 class="cp-post-subtitle normal_white_space"><strong>Attend : {{person.attend}}</strong></h3>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

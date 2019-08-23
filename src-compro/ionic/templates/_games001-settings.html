@@ -1,0 +1,39 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> GAMES 001 </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <label class="item item-input item-select">
+                <div class="input-label">
+                  Panel Size
+                </div>
+                <select ng-model="input.panelSize">
+                  <option value="2">2 x 2</option>
+                  <option value="3">3 x 3</option>
+                  <option selected value="4">4 x 4</option>
+                  <option value="5">5 x 5</option>
+                </select>
+            </label>
+            <div class="row">
+                <div class="col col-33 text-center">
+                    <button class="button button-block cp-button" ng-click='subTotal("substract");'>
+                        <i class="ion-ios-minus-outline"></i>
+                    </button>
+                </div>
+                <div class="col col-33 col-center text-center cp-button-outline" style="border: 1px solid white">
+                    <input class="text-center" type="number" placeholder="number" ng-model="input.maxNum" style="width:100%"/>
+                </div>
+                <div class="col col-33 text-center">
+                    <button class="button button-block cp-button" ng-click='subTotal("add");'>
+                        <i class="ion-ios-plus-outline"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="button button-block cp-button" ng-click="playGame()"> PLAY GAME</div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

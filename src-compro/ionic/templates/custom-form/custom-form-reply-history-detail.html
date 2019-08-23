@@ -1,0 +1,75 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>{{ content_data.category }}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <!--<div class="item item-divider cp-term-divider">-->
+                <!--{{ content_data.category }}-->
+            <!--</div>-->
+            <div class="row">
+                <div class="col">
+                    <h3 class="text-center normal_white_space">
+                        <span class="cp-post-title">{{ content_data.user_post_unique_id }}</span><br>
+
+                        <span ng-if="content_data.status=='REQUESTED'"
+                            class="badge badge-energized text-center">{{ content_data.status }}</span>
+                        <span ng-if="content_data.status=='PENDING'"
+                              class="badge badge-energized text-center">{{ content_data.status }}</span>
+                        <span ng-if="content_data.status=='REPLIED'"
+                              class="badge badge-balanced text-center">{{ content_data.status }}</span>
+                        <span ng-if="content_data.status=='APPROVED'"
+                              class="badge badge-balanced text-center">{{ content_data.status }}</span>
+                        <span ng-if="content_data.status=='EXPIRED'"
+                              class="badge badge-assertive text-center">{{ content_data.status }}</span>
+                        <span ng-if="content_data.status=='REJECTED'"
+                              class="badge badge-assertive text-center">{{ content_data.status }}</span>
+                    </h3>
+                    <h5 class="cp-post-content normal_white_space" style="text-align:center;">{{ text_custom_form_reply_history_detail_reply_requested_at }} {{ content_data.date_created }}</h5>
+                    <h5 class="cp-post-content normal_white_space" style="text-align:center;" ng-if="content_data.status == 'REPLIED'">{{ text_custom_form_reply_history_detail_reply_expired_at }} {{ content_data.reply_expired_at }}</h5>
+                </div>
+            </div>
+
+            <!-- Show sent data from user -->
+            <div class="item item-divider cp-term-divider">
+                {{text_custom_form_reply_history_detail_subtitle_data}}
+            </div>
+            <div class="cp-list">
+                <div class="item">
+                    <div class="row" ng-repeat='val in content_data.user_post'>
+                        <div class="col col-50">
+                          <h5 class="cp-post-subtitle normal_white_space"><b>{{ val.field_name }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                          <h5 class="cp-post-content normal_white_space">{{ val.value }}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Show replied data from admin -->
+            <div class="item item-divider cp-term-divider">
+                {{text_custom_form_reply_history_detail_subtitle_reply}}
+            </div>
+            <div class="item" ng-if="content_data.status == 'REQUESTED'" style="background-color:none;">
+                <div class="row">
+                    <div class="col" style="text-align:center;">
+                        <h5 class="cp-post-subtitle normal_white_space"><b>{{ text_custom_form_reply_history_detail_no_reply_yet }}</b> </h5>
+                    </div>
+                </div>
+            </div>
+            <div class="cp-list" ng-if="content_data.status != 'REQUESTED'" style="background-color:none;">
+              <div class="item">
+                  <div class="row">
+                      <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='content_data.admin_reply_content | unsafe'></p>
+                  </div>
+              </div>
+            </div>
+            <br><br>
+        </ion-content>
+    </ion-pane>
+    <div class="bar bar-footer" ng-if='!isLoading && content_data.status == "REPLIED"'>
+      <a class="button cp-button" style="width:100%;" ng-click="approveReply()"><i class="ion-checkmark"></i>
+        {{ text_custom_form_reply_history_detail_button_approve }}
+      </a>
+    </div>
+</ion-view>

@@ -1,0 +1,89 @@
+<ion-modal-view cache-view="false" class="home-6 modal-transparent cp-menu-image-overlay">
+    <ion-content class="cp-modal-menu-bg">
+        <div class="full-modal-menu">
+            <div class="row text-center">
+                <div class="col col-33">
+                    <button class="button button-clear cp-modal-menu-item" ng-click="closeMenu()" >
+                        <i class="icon ion-close-circled cp-post-title"></i>
+                    </button>
+                </div>
+            </div>
+            {{vMaxCol=3;""}}
+            {{vGap=20/vMaxCol;""}}
+            {{vMaxWidth=(81 /vMaxCol) - vGap;""}}
+            {{vIconSize=vMaxWidth/2.5;""}}
+            {{vFontSize=vMaxWidth/1.8;""}}
+            <div ng-repeat-start='menus in content_data.menus track by $index'> </div>
+            {{vIndex = $index;""}}
+            <!--
+                if is the beginning of row, and total_last_column is less than vMaxCol
+                add margin-left as many as: ((vMaxCol - (totalMenu - vIndex)) * (vMaxWidth + vGap/2)) / 2
+                total_last_column = vMaxCol - content_data.menus.length - vIndex
+            -->
+            {{totalMenu=content_data.menus.length+1;""}}
+            <div class="row" ng-if="$index>=4 && ($index-1)%3==0">
+                <div class="col col-33 cp-home-grid-menu cp-modal-menu-item-container" style="border-bottom:0px !important; margin-left:{{(vGap/2)+extraMargin}}vw; margin-right:{{vGap/2}}vw; margin-bottom:{{vGap/2}}vw; ">
+                    <span class='cp-modal-menu-item text' style="font-size:{{vFontSize}}px; max-width:{{vMaxWidth}}vw; max-height:{{vMaxWidth+vGap*3}}vw;">
+                        <div class='circle' style="width:{{vMaxWidth}}vw; height:{{vMaxWidth}}vw; padding-top:{{vIconSize/1.3}}vw;">
+                            <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].content_type_id == "1" || content_data.menus[$index].content_type_id == "2"' ng-click="closeMenu();clearHistory();" href="#/app/{{content_data.menus[$index].term_template.name}}/{{content_data.menus[$index].id}}"><i class="icon {{content_data.menus[$index].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i></a>
+                            <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].content_type_id == "3"' ng-click="closeMenu();clearHistory();" href="#/app/{{content_data.menu_post[content_data.menus[$index].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index].id].id}}"><i class="icon {{content_data.menus[$index].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i></a>
+
+
+
+                            <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].title == "Share Apps"' ng-click="closeMenu();clearHistory();socialShare()"><i class="icon {{content_data.menus[$index].icon_code}}"></i></a>
+                        </div>
+                    {{content_data.menus[$index].title}}
+                    </span>
+                </div>
+                <div class="col col-33 cp-modal-menu-item-container" style="border-bottom:0px !important; margin-left:{{(vGap/2)+extraMargin}}vw; margin-right:{{vGap/2}}vw; margin-bottom:{{vGap/2}}vw; " ng-if="$index + 1 < content_data.menus.length">
+                    <div class="cp-home-grid-menu">
+                        <span class='cp-modal-menu-item text' style="font-size:{{vFontSize}}px; max-width:{{vMaxWidth}}vw; max-height:{{vMaxWidth+vGap*3}}vw;">
+                            <div class='circle' style="width:{{vMaxWidth}}vw; height:{{vMaxWidth}}vw; padding-top:{{vIconSize/1.3}}vw;">
+                                <a class="cp-modal-menu-item" ng-if='content_data.menus[$index + 1].content_type_id == "1" || content_data.menus[$index + 1].content_type_id == "2"' ng-click="closeMenu();clearHistory();" href="#/app/{{content_data.menus[$index + 1].term_template.name}}/{{content_data.menus[$index + 1].id}}"><i class="icon {{content_data.menus[$index + 1].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i></a>
+                                <a class="cp-modal-menu-item" ng-if='content_data.menus[$index + 1].content_type_id == "3"' ng-click="closeMenu();clearHistory();" href="#/app/{{content_data.menu_post[content_data.menus[$index + 1].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index + 1].id].id}}"><i class="icon {{content_data.menus[$index + 1].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i></a>
+                                <a class="cp-modal-menu-item" ng-if='content_data.menus[$index + 1].title == "Share Apps"' ng-click="closeMenu();clearHistory();socialShare()"><i class="icon {{content_data.menus[$index + 1].icon_code}}"></i></a>
+                            </div>
+                        {{content_data.menus[$index + 1].title}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col col-33 cp-modal-menu-item-container" style="border-bottom:0px !important; margin-left:{{(vGap/2)+extraMargin}}vw; margin-right:{{vGap/2}}vw; margin-bottom:{{vGap/2}}vw; "  ng-if="$index + 2 < content_data.menus.length">
+                    <div class="cp-home-grid-menu">
+                        <span class='cp-modal-menu-item text' style="font-size:{{vFontSize}}px; max-width:{{vMaxWidth}}vw; max-height:{{vMaxWidth+vGap*3}}vw;">
+                            <div class='circle' style="width:{{vMaxWidth}}vw; height:{{vMaxWidth}}vw; padding-top:{{vIconSize/1.3}}vw;">
+                                <a class="cp-modal-menu-item" ng-if='content_data.menus[$index + 2].content_type_id == "1" || content_data.menus[$index + 2].content_type_id == "2"' ng-click="closeMenu();clearHistory();" href="#/app/{{content_data.menus[$index + 2].term_template.name}}/{{content_data.menus[$index + 2].id}}"><i class="icon {{content_data.menus[$index + 2].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i></a>
+                                <a class="cp-modal-menu-item" ng-if='content_data.menus[$index + 2].content_type_id == "3"' ng-click="closeMenu();clearHistory();" href="#/app/{{content_data.menu_post[content_data.menus[$index + 2].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index + 2].id].id}}"><i class="icon {{content_data.menus[$index + 2].icon_code}}" style="height:{{vIconSize}}vw;font-size:{{vIconSize}}vw;"></i></a>
+                                <a class="cp-modal-menu-item" ng-if='content_data.menus[$index + 2].title == "Share Apps"' ng-click="closeMenu();clearHistory();socialShare()"><i class="icon {{content_data.menus[$index + 2].icon_code}}"></i></a>
+                            </div>
+                        {{content_data.menus[$index + 2].title}}
+                        </span>
+                    </div>
+                </div>
+                <div class="col col-33 cp-modal-menu-item-container" style="border-bottom:0px !important; margin-left:{{(vGap/2)+extraMargin}}vw; margin-right:{{vGap/2}}vw; margin-bottom:{{vGap/2}}vw; "  ng-if="$index  >= content_data.menus.length">
+
+                </div>
+                <div class="col col-33 cp-modal-menu-item-container" style="border-bottom:0px !important; margin-left:{{(vGap/2)+extraMargin}}vw; margin-right:{{vGap/2}}vw; margin-bottom:{{vGap/2}}vw; "  ng-if="$index +1  >= content_data.menus.length">
+
+                </div>
+                <div class="col col-33 cp-modal-menu-item-container" style="border-bottom:0px !important; margin-left:{{(vGap/2)+extraMargin}}vw; margin-right:{{vGap/2}}vw; margin-bottom:{{vGap/2}}vw; "  ng-if="$index +2 >= content_data.menus.length">
+
+                </div>
+
+            </div>
+            <div ng-repeat-end> </div>
+            <!--<div class="row">
+                <div class="col col-25 cp-modal-menu-item-container">
+                    <a class="cp-modal-menu-item" ng-click="closeMenu();clearHistory();" href="#/app/shopping-cart-1" ng-show="shopping_enabled == 'YES'">Shopping Cart</a>
+                </div>
+
+                <div class="col col-25 cp-modal-menu-item-container">
+                <a class="cp-modal-menu-item" ng-click="closeMenu();clearHistory();" href="#/app/shopping-cart-2" ng-show="shopping_enabled == 'YES'">Shopping Cart 2</a>
+                </div>
+
+                <div class="col col-25 cp-modal-menu-item-container">
+                <a class="cp-modal-menu-item" ng-click="closeMenu();clearHistory();" href="#/app/login" ng-show="login_enabled == 'YES'">Login</a>
+                </div>
+            </div>-->
+        </div>
+    </ion-content>
+</ion-modal-view>

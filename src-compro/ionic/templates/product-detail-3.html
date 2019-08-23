@@ -1,0 +1,55 @@
+<ion-view view-title="{{content_data.title}}" class="cp-page">
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content" overflow-scroll="true">
+            <div class="row">
+                <div class="col">
+                    <h2 class="cp-post-title normal_white_space" ng-bind="content_data.title"><b></b></h2>
+                    <h3 class="cp-post-subtitle  normal_white_space"
+                        ng-bind="getPostMetaValueById(content_data.post_meta, 'subtitle').value"></h3>
+                    <h3 class="cp-post-subtitle normal_white_space"
+                        ng-if="getPostMetaValueById(content_data.post_meta, 'stock') && stock_status_visible=='YES'">
+                        <span ng-if="getPostMeta('stock') == '0'"
+                              style="color:red">{{ui_text_out_of_stock}}</span>
+                        <span ng-if="getPostMeta('stock') !== '0'"
+                              style="color:green">{{ui_text_in_stock}} <strong ng-if="getPostMetaValueById(content_data.post_meta, 'show_stock_value').value == 'YES'">- {{ getPostMeta('stock') }}</strong></span>
+                    </h3>
+
+                    <ion-slide-box class="cp-full-slider-background" on-slide-changed="slideHasChanged($index)">
+                        <ion-slide class="slider-slide-full" ng-repeat="image in images">
+                            <div class="box"><img ng-src="{{images[$index].src}}" ng-click="gallery($index);"
+                                                  class="image-fix-ratio-2-1 fix-aspect-ratio"/></div>
+                        </ion-slide>
+                    </ion-slide-box>
+
+                    <div ng-if="shopping_enabled=='YES'" class="button button-block cp-button-outline cp-post-price">
+                        <small class="text-decoration-line-through cp-post-old-price"
+                               ng-hide="getPostMetaValueById(content_data.post_meta, 'old_price').value === ''"
+                               ng-bind="getPostMetaValueById(content_data.post_meta, 'old_price').value | currency:currency "></small>
+                        &nbsp;{{ getPostMeta('price') | currency:currency}}
+                    </div>
+
+                    <div ng-if="shopping_enabled=='NO'"  class="button button-block cp-button-outline cp-post-price">
+                        <small class="text-decoration-line-through cp-post-old-price"
+                               ng-hide="getPostMetaValueById(content_data.post_meta, 'small_label').value === ''"
+                               ng-bind="getPostMetaValueById(content_data.post_meta, 'small_label').value"></small>
+                        &nbsp;{{getPostMetaValueById(content_data.post_meta, "label").value}}
+                    </div>
+                </div>
+            </div>
+            <shopping-cart></shopping-cart>
+            <br/>
+
+            <div class="row">
+                <div class="col">
+                    <div class="cp-post-content normal_white_space justify_text_align"
+                         ng-bind-html="content_data.content | unsafe"></div>
+                    <!-- <ion-scroll direction="x"  zooming="false" delegate-handle="horizontal" horizontal-scroll-fix="mainScroll">
+                       <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html="content_data.content | unsafe"></p>
+                   </ion-scroll> -->
+                </div>
+            </div>
+            <comment-pane></comment-pane>
+        </ion-content>
+    </ion-pane>
+</ion-view>

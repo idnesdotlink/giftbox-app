@@ -1,0 +1,225 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>{{content_data.trans_master.order_id}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_total}}
+            </div>
+            <div class="row">
+                <div class="col">
+                    <h1 class="text-center normal_white_space" >
+                        <span class="cp-post-title" style="font-weight:bold !important; font-size:20px !important;">{{ booking_price | currency:currency}}</span><br>
+                        <span ng-if="content_data.trans_master.trans_status=='Pending'"
+                              class="badge badge-energized text-center">{{ status_pending }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Capture'"
+                              class="badge badge-energized text-center">{{ status_capture }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Settlement'"
+                              class="badge badge-energized text-center">{{ status_settlement }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Challenge'"
+                              class="badge badge-energized text-center">{{ status_challenge }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='In Process'"
+                              class="badge badge-energized text-center">{{ status_in_process }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Delivery'"
+                              class="badge badge-energized text-center">{{ status_delivery }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Completed'"
+                              class="badge badge-balanced text-center">{{ status_completed }}</span>
+                        <span ng-if="content_data.trans_master.trans_status=='Cancelled'"
+                              class="badge badge-assertive text-center">{{ status_cancelled }}</span>
+                    </h1>
+                </div>
+            </div>
+            <!-- TODO: Add VT Payment Here -->
+            <div class="row" ng-if="content_data.trans_master.trans_status=='Pending' && ((vt_payment_service =='YES' && content_data.trans_master.payment_type == 'vt') || content_data.trans_master.payment_type.indexOf('sa') > -1 || content_data.trans_master.payment_type.indexOf('ij') > -1)">
+                <div class="col">
+                    <div class="button button-block cp-button" ng-click="makePayment()">{{button_text_pay_now}}</div>
+                </div>
+            </div>
+
+            <div ng-if="content_data.trans_master.trans_status=='Pending'">
+                <div class="item item-divider cp-term-divider">
+                    {{subtitle_text_payment}}
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <a href="#/app/manual-payment" class="button button-block cp-button">{{button_text_how_to_pay}}</a>
+                    </div>
+                </div>
+            </div>
+            <div ng-if="content_data.trans_master.payment_type == 'manual' && content_data.trans_master.trans_status=='Pending'">
+                <div class="item item-divider cp-term-divider">
+                    {{subtitle_text_transaction_receipt}}
+                </div>
+                <div class="row" ng-show="imgURI !== undefined || content_data.trans_master.transfer_receipt !== ''">
+                    <div class="col" style="text-align:center">
+                        <img ng-show="imgURI !== undefined" ng-src="{{imgURI}}" style="text-align: center; width:100%;">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+
+                        <div class="button button-block cp-button" ng-click="takePhoto(content_data.trans_master.id)">
+                            {{button_text_take_photo}}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="button button-block cp-button" ng-click="choosePhoto(content_data.trans_master.id)">
+                            {{button_text_choose_photo}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                Booking Transaction Detail
+            </div>
+            <div class="cp-list">
+                <div class="item">
+                    <div class="row" ng-if="content_data.trans_master.payment_type">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ ui_text_payment_type }}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.payment_type_description | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_transaction_code}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.order_id | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Booking Code</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.booking_code | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_date}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.date_created | unsafe'></h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>{{ui_text_admin_notes}}</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space"
+                                ng-bind-html='content_data.trans_master.admin_notes | unsafe'></h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="item item-divider cp-term-divider">
+                {{subtitle_text_product_detail}} {{flight}}
+            </div>
+            <div class="cp-list">
+                <div class="item">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Origin</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{origin}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Destination</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{destination}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Flight</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{origin_airline}} {{origin_flight_number}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Depart Time</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{origin_depart_date}} {{origin_depart_time}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Arrival Time</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{origin_arrival_date}} {{origin_arrival_time}}</h5>
+                        </div>
+                    </div>
+                </div>
+                <div class="item" ng-if="flight == 'Return Flight'">
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Origin</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{destination}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Destination</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{origin}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Flight</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{destination_airline}} {{destination_flight_number}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Depart Time</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{destination_depart_date}} {{destination_depart_time}}</h5>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col col-50">
+                            <h5 class="cp-post-subtitle normal_white_space"><b>Arrival Time</b>: </h5>
+                        </div>
+                        <div class="col col-50 text-right">
+                            <h5 class="cp-post-content normal_white_space">{{destination_arrival_date}} {{destination_arrival_time}}</h5>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br><br>
+        </ion-content>
+    </ion-pane>
+    <div class="bar bar-footer" ng-if="content_data.trans_master.trans_status=='Pending'">
+        <a class="button cp-button" style="width:100%;" ng-href="#/app/manual-payment"><i class="ion-help-circled"></i>
+            {{button_text_how_to_pay}}</a>
+    </div>
+</ion-view>

@@ -1,0 +1,29 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> Login to {{ loyalty_app_integration_apps_loyalty }} </ion-nav-title>
+
+    <ion-content class='cp-page-content' scroll='true'>
+
+        <div>
+            <div class="list cp-list">
+                <label class="item item-input cp-item-input">
+                    <span class="input-label">{{ ui_text_email }}</span>
+                    <input type="email" ng-model="input.email" placeholder="you@email.com">
+                </label>
+
+                <label class="item item-input cp-item-input">
+                    <span class="input-label">{{ ui_text_password }}</span>
+                    <input type="password" ng-model="input.password" placeholder="{{ ui_text_password }}">
+                </label>
+
+                <div class="item" style="border-bottom: none; ">
+                    <button type="button" class="button button-block button-positive cp-button" ng-click="loginLoyalty()">{{button_text_login}}</button>
+                    <br>
+                    <div class="cp-post-content">
+                        <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='text_loyalty_register | unsafe' style="text-align: center"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </ion-content>
+</ion-view>

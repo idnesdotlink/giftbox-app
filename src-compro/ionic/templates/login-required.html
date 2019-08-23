@@ -1,0 +1,36 @@
+
+<ion-view cache-view="false"  class="cp-page">
+    <ion-nav-bar class="has-tab-tops cp-header header-no-border">
+        <ion-nav-back-button class="cp-header-button"></ion-nav-back-button>
+
+    </ion-nav-bar>
+
+    <ion-nav-title class='cp-header'> Login </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-content class='cp-page-content'>
+            <div class="list cp-list" ng-if='!isLoading'>
+                <label class="item item-input">
+                    <span class="input-label">Email</span>
+                    <input type="email" ng-model="input.email" placeholder="you@email.com">
+                </label>
+
+                <label class="item item-input">
+                    <span class="input-label">Password</span>
+                    <input type="password" ng-model="input.password" placeholder="password">
+                </label>
+
+                <div class="item" style="border-bottom: none; ">
+                    <button type="button" class="button button-block button-positive cp-button" ng-click="login()">Log in</button>
+                    <div style="text-align: center">or</div>
+                    <!--<a class="button button-block button-positive cp-button" href="#/register">Register</a>-->
+                    <a class="button button-block button-positive cp-button" href="#/custom-register">Register</a>
+                    <div class="col text-center">
+                        Forgot Password? <strong><a class="center" href="#/app/reset-password">Click Here</a></strong>
+                    </div>
+                </div>
+
+                <!--<a class="button cp-button" href="#/app/{{home_template}}/{{home_id}}"></a>-->
+            </div>
+
+    </ion-content>
+</ion-view>

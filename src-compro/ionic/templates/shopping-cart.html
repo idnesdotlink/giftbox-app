@@ -1,0 +1,59 @@
+<div ng-hide="shopping_enabled!='YES'">
+
+    <div class="row" ng-show="variants_enabled == 'YES'">
+      <div class="col col-center text-center">
+        <h4 class="cp-post-subtitle normal_white_space">{{ui_text_variants}}</h4>
+      </div>
+    </div>
+
+  <!-- SHOW / HIDE VARIANTS HERE -->
+    <div ng-show="variants_enabled == 'YES'">
+      <label class="item item-input item-select cp-item-input" ng-repeat="vt in content_data.variantTypes track by $index">
+        <span class="input-label cp-post-subtitle">{{ vt.name }}</span>
+        <select ng-model="variant[vt.id]" ng-change="changeVariant()" class="input-label">
+          <option value="" disabled>{{ text_dropdown_choose_one }}</option>
+          <option ng-repeat="val in vt.values" value="{{ val }}" {{ variant[vt.id] == val ? 'selected' : '' }}>{{ val }}</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="row">
+      <div class="col col-center text-center">
+        <h4 class="cp-post-subtitle normal_white_space">{{ui_text_quantity_to_buy}}</h4>
+        <h4 ng-if="shopping_enabled == 'YES' && limit_per_customer_enabled == 'YES' && getPostMetaValueById(content_data.post_meta, 'limit_per_customer').value > 0" class="cp-post-subtitle normal_white_space"><span class="badge badge-assertive">Limit to {{getPostMetaValueById(content_data.post_meta, 'limit_per_customer').value}} item per customer</span></h4>
+      </div>
+    </div>
+
+    <div class="row">
+        <div class="col col-33 text-center">
+            <button class="button button-block cp-button" ng-click='subTotal("substract");'>
+                <i class="ion-ios-minus-outline"></i>
+            </button>
+        </div>
+        <div class="col col-33 col-center text-center cp-button-outline" style="border: 1px solid white">
+            <input class="text-center" type="number" placeholder="0" ng-model="input.qty" style="width:100%"/>
+        </div>
+        <div class="col col-33 text-center">
+            <button class="button button-block cp-button" ng-click='subTotal("add");'>
+                <i class="ion-ios-plus-outline"></i>
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <!-- COMPRO TODO: Change this to Tooltip or Make It More Readable -->
+        <div class="col col-center text-center" ng-show="low_stock">
+            <h4 class="cp-post-subtitle normal_white_space">{{ui_text_stock_is_not_enough}} {{ getPostMeta('stock') }}</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="button button-block cp-button icon ion-android-cart" ng-hide="offlineMode"
+                 ng-click="addToChart(content_data)"
+                 ng-disabled="getPostMetaValueById(content_data.post_meta, 'stock').value == '0'"> {{button_text_add_to_cart}}
+            </div>
+            <div class="button button-block cp-button icon ion-android-cart" ng-click="showConnectionAlert()"
+                 ng-show="offlineMode"> {{button_text_add_to_cart}}
+            </div>
+        </div>
+    </div>
+</div>

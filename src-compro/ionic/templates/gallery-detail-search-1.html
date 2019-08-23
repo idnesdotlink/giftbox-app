@@ -1,0 +1,26 @@
+<!--
+    Modified from gallery-detail-2.html, used as search result.
+    Features:
+    1. Zoom
+    2. Swipe L/R to browse pic.
+    3. Added text detail.
+-->
+<!-- Ericko Yap @COMPRO, 2016 -->
+<ion-view cache-view="false"  class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="box" style="display:block;width:100%;height:100%;overflow-y:scroll;">
+                <ion-scroll zooming="true" min-zoom="1" direction="xy" locked="false" style="" overflow-scroll="true">
+                    <img ng-src="{{content_data.featured_image_path}}" class="full_page_image fix-aspect-ratio"/>
+                    <div style="padding:10px;">
+                        <h2 class="cp-post-title normal_white_space"><b>{{content_data.title}}</b></h2>
+                        <h3 class="cp-post-subtitle normal_white_space">{{content_data.published_date}}</h3>
+                        <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html="content_data.content | unsafe"></p>
+                    </div>
+                </ion-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

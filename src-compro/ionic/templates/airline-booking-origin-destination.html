@@ -1,0 +1,14 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> Select {{od}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content has-header'>
+        	<!-- <ion-refresher pulling-text="Pull to refresh..." on-refresh=""></ion-refresher> -->
+	        <div class="list cp-list" >
+                <a class="item" href="#/app/airline-booking?{{od}}={{airline.CityName}} ({{airline.Code}}) - {{ airline.AirportName }}&{{od}}_code={{airline.Code}}" ng-repeat="airline in content_data.airlines">
+                    <h2 class="cp-post-title normal_white_space">{{airline.CityName}} ({{airline.Code}}) - {{ airline.AirportName }}</h2>
+                </a>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

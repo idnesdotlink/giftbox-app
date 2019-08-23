@@ -1,0 +1,84 @@
+<!-- extended from home-5 -->
+
+<!--<link href="css/templates/home-6.css" rel="stylesheet"> <!-- comment this line when deploying -->
+
+<ion-view class="cp-page"  hide-nav-bar="true">
+    <div class="bar bar-clear" ng-if="menu_type=='sidebar'">
+        <button class="button button-icon button-clear ion-navicon cp-header-button" menu-toggle="left"></button>
+        <a href="#/app/shopping-cart-1/-3" style="position: absolute; top:5px; right:5px; bottom:5px">
+            <button ng-show="totalQty > 0" class="button button-icon button-clear ion-ios-cart cp-header-button" menu-toggle="right">
+                <span class="badge badge-assertive" ng-bind="totalQty" style="position:absolute; top:45%; right: -10%"></span>
+            </button>
+        </a>
+    </div>
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-content class='cp-page-content home-5' scroll="false">
+        <!--<div style="display:flex;justify-content:center;align-items:center;height:100%;width:100%;text-align:center;" ng-show='isLoading'>-->
+            <!--<div ng-show="isTimeout==false"><ion-spinner class='cp-spinner' ng-if='isLoading'></ion-spinner><br>-->
+                <!--&lt;!&ndash;<h4 class="cp-modal-menu-item text" style="text-shadow: 1px 1px #000000;">Please wait a moment...</h4>&ndash;&gt;-->
+                <!--<h4>Please wait a moment...</h4>-->
+            <!--</div>-->
+            <!--<div ng-show="isTimeout==true">-->
+                <!--<h4>Oops, something is wrong here...<br/><small> Tap <span style='font-weight:bold;'>Reload</span> to try again.</small></h4>-->
+                <!--<input type="button"-->
+                       <!--style='font-size:20px;'-->
+                       <!--class="cp-button"  ng-click="retryLoadContent()" value="Reload"/>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--        <div style="width:100%;background:url('img/1.jpg') 100% 100% no-repeat"></div>-->
+        <div ng-hide="isLoading">
+          <img ng-src="{{content_data.img_src}}" style="position:absolute;width:100%;height:100%;-webkit-transform: translateZ(0);"/>
+
+
+    <!--            <img ng-src="img/logo-dark.png" style="position:absolute;width:90%;margin:10% 5%;"/>-->
+            <div style="position:absolute;width:100%;bottom:5%;">
+                <div class="home-panel-menu">
+                    <div class="cp-home-grid-menu" style="margin-top:-180px; text-align:center; width:100% inherit; background-color:transparent !important;">
+                        <span class="cp-modal-menu-item text"
+                              style='font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+                                     font-size:21px;'>
+                            <a id="home12menuTitle" href="#/app/{{selectedMenuData.term_template.name}}/{{selectedMenuData.id}}" class="cp-modal-menu-item" style="text-decoration:none; opacity: 0; transition: opacity 0.3s ease-out;">
+                                {{ selectedMenuData.title }}
+                            </a>
+                        </span>
+                    </div>
+                    <ion-wheel class="cp-home-grid-menu" style="z-index:1;">
+                        <div class="col-5 cp-home-grid-menu" id="activate">
+                            <div class="circle" style="width:60px; height:60px; border-radius:50%;">
+                                <a class="cp-modal-menu-item">
+                                    <i class="icon ion-grid"></i>
+                                </a>
+                            </div>
+                        </div>
+                        <div class="ionic-wheel-circle {{ content_data.title }}" ng-repeat="menu in content_data.menus" style="opacity:0; -webkit-transition: opacity 1s ease-out; transition: opacity 1s ease-out;">
+                            <!--<span class="cp-modal-menu-item text"> {{menu.title}}</span>-->
+
+                            <span class="cp-modal-menu-item text home-11-menu-item show-menu-on-top" >
+                                <div class='circle'>
+                                    <a class="cp-modal-menu-item" ng-if='menu.content_type_id == "1" || menu.content_type_id == "2"' href="#/app/{{menu.term_template.name}}/{{menu.id}}">
+                                        <i class="icon {{menu.icon_code}}"></i>
+                                    </a>
+                                    <a class="cp-modal-menu-item" ng-if='menu.content_type_id == "3"' href="#/app/{{content_data.menu_post[menu.id].post_template.name}}/{{content_data.menu_post[menu.id].id}}">
+                                        <i class="icon {{menu.icon_code}}"></i>
+                                    </a>
+                                </div>
+                                <!--<div style="margin-top:-15px;"><hr></div>{{menu.title}}-->
+                            </span>
+                        </div>
+
+                    </ion-wheel>
+
+                </div>
+            </div>
+            <svg style="width:100%; height:100%; position:absolute;">
+                <defs>
+                    <clipPath id="svgClipImage" >
+                        <circle cx="50%" cy="95%" r="87.5" stroke="green" stroke-width="0" fill="yellow" />
+                    </clipPath>
+                </defs>
+            </svg>
+            <img ng-src="{{content_data.img_src}}" class="clip-image" />
+        </div>
+    </ion-content>
+</ion-view>

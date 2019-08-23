@@ -1,0 +1,16 @@
+<ion-view view-title="{{content_data.title}}" class="cp-page" cache-view="true">
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found" timeout="isTimeout" loading="isLoading" exist="content_data.posts.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.posts.length > 0'>
+        <ion-content>
+          <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list" >
+                <a class="item item-thumbnail-left" href="#/app/reservation-admin-detail/{{post.id}}" ng-repeat="post in content_data.posts">
+                    <!--<img ng-src="{{product.featured_image_path}}"  style="width:auto; height:auto;">-->
+                    <img class="image-product-cover" style="background-image: url({{post.featured_image_path}});">
+                    <h2 class="cp-post-title normal_white_space"><b>{{post.title}}</b></h2>
+                    <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html='post.content | unsafe'></p>
+                </a>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

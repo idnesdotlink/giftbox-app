@@ -1,0 +1,139 @@
+<ion-view view-title="{{title}}" class="cp-page" cache-view="false">
+    <ion-content class="cp-page-content" ng-init="">
+        <div class="row">
+            <div class="col">
+                <h2 class="cp-post-title"><b>{{items_in_cart}}</b></h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <p class="cp-post-subtitle">{{remove_item_hint}}</p>
+            </div>
+        </div>
+        <hr/>
+
+        <ion-list show-delete="shouldShowDelete"
+                  show-reorder="shouldShowReorder"
+                  can-swipe="listCanSwipe"
+                  class="cp-list cp-swippable-list height-50vh">
+
+            <div ng-show='!isLoading && shoppingCarts.length < 1'
+                 style="display:flex;justify-content:center;align-items:center;width: 100%;height:100%;font-size: 20px">
+                {{no_cart_item}}
+            </div>
+
+            <ion-item ng-repeat="item in shoppingCarts"
+                      class="item-thumbnail-left item-remove-animate">
+
+                <img ng-src="{{item.img}}" style="width:auto; height:auto;">
+                <h2 class="cp-post-title normal_white_space"><b>{{item.title}}</b></h2>
+                <h3 class="cp-post-old-price normal_white_space">qty: <b>{{item.qty}}</b></h3>
+                <h2 class="cp-post-price normal_white_space"><b>{{(item.price * item.qty) | currency:currency }}</b>
+                </h2>
+
+                <ion-option-button class="button-assertive icon-left ion-android-delete"
+                                   style="width:80vw; text-align:center;padding:50px;"
+                                   ng-click="onItemDelete($index, item.id)">
+                    Remove
+                </ion-option-button>
+
+                <ion-delete-button class="ion-minus-circled"
+                                   ng-click="items.splice($index, 1)">
+                </ion-delete-button>
+
+                <ion-reorder-button class="ion-navicon"
+                                    on-reorder="reorderItem(item, $fromIndex, $toIndex)">
+                </ion-reorder-button>
+
+            </ion-item>
+        </ion-list>
+        <hr/>
+
+        <div class="row">
+            <div class="col">
+                <h4 class="normal_white_space"></h4>
+            </div>
+
+            <div class="col">
+                <h4 class="normal_white_space">Total</h4>
+            </div>
+
+            <div class="col">
+                <h4 class="normal_white_space"><b>{{totalPrice | currency:currency}}</b></h4>
+            </div>
+        </div>
+
+        <div class="list" ng-show="!isLogin">
+            <div class="row">
+                <div class="col">
+                    <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="totalQty!=0">{{button_text_checkout}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form name="frmSubmitOrder" novalidate ng-show="isLogin">
+            <div class="list">
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Name</span>
+                    <input type="text" placeholder="Name" name="name" ng-model="input.name" required>
+
+                </label>
+                <span ng-show="frmSubmitOrder.name.$error.required && !frmSubmitOrder.name.$pristine"
+                      style="color: red;padding-left: 16px;">Name must be filled</span>
+                <span ng-show="frmSubmitOrder.name.$invalid && !frmSubmitOrder.name.$pristine && !frmSubmitOrder.name.$error.required"
+                      style="color: red;padding-left: 16px;">Wrong name format for name field</span>
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Email</span>
+                    <input type="email" placeholder="Email" name="email" ng-model="input.email" required>
+                </label>
+                <span ng-show="frmSubmitOrder.email.$error.required && !frmSubmitOrder.email.$pristine"
+                      style="color: red;padding-left: 16px;">Email must be filled</span>
+                <span ng-show="frmSubmitOrder.email.$invalid && !frmSubmitOrder.email.$pristine && !frmSubmitOrder.email.$error.required"
+                      style="color: red;padding-left: 16px;">Wrong format for email field</span>
+
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Phone</span>
+
+                    <div class="numeric">
+                        <input type="text" name="phone" placeholder="Phone" ng-model="input.phone"
+                               onkeypress="return isNumberKey(event)" required>
+                    </div>
+                </label>
+
+                <span ng-show="frmSubmitOrder.phone.$error.required && !frmSubmitOrder.phone.$pristine"
+                      style="color: red;padding-left: 16px;">Phone number must be filled</span>
+                <span ng-show="frmSubmitOrder.phone.$invalid && !frmSubmitOrder.phone.$pristine && !frmSubmitOrder.phone.$error.required"
+                      style="color: red;padding-left: 16px;">Wrong format for phone number field</span>
+
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Address</span>
+                    <input type="text" placeholder="Address" name="address" ng-model="input.address" required>
+                </label>
+                <span ng-show="frmSubmitOrder.address.$error.required && !frmSubmitOrder.address.$pristine"
+                      style="color: red;padding-left: 16px;">Address must be filled</span>
+                <span ng-show="frmSubmitOrder.address.$invalid && !frmSubmitOrder.address.$pristine && !frmSubmitOrder.address.$error.required"
+                      style="color: red;padding-left: 16px;">Wrong format for Address field</span>
+
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Comments</span>
+                    <textarea placeholder="Comments" ng-model="input.comments"></textarea>
+                </label>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="button button-block cp-button" ng-click="submitOrder()"
+                         ng-disabled="frmSubmitOrder.$invalid"> Checkout
+                    </div>
+                </div>
+            </div>
+        </form>
+
+    </ion-content>
+</ion-view>

@@ -1,0 +1,21 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.files.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.files.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list">
+                <a  ng-repeat='file in content_data.files' class="item" href="#/app/file-detail-2/{{file.id}}"> <!--ng-click="downloadFile('https://cspinet.org/salt/saltreport.pdf', 'downloadLagi')">-->
+                    <h2 class="cp-post-title normal_white_space"><b>{{file.title}}</b></h3> <!-- title -->
+                    <h3 class='cp-post-subtitle normal_white_space'>{{file.created_at}}</h4>  <!-- Summary -->
+                    <img  ng-src="{{file.featured_image_path}}" ng-show="file.featured_image_path !== null && file.featured_image_path !== ''" class="full-image"/>
+                    <p class='cp-post-content' ng-bind-html="getPostMetaValueById(file.post_meta, 'publisher').value | unsafe"></p>  <!-- Summary -->
+                </a>
+                <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

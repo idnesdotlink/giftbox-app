@@ -1,0 +1,20 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> GAMES 001 </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="row">
+                <div class="col"></div><div class="col"></div><div class="col games001-score" ng-click="restart()">Restart</div>
+            </div>
+            <div class="row">
+                <div class="col games001-score">Current</div><div class="col games001-score">Time</div>
+            </div>
+            <div class="row">
+                <div class="col games001-score">{{currentNumber}}</div><div class="col games001-score"><p  ng-bind="timeCounter"></p></div>
+            </div>
+            <div class="row" ng-repeat="a in range(panelSize) track by $index">
+                <div class="col games001-col" style="background:{{backgroundColor}}; color: {{textColor}}" ng-repeat="b in range(panelSize) track by $index" ng-click="onPanelClick($parent.$index*panelSize+$index)">{{panel_numbers[$parent.$index*panelSize+$index]}}</div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

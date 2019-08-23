@@ -1,0 +1,24 @@
+<div style="width:100%;text-align:center">
+    {{ alert_unavailable_product_content_info }}
+        <br><br>
+    <div ng-if="unavailable_product.length > 0">
+    	{{ alert_unavailable_product_content_unavailable_items }}
+    	<br>
+		<ul ng-repeat="product in unavailable_product">
+			<li >
+				- {{ product.title }}
+			</li>
+		</ul>
+	</div>
+	<div ng-if="limited_product.length > 0">
+		{{ alert_unavailable_product_content_limited }}
+    	<br>
+		<ul ng-repeat="product in limited_product">
+			<li >
+				- {{ product.title }}
+			</li>
+		</ul>
+	</div>
+    <br>
+    {{ unavailable_product_content_apologize }}
+</div>

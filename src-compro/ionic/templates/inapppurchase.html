@@ -1,0 +1,32 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{ text_inapp_purchase_title }}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-content class='cp-page-content'>
+        <div ng-hide='isLoading'>
+            <div class="item item-image" style='height:100%;width:100%'>
+                <img ng-src="{{content_data.img_src}}"/>
+            </div>
+        </div>
+<!--
+        <button ng-show="!products" ng-click="loadProducts()" class="button button-block button-balanced">
+            <i class="ion-arrow-down-c"></i> Load Products
+        </button>
+-->
+        <button ng-repeat="product in products" ng-click="buy(product.productId)"
+                class="button button-block cp-button">
+            {{product.title}}<br/>{{product.price}}
+        </button>
+<!--
+        <h3>Restore Purchases</h3>
+        <button ng-click="restore()" class="button button-block button-balanced">
+            <i class="ion-refresh"></i> Restore
+        </button>
+-->
+<!--
+        <h3>Test TopUp</h3>
+        <button ng-click="topUpAccount(365)" class="button button-block button-balanced">
+            <i class="ion-refresh"></i> Top Up
+        </button>
+-->
+    </ion-content>
+</ion-view>

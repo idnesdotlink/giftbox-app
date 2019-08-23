@@ -1,0 +1,214 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content'>
+            <div class="row"><div class="col"><h3 class="cp-post-title">{{title_text_form}}</h3></div></div>
+            <form name="frmSubmitForm" novalidate>
+                <div class="list cp-list">
+                    <div ng-repeat="field in content_data.fields">
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'plaintext.placeholder'">
+                            <input type="text" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'plaintext.inline-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="text" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-stacked-label cp-item-input"
+                               ng-if="field.type === 'plaintext.stacked-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="text" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-floating-label cp-item-input"
+                               ng-if="field.type === 'plaintext.floating-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="text" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'email.placeholder'">
+                            <input type="email" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'email.inline-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="email" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-stacked-label cp-item-input"
+                               ng-if="field.type === 'email.stacked-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="email" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-floating-label cp-item-input"
+                               ng-if="field.type === 'email.floating-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="email" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'password.placeholder'">
+                            <input type="password" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'password.inline-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="password" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-stacked-label cp-item-input"
+                               ng-if="field.type === 'password.stacked-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="password" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-floating-label cp-item-input"
+                               ng-if="field.type === 'password.floating-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="password" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'number.placeholder'">
+                            <input type="text" class="numeric" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   ng-model="input.meta[field.name]" onkeypress="return isNumberKey(event)" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'number.inline-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="text" class="numeric" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   onkeypress="return isNumberKey(event)" ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-stacked-label cp-item-input"
+                               ng-if="field.type === 'number.stacked-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="text" class="numeric" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   onkeypress="return isNumberKey(event)" ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-floating-label cp-item-input"
+                               ng-if="field.type === 'number.floating-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <input type="text" class="numeric" placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                   onkeypress="return isNumberKey(event)" ng-model="input.meta[field.name]" required>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'textarea.placeholder'">
+                            <textarea placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                      ng-model="input.meta[field.name]" required></textarea>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input cp-item-input" ng-if="field.type === 'textarea.inline-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <textarea placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                      ng-model="input.meta[field.name]" required></textarea>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-stacked-label cp-item-input"
+                               ng-if="field.type === 'textarea.stacked-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <textarea placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                      ng-model="input.meta[field.name]" required></textarea>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-floating-label cp-item-input"
+                               ng-if="field.type === 'textarea.floating-label'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <textarea placeholder="{{field.placeholder}}" name="{{field.name}}"
+                                      ng-model="input.meta[field.name]" required></textarea>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+
+                        <label class="item item-input item-select cp-item-input" ng-if="field.type === 'select'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                            <select name="{{field.name}}" ng-model="input.meta[field.name]">
+                                <option ng-repeat="option in field.options.split('<br/>')">{{option}}</option>
+                            </select>
+                            <span ng-show="frmSubmitForm[field.name].$error.required && !frmSubmitForm[field.name].$pristine"
+                                  style="color: red;padding-left: 16px;">{{input_text_required}}</span>
+                        </label>
+
+                        <label class="item item-input item-input-stacked cp-item-input"
+                               ng-if="field.type === 'checkbox'">
+                            <span class="input-label">{{field.placeholder}}</span>
+                        </label>
+                        <ion-list ng-if="field.type === 'checkbox'">
+                            <ion-checkbox ng-repeat="option in field.options.split('<br/>') track by $index"
+                                          ng-model="input.meta[field.name][option]">{{option}}
+                            </ion-checkbox>
+                        </ion-list>
+
+                    </div>
+                    <div class="button button-block cp-button" ng-click="submitForm()"
+                         ng-disabled="frmSubmitForm.$invalid"> {{button_text_submit}}
+                    </div>
+
+                </div>
+
+            </form>
+        </ion-content>
+    </ion-pane>
+</ion-view>

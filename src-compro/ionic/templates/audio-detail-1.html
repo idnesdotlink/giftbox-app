@@ -1,0 +1,39 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content'>
+            <div class="row">
+                <div class="col">
+                    <ion-audio-track track="track">
+                        <div class="list list-inset">
+                            <div class="item item-thumbnail-left">
+                                <img ng-src="{{track.art}}">
+                                <h2 ng-bind="track.title" class='cp-post-title'></h2>
+                                <p ng-bind="track.artist" class='cp-post-subtitle'></p>
+
+                                <div ng-show='isPhoneGap()'>
+                                    <ion-audio-controls>
+                                        <button class="button button-small button-assertive icon cp-button" ion-audio-play></button>
+                                        <ion-spinner icon="ios"></ion-spinner>
+                                        <button ng-click="downloadAudio(content_data.audio_id)" class="button button-small button-assertive icon-left ion-archive cp-button" ng-hide='isDownloaded || !audioDownloadEnabled'>{{button_text_download}}</button>
+                                        <button disabled class="button button-small button-assertive icon-left ion-archive cp-button" ng-show='isDownloaded && audioDownloadEnabled' style='opacity: 0.3'>{{button_text_download}}</button>
+
+                                        <!-- <a ng-click="downloadAudio(content_data.audio_id)" class"button button-icon icon" ion-audio-play ng-hide='content_data.isDownloaded'>Download</a> -->
+                                    </ion-audio-controls>
+                                </div>
+                            </div>
+
+                            <div class="item" ng-show='isPhoneGap()'>
+                                <ion-audio-progress-bar track="track" display-time></ion-audio-progress-bar>
+                            </div>
+                        </div>
+                    </ion-audio-track>
+                    <p class="normal_white_space justify_text_align cp-post-content" ng-bind-html='content_data.content | unsafe'></p>
+                </div>
+            </div>
+            <comment-pane></comment-pane>
+        </ion-content>
+    </ion-pane>
+</ion-view>
+

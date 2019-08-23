@@ -1,0 +1,21 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'>{{viewTitle}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='content_data.events.length' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.events.length > 0'>
+      <ion-header-bar class="bar-subheader" style="padding:0px">
+          <button class="button" ng-disabled="isToday()" ng-click="today()">Today</button>
+          <button class="button" ng-click="changeMode('month')">M</button>
+          <button class="button" ng-click="changeMode('week')">W</button>
+          <button class="button" ng-click="changeMode('day')">D</button>
+          <button class="button" ng-click="doRefresh()">Refresh</button>
+      </ion-header-bar>
+      <ion-pane>
+          <ion-content scroll="false" class="main-content" has-header="true">
+              <calendar ng-model="calendar.currentDate" calendar-mode="calendar.mode" event-source="calendar.eventSource"
+                        range-changed="reloadSource(startTime, endTime)"
+                        event-selected="onEventSelected(event)" title-changed="onViewTitleChanged(title)"
+                        time-selected="onTimeSelected(selectedTime, events)" step="30"></calendar>
+          </ion-content>
+      </ion-pane>
+    </ion-pane>
+</ion-view>

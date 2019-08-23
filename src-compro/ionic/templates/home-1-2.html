@@ -1,0 +1,34 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content'>
+            <div class="item item-image" ng-if="content_data.img_src!='' && content_data.img_src!=null" style="border:0;">
+                <img ng-src="{{content_data.img_src}}" />
+            </div>
+            <div class="list cp-list">
+                {{ colors = ['109,110,113','147,149,152','192,194,196','209,211,212','255,245,112','255,222,23','254,195,64','249,159,63','247,148,30'];""}}
+                <div ng-repeat='menu in content_data.menus track by $index' style="background-color:rgb({{ colors[$index < colors.length ? $index : (($index / colors.length) % 2 === 0 ? (colors.length - ($index%colors.length)) : $index%colors.length)] }});">
+                    <div ng-if='menu.id == -5'>
+                        <a class="item item-icon-left cp-col-text" ng-click='socialShare()' style="border:0;">
+                            <i class="{{menu.icon_code}}"></i>
+                            {{menu.title}}
+                        </a>
+                    </div>
+                    <div ng-if='menu.content_type_id == 1 || menu.content_type_id == 2'>
+                        <a href="#/app/{{menu.term_template.name}}/{{menu.id}}" class="item item-icon-left cp-col-text" style="border:0;">
+                            <i class="{{menu.icon_code}}"></i>
+                            {{menu.title}}
+                        </a>
+                    </div>
+                    <div ng-if='menu.content_type_id == 3'>
+                        <a href="#/app/{{content_data.menu_post[menu.id].post_template.name}}/{{content_data.menu_post[menu.id].id}}" class="item item-icon-left cp-col-text" style="border:0;">
+                            <i class="{{menu.icon_code}}"></i>
+                            {{menu.title}}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

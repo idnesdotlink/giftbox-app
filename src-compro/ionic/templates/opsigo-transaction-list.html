@@ -1,0 +1,42 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.transactions.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.transactions.length > 0'>
+        <ion-content class='cp-page-content'>
+            <ion-refresher pulling-text="{{ text_pull_to_refresh }}" on-refresh="doRefresh()"></ion-refresher>
+            <div class="list cp-list" >
+                <div ng-repeat='transaction in content_data.transactions'>
+                    <!-- <div class="item item-divider cp-term-divider">
+                        {{transaction.date_created}}
+                    </div> -->
+                    <a class="item" href="#/app/airline-transaction-detail/{{transaction.id}}">
+                        <div class="row" style="margin-bottom:20px">
+                            <div class="col col-50">
+                                <h3 class="cp-post-subtitle normal_white_space"><strong>{{transaction.order_id}}</strong></h3>
+                                <h3 class="cp-post-subtitle normal_white_space">{{transaction.date_created}}</h3>
+                            </div>
+                            <div class="col col-50 text-right">
+                                <h3 class="cp-post-subtitle normal_white_space"><strong>{{transaction.booking_code}}</strong></h3>
+                                <h3 ng-if="transaction.trans_status=='Pending'" class="badge badge-energized" style="right:25px; top:50px">{{ status_pending }}</h3>
+                                <h3 ng-if="transaction.trans_status=='Capture'" class="badge badge-energized" style="right:25px; top:50px">{{ status_capture }}</h3>
+                                <h3 ng-if="transaction.trans_status=='Settlement'" class="badge badge-energized" style="right:25px; top:50px">{{ status_settlement }}</h3>
+                                <h3 ng-if="transaction.trans_status=='Challenge'" class="badge badge-energized" style="right:25px; top:50px">{{ status_challenge }}</h3>
+                                <h3 ng-if="transaction.trans_status=='In Process'" class="badge badge-energized" style="right:25px; top:50px">{{ status_in_process }}</h3>
+                                <h3 ng-if="transaction.trans_status=='Delivery'" class="badge badge-energized" style="right:25px; top:50px">{{ status_delivery }}</h3>
+                                <h3 ng-if="transaction.trans_status=='Completed'" class="badge badge-balanced" style="right:25px; top:50px">{{ status_completed }}</h3>
+                                <h3 ng-if="transaction.trans_status=='Cancelled'" class="badge badge-assertive" style="right:25px; top:50px">{{ status_cancelled }}</h3>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <ion-infinite-scroll distance="2"
+                                     on-infinite="loadMoreData()"
+                                     ng-if="!moredata">
+                </ion-infinite-scroll>
+            </div>
+        </ion-content>
+    </ion-pane>
+    <div class="bar bar-footer" ng-show="vt_payment_service!='YES'">
+        <a class="button cp-button" style="width:100%;"  ng-href="#/app/manual-payment"><i class="ion-help-circled"></i> {{button_text_how_to_pay}}</a>
+    </div>
+</ion-view>

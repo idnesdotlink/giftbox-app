@@ -1,0 +1,36 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class='cp-page-content'>
+            <div class="row">
+                <div class="col">
+                    <h2 class="post_title normal_white_space cp-post-title"><b>{{content_data.title}}</b></h2>
+                    <h3 class="post_subtitle normal_white_space cp-post-subtitle">{{content_data.created_date}}</h3>
+                    <img ng-src="{{content_data.cover}}" class="full-image"/>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-50" style="padding-right: 3px;">
+                    <button class="button button-block cp-button" ng-click="openFile()" ng-disabled="!isDownloaded">
+                        {{button_text_open}}
+                    </button>
+                </div>
+                <div class="col-50" style="padding-left: 3px;">
+                    <button class="button button-block cp-button" ng-click="downloadFile()" ng-disabled="!isPhoneGap()">
+                        {{button_text_download}}
+                    </button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <p class="normal_white_space justify_text_align cp-post-content" ng-bind-html='content_data.content | unsafe'></p>
+                </div>
+            </div>
+
+            <comment-pane></comment-pane>
+        </ion-content>
+    </ion-pane>
+</ion-view>

@@ -1,0 +1,37 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.galleries.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.galleries.length > 0'>
+        <ion-content class='gallery-small-padding cp-page-content'>
+            <div class="row" ng-repeat="image in content_data.galleries" ng-if="$index % 3 === 0">
+                <div class="col col-33">
+                    <!--<img ng-src="{{content_data.galleries[$index].featured_image_path}}" ng-click="gallery($index,'templates/gallery-detail-2.html')"/>-->
+                    <img class="image-product-cover" style="background-image: url({{content_data.galleries[$index].featured_image_path}});" ng-click="gallery($index,'templates/gallery-detail-2.html');">
+                </div>
+
+                <div class="col col-33" ng-if="$index + 1 < content_data.galleries.length">
+                    <!--<img ng-src="{{content_data.galleries[$index + 1].featured_image_path}}" ng-click="gallery($index + 1,'templates/gallery-detail-2.html');"/>-->
+                    <img class="image-product-cover" style="background-image: url({{content_data.galleries[$index+1].featured_image_path}});" ng-click="gallery($index + 1,'templates/gallery-detail-2.html');">
+                </div>
+
+                <div class="col col-33" ng-if="$index + 2 < content_data.galleries.length">
+                    <!--<img ng-src="{{content_data.galleries[$index + 2].featured_image_path}}" ng-click="gallery($index + 2,'templates/gallery-detail-2.html');"/>-->
+                    <img class="image-product-cover" style="background-image: url({{content_data.galleries[$index+2].featured_image_path}});" ng-click="gallery($index + 2,'templates/gallery-detail-2.html');">
+                </div>
+
+
+            </div>
+            <ion-infinite-scroll distance="2"
+                                 on-infinite="loadMoreData()"
+                                 ng-if="!moredata">
+
+            </ion-infinite-scroll>
+
+            <div class="row">
+                <div class="col text-center">
+                    <input type="button" class="cp-button" ng-click="loadMoreData()" value="Load More Image"/>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

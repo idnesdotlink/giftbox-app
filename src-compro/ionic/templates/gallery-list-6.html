@@ -1,0 +1,20 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.galleries.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.galleries.length > 0'>
+        <ion-slide-box class="slider-image-full cp-transparent-slider-background" on-slide-changed="slideHasChanged($index)" does-continue='true'>
+            <ion-slide class="slider-slide-full" ng-repeat="image in content_data.galleries">
+                <ion-content class='cp-gallery-background'>
+                    <div class="box">
+                        <img ng-src="{{content_data.galleries[$index].featured_image_path}}" class="half-page-image"/>
+                        <div class="half-page-content" style="padding:10px;">
+                            <h2 class="cp-post-title normal_white_space"><b>{{content_data.galleries[$index].title}}</b></h2> <!-- title -->
+                            <h3 class="cp-post-subtitle normal_white_space">{{content_data.galleries[$index].created_at}}</h3>  <!-- Subtitle -->
+                            <p class="cp-post-content normal_white_space justify_text_align" ng-bind-html="image.content | unsafe"></p>  <!-- Summary  -->
+                        </div>
+                    </div>
+                </ion-content>
+            </ion-slide>
+        </ion-slide-box>
+    </ion-pane>
+</ion-view>

@@ -1,0 +1,93 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="row">
+                <div class="col">
+                    <h4 class="cp-post-title post_title normal_white_space"><b>{{content_data.title}}</b></h4>
+                    <!--<h5 class="cp-post-subtitle post_subtitle normal_white_space">{{content_data.created_date}}</h5>-->
+                    <img ng-src="{{content_data.img_src}}" class="full-image"/>
+                    <p class="cp-post-content normal_white_space justify_text_align"
+                       ng-bind-html='content_data.content | unsafe'></p>
+                </div>
+            </div>
+
+
+            <div class="row" ng-show="isLoginEnabled && isLogin">
+                <div class="col">
+                    <form name="frmRegister" novalidate>
+                      <div class="list">
+
+<!--
+                        <label class="item item-input item-stacked-label cp-item-input">
+                            <span class="input-label" required>Email <i style="color: red;">*</i></span>
+                            <input type="email" placeholder="{{default_register_fields.email.field_name}}" name="email" ng-model="input.email" required>
+                        </label>
+                        <span ng-show="frmRegister.email.$error.required && !frmRegister.email.$pristine"
+                              style="color: red;padding-left: 16px;">Email must be filled</span>
+                        <span ng-show="frmRegister.email.$invalid && !frmRegister.email.$pristine && !frmRegister.email.$error.required"
+                              style="color: red;padding-left: 16px;">Wrong format for Email field</span>
+-->
+
+                        <label class="item item-input item-stacked-label cp-item-input">
+                          <span class="input-label">{{input_text_name}} <i style="color: red;">*</i></span>
+                          <input type="text" placeholder="{{input_placeholder_name}}" name="name" ng-model="input.meta['name']" ng-required="true">
+                        </label>
+                        <span ng-show="frmRegister.name.$error.required && !frmRegister.name.$pristine"
+                              style="color: red;padding-left: 16px;">{{input_required_error_name}}</span>
+
+<!--
+                        <label class="item item-input item-stacked-label cp-item-input">
+                          <span class="input-label">Phone <i style="color: red;">*</i></span>
+                          <input type="text" placeholder="Phone" name="phone" ng-model="input.meta['phone']" ng-required="true">
+                        </label>
+                        <span ng-show="frmRegister.phone.$error.required && !frmRegister.phone.$pristine"
+                              style="color: red;padding-left: 16px;">Phone must be filled</span>
+-->
+
+                        <label class="item item-input item-stacked-label cp-item-input">
+                          <span class="input-label">{{input_text_booking_date}}: <i style="color: red;">*</i></span>
+                          <input type="date" placeholder="{{input_placeholder_booking_date}}" name="booking_date" ng-model="input.meta['booking_date']" maxdate="todays" ng-required="true" validatedateformat data-date-format="mm/dd/yyyy">
+                        </label>
+                        <span ng-show="frmRegister.booking_date.$error.required && !frmRegister.booking_date.$pristine"
+                              style="color: red;padding-left: 16px;">{{input_required_error_booking_date}}</span>
+                        <span ng-show="frmRegister.booking_date.$invalid && !frmRegister.booking_date.$pristine && !frmRegister.booking_date.$error.required"
+                              style="color: red;padding-left: 16px;">{{input_format_error_booking_date}}</span>
+
+                        <label class="item item-input item-stacked-label cp-item-input">
+                          <span class="input-label">{{input_text_booking_time}}: <i style="color: red;">*</i></span>
+                          <input type="time" placeholder="{{input_placeholder_booking_time}}" name="booking_time" ng-model="input.meta['booking_time']" maxdate="todays" ng-required="true" validatedateformat data-time-format="mm/dd/yyyy">
+                        </label>
+                        <span ng-show="frmRegister.booking_time.$error.required && !frmRegister.booking_time.$pristine"
+                              style="color: red;padding-left: 16px;">{{input_required_error_booking_time}}</span>
+                        <span ng-show="frmRegister.booking_time.$invalid && !frmRegister.booking_time.$pristine && !frmRegister.booking_time.$error.required"
+                              style="color: red;padding-left: 16px;">{{input_format_error_booking_time}}</span>
+
+                        <label class="item item-input item-stacked-label cp-item-input">
+                          <span class="input-label">{{input_text_message}}</span>
+                          <textarea type="text" placeholder="{{input_placeholder_message}}" name="message" ng-model="input.meta['message']" rows="3"></textarea>
+                        </label>
+                      </div>
+                    </form>
+                </div>
+            </div>
+
+            <div class="row" ng-show="isLoginEnabled && isLogin">
+                <div class="col">
+                  <button class="button button-block cp-button" ng-click="submitBooking()"
+                  ng-disabled="frmRegister.$invalid">{{button_text_book_now}}
+                  </button>
+                </div>
+            </div>
+            <div class="row" ng-show="!isLogin">
+                <div class="col">
+                  <button class="button button-block cp-button" ng-click="showLoginRequiredAlert()">
+                  {{button_text_please_login}}
+                  </button>
+                </div>
+            </div>
+            <comment-pane></comment-pane>
+        </ion-content>
+    </ion-pane>
+</ion-view>

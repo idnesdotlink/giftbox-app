@@ -1,0 +1,10 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-content class='cp-page-content' scroll="false">
+        <div style="width:100%; height:100%;" ng-hide="isLoading">
+            <img ng-src="{{content_data.img_src}}" style="position:absolute;width:100%;height:100%;"/>
+            <img ng-src="{{content_data.logo}}" style="position:absolute;width:90%;margin:10% 5%;"/>
+        </div>
+    </ion-content>
+</ion-view>

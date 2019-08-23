@@ -1,0 +1,59 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if="!isLoading">
+        <ion-content class='cp-page-content' scroll="false">
+            <img class="image-product-cover" style="background-image: url({{content_data.img_src}}); width:101%; height:101%; margin-left:-1px; margin-top:-1px;" />
+            <div style="position:absolute;width:100%;bottom:0px;">
+                <div class="home-panel-menu square no-border" style="width:100%;overflow-x:scroll;">
+                    <div ng-repeat-start='menu in content_data.menus track by $index'> </div>
+                        <div class="row" ng-if="$index%3==0">
+                            <div class="col cp-home-grid-menu" style="margin-left:2vw;" ng-if="$index<content_data.menus.length">
+                                <div ng-if='content_data.menus[$index].featured_image_path == "" ' style="background:url({{content_data.menus[$index].featured_image_path}}) no-repeat left center !important; background-size: 100% 100% !important;">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].id == -5' ng-click="socialShare()"><i class="icon {{content_data.menus[$index].icon_code}}"></i>{{content_data.menus[$index].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].content_type_id == "1" || content_data.menus[$index].content_type_id == "2"' href="#/app/{{content_data.menus[$index].term_template.name}}/{{content_data.menus[$index].id}}"><i class="icon {{content_data.menus[$index].icon_code}}"></i>{{content_data.menus[$index].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].content_type_id == "3"' href="#/app/{{content_data.menu_post[content_data.menus[$index].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index].id].id}}"><i class="icon {{content_data.menus[$index].icon_code}}"></i>{{content_data.menus[$index].title}}</a>
+                                </div>
+                                <div ng-if='content_data.menus[$index].featured_image_path != "" ' style="background:url({{content_data.menus[$index].featured_image_path}}) no-repeat left center !important; background-size: 100% 100% !important;">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].id == -5' ng-click="socialShare()"><i class="icon"></i>{{content_data.menus[$index].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].content_type_id == "1" || content_data.menus[$index].content_type_id == "2"' href="#/app/{{content_data.menus[$index].term_template.name}}/{{content_data.menus[$index].id}}"><i class="icon"></i>{{content_data.menus[$index].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index].content_type_id == "3"' href="#/app/{{content_data.menu_post[content_data.menus[$index].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index].id].id}}"><i class="icon"></i>{{content_data.menus[$index].title}}</a>
+                                </div>
+                            </div>
+                            <div class="col cp-home-grid-menu" style="margin-left:3vw;margin-right:3vw;" ng-if="$index + 1 <content_data.menus.length">
+                                <div ng-if='content_data.menus[$index+1].featured_image_path == "" ' style="background:url({{content_data.menus[$index+1].featured_image_path}}) no-repeat left center !important; background-size: 100% 100% !important;">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+1].id == -5' ng-click="socialShare()"><i class="icon {{content_data.menus[$index+1].icon_code}}"></i>{{content_data.menus[$index+1].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+1].content_type_id == "1" || content_data.menus[$index+1].content_type_id == "2"' href="#/app/{{content_data.menus[$index+1].term_template.name}}/{{content_data.menus[$index+1].id}}"><i class="icon {{content_data.menus[$index+1].icon_code}}"></i>{{content_data.menus[$index+1].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+1].content_type_id == "3"' href="#/app/{{content_data.menu_post[content_data.menus[$index+1].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index+1].id].id}}"><i class="icon {{content_data.menus[$index+1].icon_code}}"></i>{{content_data.menus[$index+1].title}}</a>
+                                </div>
+                                <div ng-if='content_data.menus[$index+1].featured_image_path != "" ' style="background:url({{content_data.menus[$index+1].featured_image_path}}) no-repeat left center !important; background-size: 100% 100% !important;">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+1].id == -5' ng-click="socialShare()"><i class="icon "></i>{{content_data.menus[$index+1].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+1].content_type_id == "1" || content_data.menus[$index+1].content_type_id == "2"' href="#/app/{{content_data.menus[$index+1].term_template.name}}/{{content_data.menus[$index+1].id}}"><i class="icon "></i>{{content_data.menus[$index+1].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+1].content_type_id == "3"' href="#/app/{{content_data.menu_post[content_data.menus[$index+1].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index+1].id].id}}"><i class="icon"></i>{{content_data.menus[$index+1].title}}</a>
+                                </div>
+                            </div>
+                            <div class="col cp-home-grid-menu" style="visibility:hidden;margin-left:3vw;margin-right:3vw;" ng-if="$index + 1 >=content_data.menus.length">
+
+                            </div>
+                            <div class="col cp-home-grid-menu" style="margin-right:2vw;" ng-if="$index + 2 <content_data.menus.length">
+                                <div ng-if='content_data.menus[$index+2].featured_image_path == "" ' style="background:url({{content_data.menus[$index+2].featured_image_path}}) no-repeat left center !important; background-size: 100% 100% !important;">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+2].id == -5' ng-click="socialShare()"><i class="icon {{content_data.menus[$index+2].icon_code}}"></i>{{content_data.menus[$index+2].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+2].content_type_id == "1" || content_data.menus[$index+2].content_type_id == "2"' href="#/app/{{content_data.menus[$index+2].term_template.name}}/{{content_data.menus[$index+2].id}}"><i class="icon {{content_data.menus[$index+2].icon_code}}"></i>{{content_data.menus[$index+2].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+2].content_type_id == "3"' href="#/app/{{content_data.menu_post[content_data.menus[$index+2].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index+2].id].id}}"><i class="icon {{content_data.menus[$index+2].icon_code}}"></i>{{content_data.menus[$index+2].title}}</a>
+                                </div>
+                                <div ng-if='content_data.menus[$index+2].featured_image_path != "" ' style="background:url({{content_data.menus[$index+2].featured_image_path}}) no-repeat left center !important; background-size: 100% 100% !important;">
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+2].id == -5' ng-click="socialShare()"><i class="icon"></i>{{content_data.menus[$index+2].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+2].content_type_id == "1" || content_data.menus[$index+2].content_type_id == "2"' href="#/app/{{content_data.menus[$index+2].term_template.name}}/{{content_data.menus[$index+2].id}}"><i class="icon"></i>{{content_data.menus[$index+2].title}}</a>
+                                    <a class="cp-modal-menu-item" ng-if='content_data.menus[$index+2].content_type_id == "3"' href="#/app/{{content_data.menu_post[content_data.menus[$index+2].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index+2].id].id}}"><i class="icon"></i>{{content_data.menus[$index+2].title}}</a>
+                                </div>
+                            </div>
+                            <div class="col" style="visibility:hidden;margin-right:2vw;" ng-if="$index + 2 >=content_data.menus.length">
+
+                            </div>
+                        </div>
+                    <div ng-repeat-end> </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

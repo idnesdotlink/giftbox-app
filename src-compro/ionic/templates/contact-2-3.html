@@ -1,0 +1,70 @@
+<ion-view class="cp-page" cache-view="false" >
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-hide='isLoading'>
+        <ion-content class='cp-page-content'>
+            <leaflet lf-center="center" markers="markers" data-tap-disabled="true" data-drag-disabled="true"  height="75vw"></leaflet>
+            <div class="row">
+                <div class="col">
+                    <img ng-src="{{content_data.featured_image}}"style="width:100%; height: 50vw"/>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="text-align:center;">
+                    <h4 class="cp-post-title"><b>{{content_data.company_name}}</b></h4>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <!-- <div id="map" data-tap-disabled="true"></div> -->
+                    <div class="list card cp-list">
+                        <a class="item item-icon-left normal_white_space">
+                            <i class="icon ion-home"></i>
+                            <div ng-bind-html='content_data.address | unsafe'></div>
+                            {{content_data.city}} {{content_data.postal_code}}<br/>
+                            {{content_data.province}} - {{content_data.country}}
+                        </a>
+
+                        <div class="item" ng-repeat="contact in content_data.contacts track by $index"  ng-if="(content_data.contacts.length > 0) && content_data.contacts[$index] != ' ' && content_data.contacts[$index] != '-'"  style="padding:0px">
+                            <a ng-href="tel:{{contact | unsafe}}" class="item item-icon-left normal_white_space">
+                                <i class="icon ion-ios-telephone" ng-if="$index==0"></i>
+                                <div ng-bind-html='contact | unsafe'></div>
+                            </a>
+                        </div>
+
+                        <a ng-href="mailto:{{content_data.email | unsafe}}" class="item item-icon-left normal_white_space">
+                            <i class="icon ion-email"></i>
+                            {{content_data.email}}
+                        </a>
+
+                        <div class="item" ng-repeat="sm in content_data.social_media track by $index" style="padding:0px">
+                            <a ng-if="sm['type']!='whatsapp' && sm['type']!='skype' && sm['type']!='line'" ng-href="{{ sm['url'] | unsafe}}" class="item item-icon-left normal_white_space external-link">
+                                <i class="icon {{ sm['type'] == 'website' ? 'ion-earth' : 'ion-social-'+sm['type'] }}"></i>{{sm['title']}}
+                            </a>
+                            <a ng-if="sm['type']=='whatsapp'" ng-href="tel:{{sm['url'] | unsafe}}" class="item item-icon-left normal_white_space">
+                                <i class="icon ion-social-{{ sm['type'] }}"></i>
+                                <div ng-bind-html="sm['title'] | unsafe"></div>
+                            </a>
+                            <a ng-if="sm['type']=='skype'" ng-href="skype:{{sm['url'] | unsafe}}?call" class="item item-icon-left normal_white_space external-link">
+                                <i class="icon ion-social-{{ sm['type'] }}"></i>{{sm['title']}}
+                            </a>
+                            <a ng-if="sm['type']=='line'" ng-href="{{sm['url'] | unsafe}}" class="item item-icon-left normal_white_space external-link">
+                                <span style="position:absolute; left: 11px; font-size:15px; pointer-events: none;">LINE</span>{{sm['title']}}
+                            </a>
+                        </div>
+
+                        <a class="item item-icon-left normal_white_space">
+                            <i class="icon ion-ios-clock"></i>
+                            {{content_data.working_days}}<br/>
+                            {{content_data.working_hours}}<br/>
+                        </a>
+
+                        <a class="item normal_white_space">
+                            <button class="button button-block cp-header" ng-click="launchNavigator()">{{button_text_get_direction}}</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

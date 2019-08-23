@@ -1,0 +1,78 @@
+<ion-view class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+<!--        <div class="bar bar-subheader" style="text-align:center; padding:0;border:none;" ng-if="content_data.img_src!=null && content_data.img_src!=''">
+            <img ng-src="" style="position:relative;width:100%;height:100%; background:url({{content_data.img_src}}) no-repeat center !important;"/>
+        </div>-->
+        <ion-content class='cp-page-content'>
+            <div class="item item-image" style="position:relative;width:100%;border:0; background-color:transparent;" ng-if="content_data.img_src!=null && content_data.img_src!=''">
+                <img style="position:relative;width:100%; margin-bottom:3vw" ng-src="{{content_data.img_src}}" />
+            </div>
+            <div ng-repeat='menu in content_data.menus track by $index'>
+                <div class="row" style="padding:0" ng-if="$index%2==0">
+                    <div style="position:relative;width:{{ $index == content_data.menus.length - 1 ? 100 : 50 }}vw;height:50vw; margin-left:{{ $index == content_data.menus.length - 1 ? 25 :0 }}vw;">
+                        {{ hasFeatureImage = content_data.menus[$index].featured_image_path !== "" && content_data.menus[$index].featured_image_path !== null && content_data.menus[$index].featured_image_path !==  false;''}}
+                        <a ng-if='content_data.menus[$index].id == -5' ng-click="socialShare()" style="text-decoration:none;">
+                            <div class='cp-menu-icon-center cp-header' ng-hide='hasFeatureImage'>
+                                <i class="icon {{content_data.menus[$index].icon_code}}"></i>
+                            </div>
+                            <img ng-src="" class='cp-menu-image' style="position:absolute;width:30vw;height:30vw;background:url({{content_data.menus[$index].featured_image_path}}) no-repeat center !important; background-size: cover !important; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; padding:30.6%; margin:5vw 10vw;"/>
+                            <div class="cp-post-title" style="position:relative;bottom:0;line-height:120%;text-align:center; padding-top:37.5vw;">
+                                {{content_data.menus[$index].title}}
+                            </div>
+                        </a>
+                        <a ng-if='content_data.menus[$index].content_type_id == 1 || content_data.menus[$index].content_type_id == 2' href="#/app/{{content_data.menus[$index].term_template.name}}/{{content_data.menus[$index].id}}" style="text-decoration:none;">
+                            <div class='cp-menu-icon-center cp-header' ng-hide='hasFeatureImage'>
+                                <i class="icon {{content_data.menus[$index].icon_code}}"></i>
+                            </div>
+                            <img ng-src="" style="position:absolute;width:30vw;height:30vw;background:url({{content_data.menus[$index].featured_image_path}}) no-repeat center !important; background-size: cover !important; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; padding:30.6%;  margin:5vw 10vw;"/>
+                            <div class="cp-post-title" style="position:relative;bottom:0;line-height:120%;text-align:center; padding-top:37.5vw;">
+                                {{content_data.menus[$index].title}}
+                            </div>
+                        </a>
+                        <a ng-if='content_data.menus[$index].content_type_id == 3' href="#/app/{{content_data.menu_post[content_data.menus[$index].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index].id].id}}" style="text-decoration:none;">
+                            <div class='cp-menu-icon-center cp-header' ng-hide='hasFeatureImage'>
+                                <i class="icon {{content_data.menus[$index].icon_code}}"></i>
+                            </div>
+                            <img ng-src="" style="position:absolute;width:30vw;height:30vw;background:url({{content_data.menus[$index].featured_image_path}}) no-repeat center !important; background-size: cover !important; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; padding:30.6%;  margin:5vw 10vw;"/>
+                            <div class="cp-post-title" style="position:relative;bottom:0;line-height:120%;text-align:center; padding-top:37.5vw;">
+                                {{content_data.menus[$index].title}}
+                            </div>
+                        </a>
+                    </div>
+                    <div style="position:relative;width:50vw;height:50vw; margin:0;">
+                        {{ hasFeatureImage1 = content_data.menus[$index+1].featured_image_path !== "" && content_data.menus[$index+1].featured_image_path !== null && content_data.menus[$index+1].featured_image_path !==  false;''}}
+                        <a ng-if='content_data.menus[$index+1].id == -5' ng-click="socialShare()" style="text-decoration:none;">
+                            <div class='cp-menu-icon-center cp-header' ng-hide='hasFeatureImage1'>
+                                <i class="icon {{content_data.menus[$index+1].icon_code}}"></i>
+                            </div>
+                            <img ng-src="" style="position:absolute;width:30vw;height:30vw;background:url({{content_data.menus[$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; padding:30.6%;  margin:5vw 10vw;"/>
+                            <div class="cp-post-title" style="position:relative;bottom:0;line-height:120%;text-align:center; padding-top:37.5vw;">
+                                {{content_data.menus[$index+1].title}}
+                            </div>
+                        </a>
+                        <a ng-if='content_data.menus[$index+1].content_type_id == 1 || content_data.menus[$index+1].content_type_id == 2' href="#/app/{{content_data.menus[$index+1].term_template.name}}/{{content_data.menus[$index+1].id}}" style="text-decoration:none;">
+                            <div class='cp-menu-icon-center cp-header' ng-hide='hasFeatureImage1'>
+                                <i class="icon {{content_data.menus[$index+1].icon_code}}"></i>
+                            </div>
+                            <img ng-src="" style="position:absolute;width:30vw;height:30vw;background:url({{content_data.menus[$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; padding:30.6%;  margin:5vw 10vw;"/>
+                            <div class="cp-post-title" style="position:relative;bottom:0;line-height:120%;text-align:center; padding-top:37.5vw;">
+                                {{content_data.menus[$index+1].title}}
+                            </div>
+                        </a>
+                        <a ng-if='content_data.menus[$index+1].content_type_id == 3' href="#/app/{{content_data.menu_post[content_data.menus[$index+1].id].post_template.name}}/{{content_data.menu_post[content_data.menus[$index+1].id].id}}" style="text-decoration:none;">
+                            <div class='cp-menu-icon-center cp-header' ng-hide='hasFeatureImage1'>
+                                <i class="icon {{content_data.menus[$index+1].icon_code}}"></i>
+                            </div>
+                            <img ng-src="" style="position:absolute;width:30vw;height:30vw;background:url({{content_data.menus[$index+1].featured_image_path}}) no-repeat center !important; background-size: cover !important; -webkit-border-radius:50%; -moz-border-radius:50%; border-radius:50%; padding:30.6%;  margin:5vw 10vw;"/>
+                            <div class="cp-post-title" style="position:relative;bottom:0;line-height:120%;text-align:center; padding-top:37.5vw;">
+                                {{content_data.menus[$index+1].title}}
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

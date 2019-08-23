@@ -1,0 +1,88 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> User Registration</ion-nav-title>
+    <ion-content class='cp-page-content'>
+        <form name="frmRegister" novalidate>
+            <div class="list">
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Email</span>
+                    <input type="email" placeholder="Email" name="email" ng-model="input.email" required>
+                </label>
+                <span ng-show="frmRegister.email.$error.required && !frmRegister.email.$pristine"
+                      style="color: red;padding-left: 16px;">Email must be filled</span>
+                <span ng-show="frmRegister.email.$invalid && !frmRegister.email.$pristine && !frmRegister.email.$error.required"
+                      style="color: red;padding-left: 16px;">Wrong format for email field</span>
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Password</span>
+                    <input type="password" placeholder="Password" name="password" ng-model="input.password"
+                           ng-minlength="6" required>
+                </label>
+                <span ng-show="frmRegister.password.$error.required && !frmRegister.password.$pristine"
+                      style="color: red;padding-left: 16px;">Password must be filled</span>
+                <span ng-show="frmRegister.password.$error.minlength && !frmRegister.password.$pristine"
+                      style="color: red;padding-left: 16px;">Password must be min length 6 characters</span>
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Password Confirmation</span>
+                    <input type="password" placeholder="Password Confirmation" name="passwordConf"
+                           ng-model="input.passwordConf" required compare-to="input.password">
+                </label>
+                <span ng-show="frmRegister.passwordConf.$error.required && !frmRegister.passwordConf.$pristine"
+                      style="color: red;padding-left: 16px;">Password Confirmation must be filled</span>
+                <span ng-show="frmRegister.passwordConf.$error.compareTo && !frmRegister.passwordConf.$pristine && !frmRegister.passwordConf.$error.required"
+                      style="color: red;padding-left: 16px;">Password and Password Confirmation not match</span>
+
+
+                <label class="item item-input item-floating-label cp-item-input">
+                    <span class="input-label">Username</span>
+                    <input type="text" placeholder="Username" name="username" ng-model="input.username" required>
+                </label>
+                <span ng-show="frmRegister.username.$error.required && !frmRegister.username.$pristine"
+                      style="color: red;padding-left: 16px;">Username must be filled</span>
+                <span ng-show="frmRegister.username.$invalid && !frmRegister.username.$pristine && !frmRegister.username.$error.required"
+                      style="color: red;padding-left: 16px;">Wrong format for username field</span>
+
+
+                <div ng-show="{{register_phone_required == 'YES'}}">
+                    <label class="item item-input item-floating-label cp-item-input numeric">
+                        <span class="input-label">Phone</span>
+                        <input type="text" placeholder="Phone" name="phone" ng-model="input.meta['phone']"
+                               ng-required="{{register_phone_required == 'YES'}}"
+                               onkeypress="return isNumberKey(event)">
+                    </label>
+                    <span ng-show="frmRegister.phone.$error.required && !frmRegister.phone.$pristine"
+                          style="color: red;padding-left: 16px;">Phone must be filled</span>
+                </div>
+
+                <div ng-show="{{register_address_required == 'YES'}}">
+                    <label class="item item-input item-floating-label cp-item-input">
+                        <span class="input-label">Address</span>
+                        <textarea type="text" placeholder="Address" name="address" ng-model="input.meta['address']"
+                                  ng-required="{{register_address_required == 'YES'}}" rows="3"></textarea>
+                    </label>
+                    <span ng-show="frmRegister.address.$error.required && !frmRegister.address.$pristine"
+                          style="color: red;padding-left: 16px;">Address must be filled</span>
+                </div>
+
+                <div ng-show="{{register_message_required == 'YES'}}">
+                    <label class="item item-input item-floating-label cp-item-input">
+                        <span class="input-label">{{field_title_register_additional_message}}</span>
+                        <textarea type="text" placeholder="{{field_title_register_additional_message}}" name="message" ng-model="input.meta['message']"
+                                  rows="5"></textarea>
+                    </label>
+                    <span ng-show="frmRegister.message.$error.required && !frmRegister.message.$pristine"
+                          style="color: red;padding-left: 16px;">Message must be filled</span>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <button class="button button-block cp-button" ng-click="register()"
+                            ng-disabled="frmRegister.$invalid">Register
+                    </button>
+                </div>
+            </div>
+        </form>
+    </ion-content>
+</ion-view>

@@ -1,0 +1,44 @@
+<ion-content>
+
+    <ion-nav-bar class="has-tab-tops cp-header header-no-border">
+        <ion-nav-back-button class="cp-header-button"></ion-nav-back-button>
+    </ion-nav-bar>
+    <div ng-if="tab_type==='tabs-top'">
+        <ion-nav-view name="menuContent" class="has-tabs-top"></ion-nav-view>
+    </div>
+    <div ng-if="tab_type==='tabs-bottom'">
+        <ion-nav-view name="menuContent" class="has-tabs"></ion-nav-view>
+    </div>
+
+    <!--bottom tabs -->
+    <div class="tabs-striped">
+        <div class="tabs {{tab_type}} cp-tabs tabs-icon-top" ng-if="main_menu.length > 4">
+            <div ng-repeat-start='menus in main_menu track by $index'> </div>
+            <a ng-click="clearHistory(); setActiveMenu($index)" class="tab-item" ng-class="{active:$index===selected_menu}" ng-if='$index<3 && (menus.content_type_id == "1" || menus.content_type_id == "2")' href="#/app/{{menus.term_template.name}}/{{menus.id}}">
+                <i class="icon {{menus.icon_code}}"></i>
+                {{menus.title}}
+            </a>
+            <a ng-click="clearHistory(); setActiveMenu($index)" class="tab-item" ng-class="{active:$index===selected_menu}" ng-if='$index<3 && menus.content_type_id == "3"' href="#/app/{{main_menu_post.posts[menus.id].post_template.name}}/{{main_menu_post.posts[menus.id].id}}">
+                <i class="icon {{menus.icon_code}}"></i>
+                {{menus.title}}
+            </a>
+            <div ng-repeat-end> </div>
+            <a class="tab-item" ng-class="{active:$index===selected_menu}" ng-click='openMenu(); setActiveMenu($index)'>
+                <i class="icon ion-more"></i>
+                More
+            </a>
+        </div>
+        <div class="tabs cp-tabs tabs-icon-top" ng-if="main_menu.length <= 4">
+            <div ng-repeat-start='menus in main_menu track by $index'> </div>
+            <a ng-click="clearHistory(); setActiveMenu($index)" class="tab-item" ng-class="{active:$index===selected_menu}" ng-if='$index<4 && (menus.content_type_id == "1" || menus.content_type_id == "2")' href="#/app/{{menus.term_template.name}}/{{menus.id}}">
+                <i class="icon {{menus.icon_code}}"></i>
+                {{menus.title}}
+            </a>
+            <a ng-click="clearHistory(); setActiveMenu($index)" class="tab-item" ng-class="{active:$index===selected_menu}" ng-if='$index<4 && menus.content_type_id == "3"' href="#/app/{{main_menu_post.posts[menus.id].post_template.name}}/{{main_menu_post.posts[menus.id].id}}">
+                <i class="icon {{menus.icon_code}}"></i>
+                {{menus.title}}
+            </a>
+            <div ng-repeat-end> </div>
+        </div>
+    </div>
+</ion-content>

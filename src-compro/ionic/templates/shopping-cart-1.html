@@ -1,0 +1,720 @@
+<ion-view view-title="{{title}}" class="cp-page" cache-view="false">
+    <ion-content class="cp-page-content" ng-init="">
+        <div class="row">
+            <div class="col">
+                <h2 class="cp-post-title"><b>{{items_in_cart}}</b></h2>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <p class="cp-post-subtitle">{{remove_item_hint}}</p>
+            </div>
+        </div>
+        <hr/>
+        
+        <ion-scroll style="height: 50vh!important;">
+            <ion-list show-delete="shouldShowDelete"
+                      show-reorder="shouldShowReorder"
+                      can-swipe="listCanSwipe"
+                      class="cp-list cp-swippable-list">
+
+                <div ng-show='!isLoading && shoppingCarts.length < 1'
+                     style="display:flex;justify-content:center;align-items:center;width: 100%;height:100%;font-size: 20px">
+                    {{no_cart_item}}
+                </div>
+
+                <ion-item ng-repeat="item in shoppingCarts"
+                          class="item-thumbnail-left item-remove-animate">
+
+                    <img ng-src="{{item.img}}" style="width:auto; height:auto;">
+                    <h2 class="cp-post-title normal_white_space"><b>{{item.title}}</b></h2>
+                    <h3 class="cp-post-old-price normal_white_space" ng-show="item.variantValues.length > 0"><b>{{ item.variantValues.join(', ') }}</b></h3>
+                    <h3 class="cp-post-old-price normal_white_space">{{ text_qty }}: <b>{{item.qty}}</b></h3>
+                    <h2 class="cp-post-price normal_white_space"><b>{{(item.price * item.qty) | currency:currency }}</b>
+                    </h2>
+
+                    <ion-option-button class="button-assertive icon-left ion-android-delete"
+                                       style="width:80vw; text-align:center;padding:50px;"
+                                       ng-click="onItemDelete($index, item.id)">
+                        {{ text_remove }}
+                    </ion-option-button>
+
+                    <ion-delete-button class="ion-minus-circled"
+                                       ng-click="items.splice($index, 1)">
+                    </ion-delete-button>
+
+                    <ion-reorder-button class="ion-navicon"
+                                        on-reorder="reorderItem(item, $fromIndex, $toIndex)">
+                    </ion-reorder-button>
+
+                </ion-item>
+            </ion-list>
+        </ion-scroll>
+        <hr/>
+        
+        <div class="row" style='text-align:right;'>
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space">{{ text_subtotal }}</h4>
+            </div>
+
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space"><b>{{subTotal | currency:currency}}</b></h4>
+            </div>
+        </div>
+        <div class="row" style='text-align:right;' ng-show="voucher_code != '' && promocode_enabled == 'YES'">
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space">Promo</h4>
+            </div>
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space"><b>- {{voucher_price | currency:currency}}</b></h4>
+            </div>
+        </div>
+        <div ng-if="tax_enabled == 'YES'">
+            <div ng-if="taxes.length > 0">
+                <div class="row" ng-repeat="tax in taxes" style='text-align:right;'>
+                    <div class="col">
+                        <h4 class="cp-post-title normal_white_space">{{tax.label}}</h4>
+                    </div>
+
+                    <div class="col">
+                        <h4 class="cp-post-title normal_white_space"><b>{{tax.value | currency:currency}}</b></h4>
+                    </div>
+                </div>
+            </div>
+            <hr/>
+        </div>
+
+        <div class="row" style='text-align:right;'>
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space">
+                    Total
+                </h4>
+            </div>
+
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space">
+                    <b>{{totalPrice | currency:currency}}</b><br>
+                    <small ng-if="loyalty_integration_active == 'NO' && isLogin && membership_features_enabled == 'YES'" style="font-style:italic;">{{ text_points_get }} <b>{{ totalPoints | number:0 }}</b> {{ text_points_points }}</small>
+                </h4>
+            </div>
+        </div>
+
+        <div class="row"  ng-if="rajaongkir_enabled=='YES' || sicepat_enabled=='YES' || shipper_enabled=='YES' || shipper_intl_enabled=='YES'"  style='text-align:right;'>
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space">{{text_grand_total}}</h4>
+            </div>
+
+            <div class="col">
+                <h4 class="cp-post-price normal_white_space"><b>{{finalTotal | currency:currency}}</b></h4>
+            </div>
+        </div>
+        
+        <div class="list" style="margin-bottom:0px" ng-show="isLogin && totalQty > 0 && promocode_enabled == 'YES'">
+            <div class="row">
+                <div class="col">
+                    <span class="input-label">Promo Code</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-66" style="margin-top:0px">
+                    <form name="frmSubmitVoucher" novalidate style="margin-bottom:10px">
+                        <label class="item item-input item-stacked-label cp-item-input">
+                            <input type="text" placeholder="Insert promo code here..." name="voucher" ng-model="voucher.data" ng-minlength="1">
+                        </label>
+                    </form>
+                </div>
+                <div class="col col-34">
+                    <div class="button button-block cp-button" ng-click="checkVoucher()" style="margin-top:0px">{{button_text_check}}</div>
+                </div>
+            </div>
+            <div class="row" ng-show="voucher_code != ''">
+                <div class="col col-75">
+                    <h4 class="cp-post-price normal_white_space" style="margin-top:0px">Promo Code <b>{{ voucher_code }}</b> Is Available</h4>
+                </div>
+    
+                <div class="col col-25 text-right">
+                    <h4 class="cp-post-price normal_white_space" style="margin-top:0px" ng-click="cancelUseVoucher()"><i class="ion-ios-close"></i></h4>
+                </div>
+            </div>
+        </div>
+        <div class="list" ng-if="!isLogin">
+            <div class="row">
+                <div class="col">
+                    <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="totalQty!=0">{{button_text_checkout}}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <form name="frmSubmitOrder" novalidate ng-show="isLogin && totalQty > 0">
+        <!-- <form name="frmSubmitOrder" novalidate > -->
+            <div class="list" style="margin-bottom:0px; padding-top:0px;">
+                <div>
+                    <label class="item item-input item-select cp-item-input">
+                        <div class="input-label">
+                          {{ ui_text_payment_type }}
+                        </div>
+                        <select ng-model="payment.selectedPaymentType" class="input-label" style="background:rgba(0,0,0,0);" ng-change="selectPaymentType(payment.selectedPaymentType)">
+                            <option value="" disabled selected>{{ ui_text_select_payment_type }}</option>
+                            <option value="manual" ng-if="payment_type.manual == 'YES'">{{ ui_text_payment_bank_transfer }}</option>
+                            <option value="vt" ng-if="payment_type.vt == 'YES'">{{ ui_text_payment_online_payment }}</option>
+                            <option value="ipay88" ng-if="payment_type.ipay88 == 'YES'">{{ ui_text_payment_online_payment }}</option>
+                            <option value="senangpay" ng-if="payment_type.senangpay == 'YES'">{{ ui_text_payment_online_payment }}</option>
+                            <option value="loyalty" ng-if="payment_type.loyalty == 'YES'">{{ ui_text_payment_loyalty }}</option>
+                            <option ng-if="payment_type.sa === 'YES' && channel.gateway_id === 'sa' && channel.active == 'YES'" ng-repeat="channel in payment_channel" value="{{ channel.gateway_id + '_' + channel.key }}" >{{ channel.text }}</option>
+                            <option ng-if="payment_type.ij === 'YES' && channel.gateway_id === 'ij' && channel.active == 'YES'" ng-repeat="channel in payment_channel" value="{{ channel.gateway_id + '_' + channel.key }}" >{{ channel.text }}</option>
+                            <option value="cod" ng-if="payment_type.cod == 'YES'">{{ ui_text_payment_cod }}</option>
+                            <option value="espay" ng-if="payment_type.espay == 'YES'">{{ ui_text_payment_espay }}</option>
+                        </select>
+                  </label>
+                </div>
+                <div ng-if="(payment.selectedPaymentType != 'cod' && payment.selectedPaymentType != '') && shipper_enabled != 'YES' && rajaongkir_enabled == 'YES'">
+                  <label class="item item-input item-select cp-item-input">
+                    <div class="input-label">
+                      {{text_rajaongkir_service}}
+                    </div>
+                    <select ng-model="tariff.selectedService" class="input-label" style="background:rgba(0,0,0,0);" ng-change="selectService(tariff.selectedService)">
+                        <option value="" disabled selected>{{text_rajaongkir_select_service}}</option>
+                        <option value="no_service" ng-if="no_delivery_enabled == 'YES'">{{ ui_text_delivery_no_service }}</option>
+                        <option value="pickup" ng-if="pickup_enabled == 'YES'">Pick Up</option>
+                        <option value="jne" ng-if="rajaongkir_enabled == 'YES' && rajaongkir_selected_services.jne">JNE</option>
+                        <option value="pos" ng-if="rajaongkir_enabled == 'YES' && rajaongkir_selected_services.pos">POS Indonesia</option>
+                        <option value="tiki" ng-if="rajaongkir_enabled == 'YES' && rajaongkir_selected_services.tiki">TIKI</option>
+                        <option value="sicepat" ng-if="sicepat_enabled == 'YES'">Sicepat</option>
+                        <option value="gosend" ng-if="go_send_enabled == 'YES'">GO-SEND</option>
+                    </select>
+                  </label>
+                  
+                  <label class="item item-input item-select cp-item-input" ng-show="tariff.selectedService == 'sicepat'">
+                    <div class="input-label">
+                      {{text_rajaongkir_province}}
+                    </div>
+                    <select ng-model="tariff.selectedProvinceSicepat" class="input-label" style="background:rgba(0,0,0,0);" ng-change="loadCitiesSicepat(tariff.selectedProvinceSicepat)"  ng-options='province.province as province.province for province in provincesSicepat'>
+                        <option value="" disabled selected>{{text_rajaongkir_select_province}}</option>
+                    </select>
+                  </label>
+                  <label class="item item-input item-select cp-item-input" ng-show="tariff.selectedService == 'jne' || tariff.selectedService == 'pos' || tariff.selectedService == 'tiki'">
+                    <div class="input-label">
+                      {{text_rajaongkir_province}}
+                    </div>
+                    <select ng-model="tariff.selectedProvince" class="input-label" style="background:rgba(0,0,0,0);"  ng-change="loadCities(tariff.selectedProvince)"  ng-options='province.province_id as province.province for province in provinces'>
+                        <option value="" disabled selected>{{text_rajaongkir_select_province}}</option>
+                    </select>
+                  </label>
+
+                  <label class="item item-input item-select cp-item-input" ng-show="tariff.selectedService == 'sicepat'">
+                    <div class="input-label">
+                      {{text_rajaongkir_city}}
+                    </div>
+                    <select ng-model="tariff.selectedCitySicepat" class="input-label" style="background:rgba(0,0,0,0);" ng-change="loadSubdistrictSicepat(tariff.selectedCitySicepat)" ng-options='city.city as city.city for city in sicepat_city'>
+                        <option value="" disabled selected>{{text_rajaongkir_select_city}}</option>
+                    </select>
+                  </label>
+                  <label class="item item-input item-select cp-item-input" ng-show="tariff.selectedService == 'jne' || tariff.selectedService == 'pos' || tariff.selectedService == 'tiki'">
+                    <div class="input-label">
+                      {{text_rajaongkir_city}}
+                    </div>
+                    <select ng-model="tariff.selectedCity" class="input-label" style="background:rgba(0,0,0,0);" ng-change="selectCity(tariff.selectedCity)" ng-options='city.city_id as city.city_name for city in cities'>
+                        <option value="" disabled selected>{{text_rajaongkir_select_city}}</option>
+                    </select>
+                  </label>
+                  <label class="item item-input item-select cp-item-input" ng-show="tariff.selectedService == 'sicepat'">
+                    <div class="input-label">
+                      Sub District
+                    </div>
+                    <select ng-model="tariff.selectedSubdistrictSicepat" class="input-label" style="background:rgba(0,0,0,0);" ng-change="selectSubdistrictSicepat(tariff.selectedSubdistrictSicepat)" ng-options='subdistrict.destination_code as subdistrict.subdistrict for subdistrict in sicepat'>
+                        <option value="" disabled selected>SELECT SUB DISTRICT</option>
+                    </select>
+                  </label>
+                  
+                  <!-- <leaflet id="map" lf-center="center" markers="markers" data-tap-disabled="false" data-drag-disabled="false"  height="50vh" ng-show="tariff.selectedService == 'gosend'"></leaflet> -->
+                  <div class="row" ng-show="tariff.selectedService == 'gosend'">
+                      <div class="col">
+                        <span class="cp-post-title">
+                            GO-SEND Destination and Delivery Price
+                        </span>
+                        <div class="row" ng-show="tariff.selectedService == 'gosend' && gosend_display_city != ''">
+                            Barang ini dikirim dari {{gosend_display_city}}
+                        </div>
+                        <a class="button button-block button-positive cp-button" ng-click="gosendMap('open')" style="margin-left:20px; margin-right:20px;">Choose Destination</a>
+                        <div class="list" style="max-height:300px;overflow-y:auto;" ng-show="tariff.selectedService == 'gosend'">
+                            <div class="item" ng-show="gosend_instant_active == true">
+                                <ion-radio ng-model="tariff.selectedCost" value="GO-SEND;Instant;{{gosend_instant_price}}" ng-click="calculateTotal(tariff.selectedCost)">
+                                    <div class="col-100">
+                                        GO-SEND Instant - Rp {{gosend_instant_price}}.00
+                                    </div>
+                                    <div class="col-100">
+                                        ({{gosend_instant_description}})
+                                    </div>
+                                </ion-radio>
+                            </div>
+                            <div class="item" ng-show="gosend_sameday_active == true">
+                                <ion-radio ng-model="tariff.selectedCost" value="GO-SEND;SameDay;{{gosend_sameday_price}}" ng-click="calculateTotal(tariff.selectedCost)">
+                                    <div class="col-100">
+                                        GO-SEND SameDay - Rp. {{gosend_sameday_price}}.00
+                                    </div>
+                                    <div class="col-100">
+                                        ({{gosend_sameday_description}})
+                                    </div>
+                                </ion-radio>
+                            </div>
+                        </div>
+                      </div>
+                  </div>  
+                  
+                  <div class="row">
+                        <div class="col">
+                            <div class="button button-block cp-button" ng-if="tariff.selectedService == 'sicepat'" ng-click="checkCostSicepat()"> {{button_text_rajaongkir_check_cost}} </div>
+                            <div class="button button-block cp-button" ng-if="tariff.selectedService == 'jne' || tariff.selectedService == 'pos' || tariff.selectedService == 'tiki'" ng-click="checkCost()"> {{button_text_rajaongkir_check_cost}} </div>
+                        </div>
+                    </div>
+
+                    <div class="row" ng-if="tariff.selectedService == 'sicepat' && courier_available">
+                        <div class="col">
+                            <span class="cp-post-title">
+                                    Sicepat
+                            </span><br/>
+                            <div class="list" style="max-height:300px;overflow-y:auto;">
+                                <div class="item" ng-repeat="cost in costsSicepat">
+                                    <ion-radio ng-model="tariff.selectedCost" value="Sicepat;{{cost.service}};{{cost.tariff}}" ng-click="calculateTotal(tariff.selectedCost)">
+                                        <div class="col-100">
+                                            {{cost.service}} ({{cost.description}})
+                                        </div>
+                                        <div class="col-100">
+                                            {{cost.tariff}} (ETD {{cost.etd}})
+                                        </div>
+                                    </ion-radio>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" ng-if="(tariff.selectedService == 'jne' || tariff.selectedService == 'pos' || tariff.selectedService == 'tiki') && courier_available" ng-repeat="courier in costs">
+                        <div class="col">
+                            <span class="cp-post-title">
+                                    {{courier.name}}
+                            </span><br/>
+                            <!--<hr/>-->
+                            <div class="list" style="max-height:300px;overflow-y:auto;">
+                                <div class="item" ng-repeat="cost in courier.costs">
+                                    <ion-radio ng-model="tariff.selectedCost" value="{{courier.name}};{{cost.service}};{{cost.cost[0].value}}" ng-click="calculateTotal(tariff.selectedCost)">
+                                        <div class="col-100">
+                                            {{cost.service}} ({{cost.description}})
+                                        </div>
+                                        <div class="col-100" ng-repeat="cost_value in cost.cost">
+                                            {{cost_value.value}} (ETD {{cost_value.etd}})
+                                        </div>
+                                    </ion-radio>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+ 
+                    <div class="row"  style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-title normal_white_space">{{text_rajaongkir_total_ongkir}}
+                                <br><small>{{text_volumetric_weight}}</small>
+                            </h4>
+                        </div>
+
+                        <div class="col">
+                            <h4 class="cp-post-title normal_white_space">
+                                <b>{{deliveryPrice | currency:currency}}</b>
+                                <br><small>{{totalWeight}}g</small>
+                            </h4>
+                        </div>
+                    </div>
+                    <div class="row"  ng-if="rajaongkir_enabled=='YES' || sicepat_enabled=='YES' || shipper_enabled=='YES' || shipper_intl_enabled=='YES'"  style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-price normal_white_space">{{text_grand_total}}</h4>
+                        </div>
+
+                        <div class="col">
+                            <h4 class="cp-post-price normal_white_space"><b>{{finalTotal | currency:currency}}</b></h4>
+                        </div>
+                    </div>
+<!--                    <div class="row"  ng-if="rajaongkir_enabled=='YES' || sicepat_enabled=='YES'"  style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="normal_white_space">{{text_volumetric_weight}}</h4>
+                        </div>
+
+                        <div class="col">
+                            <h4 class="normal_white_space"><b>{{totalWeight}}g</b></h4>
+                        </div>
+                    </div>-->
+                </div>
+                <!--<input type="hidden" value="no_service" ng-model="tariff.selectedService" ng-if="shipper_enabled != 'YES' && rajaongkir_enabled != 'YES'">-->
+                <div class="row"  style='text-align:right;' ng-repeat="cost in otherCosts track by $index">
+                    <div class="col">
+                        <h4 class="normal_white_space">{{cost.label}}</h4>
+                    </div>
+
+                    <div class="col">
+                        <h4 class="normal_white_space"><b>{{cost.value | currency:currency}}</b></h4>
+                    </div>
+                </div>
+            </div>
+
+            <div class="list" ng-if="(payment.selectedPaymentType != 'cod' && payment.selectedPaymentType != '') &&
+                                     ((shipper_enabled === 'YES' || (shipper_enabled === 'YES' && shipper_intl_enabled === 'YES')) || custom_delivery_enabled === 'YES') || pos_malaysia_enabled === 'YES'"
+                 style="margin-bottom:0px;">
+                <label class="item item-input item-select cp-item-input">
+                    <div class="input-label">
+                      {{text_rajaongkir_service}}
+                    </div>
+                    <select ng-model="tariff.selectedService" class="input-label" style="background:rgba(0,0,0,0);" ng-change="loadShipperProvinces(tariff.selectedService)">
+                        <option value="" disabled selected>{{text_rajaongkir_select_service}}</option>
+                        <option value="no_service" ng-if="no_delivery_enabled == 'YES'">{{ ui_text_delivery_no_delivery }}</option>
+                        <option value="pickup" ng-if="pickup_enabled == 'YES'">{{ ui_text_delivery_pick_up }}</option>
+                        <option value="domestic" ng-if="shipper_enabled == 'YES' || custom_delivery_enabled == 'YES'">{{ ui_text_delivery_domestic }}</option>
+                        <option value="international" ng-if="shipper_intl_enabled == 'YES'">{{ ui_text_delivery_international }}</option>
+                        <option value="gosend" ng-if="go_send_enabled == 'YES'">GO-SEND</option>
+                        <option value="pos_malaysia" ng-if="pos_malaysia_enabled == 'YES'">POS Malaysia</option>
+                    </select>
+                </label>
+                <div class="list" ng-show="tariff.selectedService == 'domestic'">
+                    <!-- SHIPPER PROVINCES -->
+                    <label class="item item-input item-select cp-item-input">
+                      <span class="input-label cp-post-subtitle"> {{ ui_text_delivery_select_province }} </span>
+                      <select ng-model="shipperAddress.province" ng-change="loadShipperCities(shipperAddress.province)" class="input-label" >
+                        <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                        <option ng-repeat="s in shipperProvinces" value="{{ s.id }}"> {{ s.name }} </option>
+                      </select>
+                    </label>
+
+                    <!-- SHIPPER CITIES -->
+                    <label class="item item-input item-select cp-item-input" ng-hide="shipperAddress.province == ''">
+                      <span class="input-label cp-post-subtitle"> {{ ui_text_delivery_select_city }} </span>
+                      <select ng-model="shipperAddress.city" ng-change="loadShipperSuburbs(shipperAddress.city)" class="input-label" >
+                        <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                        <option ng-repeat="s in shipperCities" value="{{ s.id }}"> {{ s.name }} </option>
+                      </select>
+                    </label>
+
+                    <!-- SHIPPER SUBURBS -->
+                    <label class="item item-input item-select cp-item-input" ng-hide="shipperAddress.city == ''">
+                      <span class="input-label cp-post-subtitle"> {{ ui_text_delivery_select_suburb }} </span>
+                      <select ng-model="shipperAddress.suburb" ng-change="loadShipperArea(shipperAddress.suburb)" class="input-label" >
+                        <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                        <option ng-repeat="s in shipperSuburbs" value="{{ s.id }}"> {{ s.name }} </option>
+                      </select>
+                    </label>
+
+                    <!-- SHIPPER AREA -->
+                    <label class="item item-input item-select cp-item-input" ng-hide="shipperAddress.suburb == ''">
+                      <span class="input-label cp-post-subtitle"> {{ ui_text_delivery_select_area }} </span>
+                      <select ng-model="shipperAddress.area" ng-change="getCostShipper(shipperAddress.area)" class="input-label" >
+                        <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                        <option ng-repeat="s in shipperArea" value="{{ s.id }}"> {{ s.name }} </option>
+                      </select>
+                    </label>
+
+                    <!-- PICK DELIVERY SERVICE -->
+                    <label class="item item-input item-select cp-item-input" ng-hide="shipperAddress.area == ''">
+                        <span class="input-label cp-post-subtitle">{{ ui_text_delivery_pick_service }}</span>
+                        <select ng-model="shipper.cost" ng-change="getCostShipperDetail(shipper.cost)" class="input-label">
+                          <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                          <option ng-repeat="sc in shipperCost track by $index" ng-if="checkAvailable(sc.name, sc.isCustomRate)" value="{{ $index }}"> {{ sc.name +  (sc.name == sc.rate_name ? '' : ' - ' + sc.rate_name) }} </option>
+                        </select>
+                    </label>
+
+                    <div class="item item-divider cp-term-divider" style="font-size: 14px">
+                      {{ text_summary }}
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"> {{ ui_text_delivery_destination_area }} </h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b> {{ selectedDestination }} </b></h4>
+                        </div>
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                          <h4 class="cp-post-subtitle normal_white_space"> {{ ui_text_delivery_delivery_time }} </h4>
+                        </div>
+                        <div class="col">
+                          <h4 class="cp-post-subtitle normal_white_space"><b> {{ minDays != '-' ? (minDays < maxDays ? minDays + "-" + maxDays : minDays) : '-' }} {{ ui_text_delivery_delivery_days }} </b></h4>
+                        </div>
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"> {{ ui_text_delivery_delivery_charge }} </h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b>{{ deliveryPrice | currency:currency}}</b></h4>
+                        </div>
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"> {{ ui_text_delivery_total_price }} </h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b>{{ finalTotal | currency:currency}}</b></h4>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SHIPPER INTERNATIONAL -->
+                <div class="list" ng-if="tariff.selectedService == 'international'">
+                    <label class="item item-input item-select cp-item-input">
+                      <span class="input-label cp-post-subtitle">{{ ui_text_delivery_select_country }}</span>
+                      <select ng-model="selectedShipperCountry" ng-change="getIntlCostShipper(selectedShipperCountry)" class="input-label cp-post-subtitle">
+                        <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                        <option ng-repeat="sc in shipperCountry track by $index" value="{{ $index }}"> {{ sc.country_name }} </option>
+                      </select>
+                    </label>
+                    <label class="item item-input item-select cp-item-input" ng-hide="selectedShipperCountry == ''">
+                      <span class="input-label cp-post-subtitle">{{ ui_text_delivery_select_expedition }}</span>
+                      <select ng-model="shipper.interCost" ng-change="getCostShipperIntlDetail(shipper.interCost)" class="input-label cp-post-subtitle">
+                        <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                        <option ng-repeat="sci in shipperCostIntl track by $index" value="{{ $index }}"> {{ sci.name }} - {{ sci.rate_name }} </option>
+                      </select>
+                    </label>
+                    <div class="item item-divider cp-term-divider" style="font-size: 14px">
+                      {{ text_summary }}
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space">{{ ui_text_delivery_destination_country }}</h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b>{{ selectedDestinationIntl }}</b></h4>
+                        </div>
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                      <div class="col">
+                        <h4 class="cp-post-subtitle normal_white_space"> {{ ui_text_delivery_delivery_time }} </h4>
+                      </div>
+                      <div class="col">
+                        <h4 class="cp-post-subtitle normal_white_space"><b> {{ minDays != '-' ? (minDays < maxDays ? minDays + "-" + maxDays : minDays) : '-' }} {{ ui_text_delivery_delivery_days }} </b></h4>
+                      </div>
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space">{{ ui_text_delivery_delivery_charge }}</h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b>{{ deliveryPrice | currency:currency}}</b></h4>
+                        </div>
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space">{{ ui_text_delivery_total_price }}</h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b>{{ finalTotal | currency:currency}}</b></h4>
+                        </div>
+                    </div>
+                </div>
+
+                  <div class="row" ng-show="tariff.selectedService == 'gosend'">
+                      <div class="col">
+                        <span class="cp-post-title">
+                            GO-SEND Destination & Delivery Price
+                        </span>
+                        <div class="row" ng-show="tariff.selectedService == 'gosend' && gosend_display_city != ''">
+                            Barang ini dikirim dari {{gosend_display_city}}
+                        </div>
+                        <a class="button button-block button-positive cp-button" ng-click="gosendMap('open')" style="margin-left:20px; margin-right:20px;">Choose Destination</a>
+                        <div class="list" style="max-height:300px;overflow-y:auto;" ng-show="tariff.selectedService == 'gosend'">
+                            <div class="item" ng-show="gosend_instant_active == true">
+                                <ion-radio ng-model="tariff.selectedCost" value="GO-SEND;Instant;{{gosend_instant_price}}" ng-click="calculateTotal(tariff.selectedCost)">
+                                    <div class="col-100">
+                                        GO-SEND Instant - Rp {{gosend_instant_price}}.00
+                                    </div>
+                                    <div class="col-100">
+                                        ({{gosend_instant_description}})
+                                    </div>
+                                </ion-radio>
+                            </div>
+                            <div class="item" ng-show="gosend_sameday_active == true">
+                                <ion-radio ng-model="tariff.selectedCost" value="GO-SEND;SameDay;{{gosend_sameday_price}}" ng-click="calculateTotal(tariff.selectedCost)">
+                                    <div class="col-100">
+                                        GO-SEND SameDay - Rp. {{gosend_sameday_price}}.00
+                                    </div>
+                                    <div class="col-100">
+                                        ({{gosend_sameday_description}})
+                                    </div>
+                                </ion-radio>
+                            </div>
+                        </div>
+                      </div>
+                  </div>  
+                <div class="list" ng-if="tariff.selectedService == 'pos_malaysia'">
+                    <label class="item item-input item-select cp-item-input">
+                      <span class="input-label cp-post-subtitle"> Select Zone </span>
+                      <select ng-model="posmalaysia.selectedZone" ng-change="loadCostPosMalaysia()" class="input-label" >
+                        <option value="" selected disabled> {{ text_dropdown_choose_one }} </option>
+                        <option ng-repeat="zone in posmalaysiaZones" value="{{ zone.zoneCode }}"> {{ zone.description }} </option>
+                      </select>
+                    </label>
+                    <div class="item item-divider cp-term-divider" style="font-size: 14px">
+                      {{ text_summary }}
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space">{{ ui_text_delivery_delivery_charge }}</h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b>{{ deliveryPrice | currency:currency}}</b></h4>
+                        </div>
+                    </div>
+                    <div class="row" style='text-align:right;'>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"> {{ ui_text_delivery_total_price }} </h4>
+                        </div>
+                        <div class="col">
+                            <h4 class="cp-post-subtitle normal_white_space"><b>{{ finalTotal | currency:currency}}</b></h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="list item-divider" ng-if="payment.selectedPaymentType == 'loyalty'" style="margin-bottom: 0px; padding: 10px;">
+                <div class="row">
+                    <div class="col col-50">{{ ui_text_loyalty_balance }}</div>
+                    <div class="col col-50 text-right">
+                        <span ng-if="!isLoadingPoints && !isPointsTryAgain && user_meta['loyalty_connect'] == 'YES'">{{ user_meta['loyalty_balance'] | currency:currency }}
+                            <i ng-if="user_meta['loyalty_balance'] >= finalTotal" class="icon ion-ios-checkmark" style="color: #33cd5f"></i>
+                            <i ng-if="!user_meta['loyalty_balance'] || user_meta['loyalty_balance'] == 0 || user_meta['loyalty_balance'] < finalTotal" class="icon ion-ios-close" style="color: red"></i>
+                        </span>
+                        <span style="font-size:x-small; margin-top:-1px;" ng-if="isLoadingPoints">
+                            <ion-spinner class='cp-spinner-sidemenu' style="margin-right:0px; margin-left:-10px;"></ion-spinner> {{ ui_text_loading }}
+                        </span>
+                        <span style="font-size:x-small; margin-top:-1px;" ng-if="isPointsTryAgain && user_meta['loyalty_connect'] == 'YES'">
+                            <i class="icon ion-close" style="margin-right:5px;"></i> {{ ui_text_try_again }}
+                        </span>
+                        <span style="font-size:x-small; margin-top:-1px;" ng-if="isPointsTryAgain && user_meta['loyalty_connect'] == 'NO'">
+                            <i class="icon ion-close" style="margin-right:5px;"></i> {{ ui_text_please_connect_to_loyalty }}
+                        </span>
+                    </div>
+                </div>
+                <div class="row" ng-if="!user_meta['loyalty_balance'] || user_meta['loyalty_balance'] == 0 || user_meta['loyalty_balance'] < finalTotal">
+                    <div class="col" style="color: red;">{{ ui_text_warning_loyalty }}</div>
+                </div>
+            </div>
+
+          <div class="list" style="margin-bottom: 0px; padding-top:0px;">
+                <label class="item item-input item-stacked-label cp-item-input" style="{{ login_mode == 'username' ? 'background-color:#CDCDCD !important;' : '' }}">
+                  <span class="input-label">{{default_transaction_fields.username.field_name}} <i style="color: red;"  ng-if="login_mode != 'username'">*</i></span>
+                  <input type="text" placeholder="{{default_transaction_fields.username.field_name}}" name="username" ng-model="input.name" ng-readonly="login_mode == 'username'" ng-required="{{ login_mode == 'username' ? 'false' : 'true' }}" ng-minlength="1">
+
+                </label>
+                <span ng-show="frmSubmitOrder.username.$error.required && !frmSubmitOrder.username.$pristine"
+                      style="color: red;padding-left: 16px;">{{default_transaction_fields.username.field_name}} {{ input_error_text_must_be_filled }}</span>
+                <span ng-show="frmSubmitOrder.username.$invalid && !frmSubmitOrder.username.$pristine && !frmSubmitOrder.username.$error.required"
+                      style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }}: {{default_transaction_fields.username.field_name}}</span>
+
+                <label class="item item-input item-stacked-label cp-item-input">
+                    <span class="input-label" required>{{default_transaction_fields.email.field_name}} <i style="color: red;">*</i></span>
+                    <input type="email" placeholder="{{default_transaction_fields.email.field_name}}" name="email" ng-model="input.email" required>
+                </label>
+                <span ng-show="frmSubmitOrder.email.$error.required && !frmSubmitOrder.email.$pristine"
+                      style="color: red;padding-left: 16px;">{{default_transaction_fields.email.field_name}} {{ input_error_text_must_be_filled }}</span>
+                <span ng-show="frmSubmitOrder.email.$invalid && !frmSubmitOrder.email.$pristine && !frmSubmitOrder.email.$error.required"
+                      style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }}: {{default_transaction_fields.email.field_name}}</span>
+
+                <div ng-repeat ="field in custom_transaction_fields track by $index">
+                <div ng-if="field.type === 'password'">
+                    <label class="item item-input item-stacked-label cp-item-input">
+                      <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                      <input type="password" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+                    </label>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$error.required && !frmSubmitOrder.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+                    <!-- <span ng-show="frmRegister.{{field.field_key}}.$error.minlength && !frmRegister.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} must be min length 6 characters</span>  -->
+                  </div>
+
+                  <div ng-if="field.type === 'date'">
+                    <label class="item item-input item-stacked-label cp-item-input">
+                      <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                      <input type="date" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" maxdate="todays" ng-required="{{field.required === 'yes'}}" validatedateformat data-date-format="mm/dd/yyyy">
+                    </label>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$error.required && !frmSubmitOrder.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$invalid && !frmSubmitOrder.{{field.field_key}}.$pristine && !frmSubmitOrder.{{field.field_key}}.$error.required"
+                          style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }}: {{field.field_name}}, {{ input_error_text_please_input_valid }} {{ input_field_type_date }}</span>
+                  </div>
+
+                  <div ng-if="field.type === 'text'">
+                    <label class="item item-input item-stacked-label cp-item-input">
+                      <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                      <input type="text" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+                    </label>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$error.required && !frmSubmitOrder.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+                  </div>
+
+                  <div ng-if="field.type === 'textarea'">
+                    <label class="item item-input item-stacked-label cp-item-input">
+                      <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                      <textarea type="text" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}" rows="3"></textarea>
+                    </label>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$error.required && !frmSubmitOrder.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+                  </div>
+
+                  <div ng-if="field.type === 'number'">
+                    <label class="item item-input item-stacked-label cp-item-input">
+                      <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                      <input type="text" pattern="[0-9.]*" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}"  onkeypress="return isNumberKey(event)">
+                    </label>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$error.required && !frmSubmitOrder.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+                  </div>
+
+                  <div ng-if="field.type === 'email'">
+                    <label class="item item-input item-stacked-label cp-item-input">
+                        <span class="input-label">{{field.field_name}} <i ng-if="field.required ==='yes'" style="color: red;">*</i></span>
+                        <input type="email" placeholder="{{field.field_name}}" name="{{field.field_key}}" ng-model="input.meta[field.field_key]" ng-required="{{field.required === 'yes'}}">
+                    </label>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$error.required && !frmSubmitOrder.{{field.field_key}}.$pristine"
+                          style="color: red;padding-left: 16px;">{{field.field_name}} {{ input_error_text_must_be_filled }}</span>
+                    <span ng-show="frmSubmitOrder.{{field.field_key}}.$invalid && !frmSubmitOrder.{{field.field_key}}.$pristine && !frmSubmitOrder.{{field.field_key}}.$error.required"
+                          style="color: red;padding-left: 16px;">{{ input_error_text_wrong_format }}: {{field.field_name}}, {{ input_error_text_please_input_valid }} {{ input_field_type_email }}</span>
+                  </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="text-align:center;">
+                    <span class="cp-item-input  normal_white_space">
+                        <span class="cp-post-content">{{text_tnc_agree}}<br><a href="#/app/shopping-tnc">{{text_view_tnc}}</a></span>
+                    </span>
+                </div>
+            </div>
+            <div class="row" ng-if="loyalty_integration_active == 'NO'">
+                <div class="col">
+                    <!-- with shipping -->
+                    <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="rajaongkir_enabled=='YES' || sicepat_enabled=='YES' || shipper_enabled=='YES' || shipper_intl_enabled=='YES'" ng-disabled="frmSubmitOrder.$invalid || subTotal === 0 || payment.selectedPaymentType == '' || !payment.selectedPaymentType || tariff.selectedService == '' || !tariff.selectedService || !pos_malaysia_valid"> {{button_text_checkout}}</div>
+                    <!-- no shipping -->
+                    <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="rajaongkir_enabled=='NO' && sicepat_enabled=='NO' && shipper_enabled=='NO' && shipper_intl_enabled=='NO'" ng-disabled="frmSubmitOrder.$invalid || subTotal === 0 || payment.selectedPaymentType == '' || !payment.selectedPaymentType"> {{button_text_checkout}}</div>
+                </div>
+            </div>
+            <div class="row" ng-if="loyalty_integration_active == 'YES'">
+                <div class="col">
+                    <div ng-if="payment_type.selectedPaymentType !== 'loyalty'">
+                        <!-- with shipping -->
+
+                        <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="rajaongkir_enabled=='YES' || sicepat_enabled=='YES' || shipper_enabled=='YES' || shipper_intl_enabled=='YES' || go_send_enabled=='YES' || pos_malaysia_enabled=='YES'" ng-disabled="frmSubmitOrder.$invalid || subTotal === 0 || payment.selectedPaymentType == '' || !payment.selectedPaymentType || tariff.selectedService == '' || !tariff.selectedService || !pos_malaysia_valid"> {{button_text_checkout}}</div>
+                        <!-- no shipping -->
+                        <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="rajaongkir_enabled=='NO' && sicepat_enabled=='NO' && shipper_enabled=='NO' && shipper_intl_enabled=='NO' && go_send_enabled=='NO' && pos_malaysia_enabled=='NO'" ng-disabled="frmSubmitOrder.$invalid || subTotal === 0 || payment.selectedPaymentType == '' || !payment.selectedPaymentType"> {{button_text_checkout}}</div>
+                    </div>
+
+                    <div ng-if="payment.selectedPaymentType == 'loyalty'">
+                        <!-- with shipping -->
+                        <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="rajaongkir_enabled=='YES' || sicepat_enabled=='YES' || shipper_enabled=='YES' || shipper_intl_enabled=='YES' || go_send_enabled=='YES' || pos_malaysia_enabled=='YES'" ng-disabled="frmSubmitOrder.$invalid || subTotal === 0 || !user_meta['loyalty_balance'] || user_meta['loyalty_balance'] == 0 || user_meta['loyalty_balance'] < finalTotal || payment.selectedPaymentType == '' || !payment.selectedPaymentType || tariff.selectedService == '' || !tariff.selectedService || !pos_malaysia_valid">{{button_text_checkout}}</div>
+                        <!-- no shipping -->
+                        <div class="button button-block cp-button" ng-click="submitOrder()" ng-if="rajaongkir_enabled=='NO' && sicepat_enabled=='NO' && shipper_enabled=='NO' && shipper_intl_enabled=='NO' && go_send_enabled=='NO' && pos_malaysia_enabled=='NO'" ng-disabled="frmSubmitOrder.$invalid || subTotal === 0 || !user_meta['loyalty_balance'] || user_meta['loyalty_balance'] == 0 || user_meta['loyalty_balance'] < finalTotal || payment.selectedPaymentType == '' || !payment.selectedPaymentType">{{button_text_checkout}}</div>
+                    </div>
+                </div>
+            </div>
+        </form>
+
+
+
+
+
+    </ion-content>
+</ion-view>

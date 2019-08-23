@@ -1,0 +1,24 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> Register {{ loyalty_app_integration_apps_loyalty }} </ion-nav-title>
+
+    <ion-content class='cp-page-content' scroll='true'>
+
+        <div>
+            <br>
+            <div class="cp-post-content" style="text-align: center">{{text_loyalty_register}}</div>
+            <br>
+            <label class="item item-input cp-item-input" style="text-align: center">
+                <span class="input-label">{{ text_link_play_store }}</span><br>
+            </label>
+            <div class="cp-post-content" style="text-align: center" ng-if="loyalty_link_play_store != ''">{{loyalty_link_play_store}}</div>
+            <div class="cp-post-content" style="text-align: center" ng-if="loyalty_link_play_store == ''">-</div>
+            <br>
+            <label class="item item-input cp-item-input" style="text-align: center">
+                <span class="input-label">{{ text_link_app_store }}</span><br>
+            </label>
+            <div class="cp-post-content" style="text-align: center" ng-if="loyalty_link_app_store != ''">{{loyalty_link_app_store}}</div>
+            <div class="cp-post-content" style="text-align: center" ng-if="loyalty_link_app_store == ''">-</div>
+        </div>
+
+    </ion-content>
+</ion-view>

@@ -1,0 +1,10 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{ title_select_language }} </ion-nav-title>
+        <ion-content class='cp-page-content'>
+            <div class="list cp-list" >
+                <a ng-repeat='lang in available_languages track by $index' class="item" ng-click="confirmLanguage($index)">
+                    <h2 class="cp-post-title normal_white_space text-capitalize"><b>{{ lang }}</b></h2> <!-- title -->
+                </a>
+            </div>
+        </ion-content>
+</ion-view>

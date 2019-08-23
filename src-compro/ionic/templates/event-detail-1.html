@@ -1,0 +1,20 @@
+<ion-view cache-view="false" class="cp-page">
+    <ion-nav-title class='cp-header'> {{content_data.title}}</ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist='true' retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading'>
+        <ion-content class="cp-page-content">
+            <div class="row">
+                <div class="col">
+                    <h4 class="cp-post-title post_title normal_white_space"><b>{{content_data.title}}</b></h4>
+                    <!--<h5 class="cp-post-subtitle post_subtitle normal_white_space">{{content_data.created_date}}</h5>-->
+                    <img ng-src="{{content_data.img_src}}" class="full-image"/>
+                    <button class="button button-block cp-button" ng-click="attendEvent()" ng-disabled="attended"
+                            ng-bind="attendedText" ng-show="canAttendEvent && isLoginEnabled"></button>
+                    <p class="cp-post-content normal_white_space justify_text_align"
+                       ng-bind-html='content_data.content | unsafe'></p>
+                </div>
+            </div>
+            <comment-pane></comment-pane>
+        </ion-content>
+    </ion-pane>
+</ion-view>

@@ -1,0 +1,11 @@
+<ion-view class="cp-page" cache-view="false">
+    <ion-nav-title class='cp-header'> QR Code Scanner </ion-nav-title>
+    <!-- <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.transactions.length" retry="retryLoadContent()"></loading-pane> -->
+    <ion-pane>
+        <ion-content class='cp-page-content'>
+            <div style="display:flex; justify-content:center; align-items:center; height:100%; width:100%; text-align:center;" >
+                <button class="button cp-button" ng-click="scanBarcode()">Scan</button>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

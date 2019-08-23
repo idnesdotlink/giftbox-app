@@ -1,0 +1,15 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{content_data.title}} </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.galleries.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.events.length > 0'>
+        <ion-content class='cp-page-content' scroll="false">
+            <ion-slide-box class="slider-image-full cp-full-slider-background" on-slide-changed="slideHasChanged($index)" >
+                <ion-slide class="slider-slide-full" ng-repeat='event in content_data.events'>
+                    <div class="box">
+                        <img ng-src="{{event.featured_image_path}}" class="full_page_image fix-aspect-ratio"/>
+                    </div>
+                </ion-slide>
+            </ion-slide-box>
+        </ion-content>
+    </ion-pane>
+</ion-view>

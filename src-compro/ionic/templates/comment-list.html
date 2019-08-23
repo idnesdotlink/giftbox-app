@@ -1,0 +1,16 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> comments </ion-nav-title>
+    <loading-pane text-please-wait="text_please_wait" text-something-wrong="text_something_wrong" text-reload-to-retry="text_reload_to_retry" text-reload="text_reload" text-no-data-found="text_no_data_found"   timeout="isTimeout" loading="isLoading" exist="content_data.comments.length" retry="retryLoadContent()"></loading-pane>
+    <ion-pane ng-if='!isLoading && content_data.comments.length > 0'>
+        <ion-content class='cp-page-content'>
+            <div class="list cp-list" >
+                <div class="item" ng-repeat='comment in content_data.comments'>
+                    <p class="normal_white_space cp-comment-text">
+                        <span class="cp-comment-author">{{comment.author}}</span>
+                        {{comment.content}}
+                    </p>
+                </div>
+            </div>
+        </ion-content>
+    </ion-pane>
+</ion-view>

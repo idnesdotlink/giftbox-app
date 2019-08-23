@@ -1,0 +1,13 @@
+<ion-view class="cp-page" cache-view="true">
+    <ion-nav-title class='cp-header'> {{ title_settings }} </ion-nav-title>
+        <ion-content class='cp-page-content'>
+            <div class="list cp-list" >
+                <a ng-repeat='setting in settingsList track by $index' class="item" ng-click="gotoSettingsMenu($index)">
+                  <h2 class="cp-post-title normal_white_space">
+                      <b>{{ setting.name }}</b>
+                      <i class="icon ion-arrow-right-b" style="float:right;"></i>
+                  </h2>
+                </a>
+            </div>
+        </ion-content>
+</ion-view>
