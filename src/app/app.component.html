@@ -24,7 +24,7 @@
           </ion-menu-toggle>
         </ion-list>
 
-        <ion-list *ngIf="loggedIn">
+        <!-- <ion-list *ngIf="loggedIn">
           <ion-list-header>
             Account
           </ion-list-header>
@@ -89,16 +89,16 @@
               </ion-label>
             </ion-item>
           </ion-menu-toggle>
-        </ion-list>
+        </ion-list> -->
 
         <ion-list>
           <ion-list-header>
-            Tutorial
+            Intro
           </ion-list-header>
           <ion-menu-toggle autoHide="false">
-            <ion-item button (click)="openTutorial()">
+            <ion-item button (click)="openIntro()">
               <ion-icon slot="start" name="hammer"></ion-icon>
-              <ion-label>Show Tutorial</ion-label>
+              <ion-label>Show Intro</ion-label>
             </ion-item>
           </ion-menu-toggle>
         </ion-list>

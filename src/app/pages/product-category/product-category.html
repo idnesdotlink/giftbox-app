@@ -4,7 +4,7 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
 
-    <ion-segment [(ngModel)]="segment" (ionChange)="updateSchedule()">
+    <ion-segment [(ngModel)]="segment" (ionChange)="updateProductCategory()">
       <ion-segment-button value="all">
         All
       </ion-segment-button>
@@ -21,7 +21,7 @@
   </ion-toolbar>
 
   <ion-toolbar>
-    <ion-searchbar [(ngModel)]="queryText" (ionChange)="updateSchedule()" placeholder="Search"></ion-searchbar>
+    <ion-searchbar [(ngModel)]="queryText" (ionChange)="updateProductCategory()" placeholder="Search"></ion-searchbar>
   </ion-toolbar>
 </ion-header>
 <ion-content>
@@ -35,7 +35,7 @@
 
       <ion-item-sliding *ngFor="let session of group.sessions" #slidingItem [attr.track]="session.tracks[0] | lowercase"
         [hidden]="session.hide">
-        <ion-item routerLink="/app/tabs/schedule/session/{{session.id}}">
+        <ion-item routerLink="/app/tabs/product/session/{{session.id}}">
           <ion-label>
             <h3>{{session.name}}</h3>
             <p>
