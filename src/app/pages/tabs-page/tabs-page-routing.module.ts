@@ -1,96 +1,96 @@
-import { NgModule } from "@angular/core";
-import { RouterModule, Routes } from "@angular/router";
-import { TabsPage } from "./tabs-page";
-import { SchedulePage } from "../schedule/schedule";
-import { ProductCategoryPage } from "../product-category/product-category";
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { TabsPage } from './tabs-page';
+import { SchedulePage } from '../schedule/schedule';
+import { ProductCategoryPage } from '../product-category/product-category';
 
 const routes: Routes = [
   {
-    path: "tabs",
+    path: 'tabs',
     component: TabsPage,
     children: [
       {
-        path: "schedule",
+        path: 'schedule',
         children: [
           {
-            path: "",
+            path: '',
             component: SchedulePage,
           },
           {
-            path: "session/:sessionId",
+            path: 'session/:sessionId',
             loadChildren: () =>
-              import("../session-detail/session-detail.module").then(
+              import('../session-detail/session-detail.module').then(
                 m => m.SessionDetailModule
               ),
           },
         ],
       },
       {
-        path: "product-category",
+        path: 'product-category',
         children: [
           {
-            path: "",
+            path: '',
             component: ProductCategoryPage,
           },
           {
-            path: "session/:sessionId",
+            path: 'session/:sessionId',
             loadChildren: () =>
-              import("../session-detail/session-detail.module").then(
+              import('../session-detail/session-detail.module').then(
                 m => m.SessionDetailModule
               ),
           },
         ],
       },
       {
-        path: "speakers",
+        path: 'speakers',
         children: [
           {
-            path: "",
+            path: '',
             loadChildren: () =>
-              import("../speaker-list/speaker-list.module").then(
+              import('../speaker-list/speaker-list.module').then(
                 m => m.SpeakerListModule
               ),
           },
           {
-            path: "session/:sessionId",
+            path: 'session/:sessionId',
             loadChildren: () =>
-              import("../session-detail/session-detail.module").then(
+              import('../session-detail/session-detail.module').then(
                 m => m.SessionDetailModule
               ),
           },
           {
-            path: "speaker-details/:speakerId",
+            path: 'speaker-details/:speakerId',
             loadChildren: () =>
-              import("../speaker-detail/speaker-detail.module").then(
+              import('../speaker-detail/speaker-detail.module').then(
                 m => m.SpeakerDetailModule
               ),
           },
         ],
       },
       {
-        path: "map",
+        path: 'map',
         children: [
           {
-            path: "",
+            path: '',
             loadChildren: () =>
-              import("../map/map.module").then(m => m.MapModule),
+              import('../map/map.module').then(m => m.MapModule),
           },
         ],
       },
       {
-        path: "about",
+        path: 'about',
         children: [
           {
-            path: "",
+            path: '',
             loadChildren: () =>
-              import("../about/about.module").then(m => m.AboutModule),
+              import('../about/about.module').then(m => m.AboutModule),
           },
         ],
       },
       {
-        path: "",
-        redirectTo: "/app/tabs/schedule",
-        pathMatch: "full",
+        path: '',
+        redirectTo: '/app/tabs/schedule',
+        pathMatch: 'full',
       },
     ],
   },
@@ -100,4 +100,4 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
 })
-export class TabsPageRoutingModule {}
+export class TabsPageRoutingModule { }

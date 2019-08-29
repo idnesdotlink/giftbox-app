@@ -1,12 +1,12 @@
-import { AfterViewInit, Component } from "@angular/core";
-import { Config, ModalController, NavParams } from "@ionic/angular";
+import { AfterViewInit, Component } from '@angular/core';
+import { Config, ModalController, NavParams } from '@ionic/angular';
 
-import { ConferenceData } from "../../providers/conference-data";
+import { ConferenceData } from '../../providers/conference-data';
 
 @Component({
-  selector: "page-product-category-filter",
-  templateUrl: "product-category-filter.html",
-  styleUrls: ["./product-category-filter.scss"],
+  selector: 'page-product-category-filter',
+  templateUrl: 'product-category-filter.html',
+  styleUrls: ['./product-category-filter.scss'],
 })
 export class ProductCategoryFilterPage implements AfterViewInit {
   ios: boolean;
@@ -18,16 +18,16 @@ export class ProductCategoryFilterPage implements AfterViewInit {
     private config: Config,
     public modalCtrl: ModalController,
     public navParams: NavParams
-  ) {}
+  ) { }
 
   ionViewWillEnter() {
-    this.ios = this.config.get("mode") === `ios`;
+    this.ios = this.config.get('mode') === `ios`;
   }
 
   // TODO use the ionViewDidEnter event
   ngAfterViewInit() {
     // passed in array of track names that should be excluded (unchecked)
-    const excludedTrackNames = this.navParams.get("excludedTracks");
+    const excludedTrackNames = this.navParams.get('excludedTracks');
 
     this.confData.getTracks().subscribe((tracks: any[]) => {
       tracks.forEach(track => {

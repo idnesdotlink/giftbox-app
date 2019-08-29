@@ -1,29 +1,29 @@
-import { Component, ViewChild, OnInit } from "@angular/core";
-import { Router } from "@angular/router";
+import { Component, ViewChild, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import {
   AlertController,
   IonList,
   LoadingController,
   ModalController,
   ToastController,
-} from "@ionic/angular";
+} from '@ionic/angular';
 
-import { ProductCategoryFilterPage } from "../product-category-filter/product-category-filter";
-import { ProductCategoryData } from "../../providers/product-category-data";
-import { UserData } from "../../providers/user-data";
+import { ProductCategoryFilterPage } from '../product-category-filter/product-category-filter';
+import { ProductCategoryData } from '../../providers/product-category-data';
+import { UserData } from '../../providers/user-data';
 
 @Component({
-  selector: "page-product-category",
-  templateUrl: "product-category.html",
-  styleUrls: ["./product-category.scss"],
+  selector: 'page-product-category',
+  templateUrl: 'product-category.html',
+  styleUrls: ['./product-category.scss'],
 })
 export class ProductCategoryPage implements OnInit {
   // Gets a reference to the list element
-  @ViewChild("scheduleList", { static: true }) scheduleList: IonList;
+  @ViewChild('scheduleList', { static: true }) scheduleList: IonList;
 
   dayIndex = 0;
-  queryText = "";
-  segment = "all";
+  queryText = '';
+  segment = 'all';
   excludeTracks: any = [];
   shownSessions: any = [];
   groups: any = [];
@@ -37,7 +37,7 @@ export class ProductCategoryPage implements OnInit {
     public router: Router,
     public toastCtrl: ToastController,
     public user: UserData
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.updateProductCategory();
@@ -80,17 +80,17 @@ export class ProductCategoryPage implements OnInit {
     if (this.user.hasFavorite(sessionData.name)) {
       // woops, they already favorited it! What shall we do!?
       // prompt them to remove it
-      this.removeFavorite(slidingItem, sessionData, "Favorite already added");
+      this.removeFavorite(slidingItem, sessionData, 'Favorite already added');
     } else {
       // remember this session as a user favorite
       this.user.addFavorite(sessionData.name);
 
       // create an alert instance
       const alert = await this.alertCtrl.create({
-        header: "Favorite Added",
+        header: 'Favorite Added',
         buttons: [
           {
-            text: "OK",
+            text: 'OK',
             handler: () => {
               // close the sliding item
               slidingItem.close();
@@ -110,10 +110,10 @@ export class ProductCategoryPage implements OnInit {
   ) {
     const alert = await this.alertCtrl.create({
       header: title,
-      message: "Would you like to remove this session from your favorites?",
+      message: 'Would you like to remove this session from your favorites?',
       buttons: [
         {
-          text: "Cancel",
+          text: 'Cancel',
           handler: () => {
             // they clicked the cancel button, do not remove the session
             // close the sliding item and hide the option buttons
@@ -121,7 +121,7 @@ export class ProductCategoryPage implements OnInit {
           },
         },
         {
-          text: "Remove",
+          text: 'Remove',
           handler: () => {
             // they want to remove this session from their favorites
             this.user.removeFavorite(sessionData.name);
