@@ -12,11 +12,15 @@
     <ion-grid class="ion-no-padding">
       <ion-row>
         <ion-col size="6">
-          <span *ngFor="let track of session?.tracks" [class]="'session-track-'+track.toLowerCase()">{{track}}</span>
+          <span *ngFor="let track of session?.tracks"
+            [class]="'session-track-'+track.toLowerCase()">{{track}}</span>
         </ion-col>
-        <ion-col size="6" [ngClass]="{'show-favorite': isFavorite}" class="ion-text-right">
-          <ion-icon name="heart-empty" size="large" class="icon-heart-empty" (click)="toggleFavorite()"></ion-icon>
-          <ion-icon name="heart" color="danger" size="large" class="icon-heart" (click)="toggleFavorite()"></ion-icon>
+        <ion-col size="6" [ngClass]="{'show-favorite': isFavorite}"
+          class="ion-text-right">
+          <ion-icon name="heart-empty" size="large" class="icon-heart-empty"
+            (click)="toggleFavorite()"></ion-icon>
+          <ion-icon name="heart" color="danger" size="large" class="icon-heart"
+            (click)="toggleFavorite()"></ion-icon>
         </ion-col>
       </ion-row>
     </ion-grid>
@@ -28,7 +32,7 @@
     </ion-text>
   </div>
 
-  <ion-list>
+  <!-- <ion-list>
     <ion-item (click)="sessionClick('watch')" button>
       <ion-label color="primary">Watch</ion-label>
     </ion-item>
@@ -45,5 +49,5 @@
     <ion-item (click)="sessionClick('leave feedback')" button>
       <ion-label color="primary">Leave Feedback</ion-label>
     </ion-item>
-  </ion-list>
+  </ion-list> -->
 </ion-content>

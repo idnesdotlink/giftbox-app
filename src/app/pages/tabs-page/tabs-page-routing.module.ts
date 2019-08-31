@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { TabsPage } from './tabs-page';
 import { SchedulePage } from '../schedule/schedule';
-import { ProductCategoryPage } from '../product-category/product-category';
 
 const routes: Routes = [
   {
@@ -25,22 +24,22 @@ const routes: Routes = [
           },
         ],
       },
-      {
-        path: 'product-category',
-        children: [
-          {
-            path: '',
-            component: ProductCategoryPage,
-          },
-          {
-            path: 'session/:sessionId',
-            loadChildren: () =>
-              import('../session-detail/session-detail.module').then(
-                m => m.SessionDetailModule
-              ),
-          },
-        ],
-      },
+      // {
+      //   path: 'product-category',
+      //   children: [
+      //     {
+      //       path: '',
+      //       component: ProductCategoryPage,
+      //     },
+      //     {
+      //       path: 'session/:sessionId',
+      //       loadChildren: () =>
+      //         import('../session-detail/session-detail.module').then(
+      //           m => m.SessionDetailModule
+      //         ),
+      //     },
+      //   ],
+      // },
       {
         path: 'speakers',
         children: [
