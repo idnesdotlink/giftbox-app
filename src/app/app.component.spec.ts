@@ -1,16 +1,16 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { Router } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
-import { TestBed, async } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { Router } from "@angular/router";
+import { SwUpdate } from "@angular/service-worker";
+import { TestBed, async } from "@angular/core/testing";
 
-import { Events, MenuController, Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { IonicStorageModule } from '@ionic/storage';
-import { AppComponent } from './app.component';
-import { UserData } from './providers/user-data';
+import { Events, MenuController, Platform } from "@ionic/angular";
+import { SplashScreen } from "@ionic-native/splash-screen/ngx";
+import { StatusBar } from "@ionic-native/status-bar/ngx";
+import { IonicStorageModule } from "@ionic/storage";
+import { AppComponent } from "./app.component";
+import { UserData } from "./providers/user-data";
 
-describe('AppComponent', () => {
+describe("AppComponent", () => {
   let eventsSpy,
     menuSpy,
     routerSpy,
@@ -24,15 +24,15 @@ describe('AppComponent', () => {
     fixture;
 
   beforeEach(async(() => {
-    eventsSpy = jasmine.createSpyObj('Events', ['subscribe']);
-    menuSpy = jasmine.createSpyObj('MenuController', ['toggle', 'enable']);
-    routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
-    userDataSpy = jasmine.createSpyObj('UserData', ['isLoggedIn', 'logout']);
-    statusBarSpy = jasmine.createSpyObj('StatusBar', ['styleDefault']);
-    splashScreenSpy = jasmine.createSpyObj('SplashScreen', ['hide']);
-    swUpdateSpy = jasmine.createSpyObj('SwUpdate', ['available', 'activateUpdate']);
+    eventsSpy = jasmine.createSpyObj("Events", ["subscribe"]);
+    menuSpy = jasmine.createSpyObj("MenuController", ["toggle", "enable"]);
+    routerSpy = jasmine.createSpyObj("Router", ["navigateByUrl"]);
+    userDataSpy = jasmine.createSpyObj("UserData", ["isLoggedIn", "logout"]);
+    statusBarSpy = jasmine.createSpyObj("StatusBar", ["styleDefault"]);
+    splashScreenSpy = jasmine.createSpyObj("SplashScreen", ["hide"]);
+    swUpdateSpy = jasmine.createSpyObj("SwUpdate", ["available", "activateUpdate"]);
     platformReadySpy = Promise.resolve();
-    platformSpy = jasmine.createSpyObj('Platform', { ready: platformReadySpy });
+    platformSpy = jasmine.createSpyObj("Platform", { ready: platformReadySpy });
 
     TestBed.configureTestingModule({
       declarations: [AppComponent],
@@ -55,11 +55,11 @@ describe('AppComponent', () => {
     app = fixture.debugElement.componentInstance;
   });
 
-  it('should create the app', () => {
+  it("should create the app", () => {
     expect(app).toBeTruthy();
   });
 
-  it('should initialize the app', async () => {
+  it("should initialize the app", async () => {
     expect(platformSpy.ready).toHaveBeenCalled();
     await platformReadySpy;
     expect(statusBarSpy.styleDefault).toHaveBeenCalled();
