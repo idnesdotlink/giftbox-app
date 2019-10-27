@@ -86,7 +86,7 @@
     "puppeteer": "^2.0.0",
     "ts-node": "^8.4.1",
     "tslint": "^5.20.0",
-    "typescript": "^3.5.3",
+    "typescript": "~3.5.3",
     "workbox-cli": "^4.3.1"
   },
   "cordova": {
