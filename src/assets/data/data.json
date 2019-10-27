@@ -71,7 +71,7 @@
   "speakers": [
     {
       "name": "Burt Bear",
-      "profilePic": "/assets/img/speakers/bear.jpg",
+      "profilePic": "assets/img/speakers/bear.jpg",
       "twitter": "ionicframework",
       "about": "Burt is a Bear.",
       "location": "Everywhere",
@@ -81,7 +81,7 @@
     },
     {
       "name": "Charlie Cheetah",
-      "profilePic": "/assets/img/speakers/cheetah.jpg",
+      "profilePic": "assets/img/speakers/cheetah.jpg",
       "twitter": "ionicframework",
       "about": "Charlie is a Cheetah.",
       "location": "Everywhere",
