@@ -1,12 +1,13 @@
 import { Component, OnInit, ViewEncapsulation } from "@angular/core";
 import { Router } from "@angular/router";
 import { SwUpdate } from "@angular/service-worker";
+import { FCM } from '@ionic-native/fcm/ngx';
 
 import {
   Events,
   MenuController,
   Platform,
-  ToastController,
+  ToastController
 } from "@ionic/angular";
 
 import { SplashScreen } from "@ionic-native/splash-screen/ngx";
@@ -52,7 +53,8 @@ export class AppComponent implements OnInit {
     private storage: Storage,
     private userData: UserData,
     private swUpdate: SwUpdate,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private fcm: FCM
   ) {
     this.initializeApp();
   }
@@ -79,9 +81,17 @@ export class AppComponent implements OnInit {
   }
 
   initializeApp() {
-    this.platform.ready().then(() => {
+    this.platform.ready().then(async () => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      const token = await this.fcm.getToken();
+      console.log(token);
+      this.fcm.onTokenRefresh().subscribe(token => {
+        console.log(token);
+      });
+      this.fcm.onNotification().subscribe(data => {
+        console.log(data);
+      });
     });
   }
 
